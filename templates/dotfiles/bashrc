@@ -1,0 +1,2 @@
+export TERM=rxvt-unicode-256color
+export PATH=$HOME/.bin:$PATH

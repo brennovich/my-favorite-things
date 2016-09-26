@@ -1,0 +1,3 @@
+URxvt.font: xft:Terminus:size=18
+URxvt.geometry: 120x40
+URxvt.scrollBar: false

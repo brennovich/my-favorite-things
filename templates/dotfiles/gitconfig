@@ -1,0 +1,59 @@
+[color]
+  ui = true
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[alias]
+  a = add                           # add
+  b = branch -v                     # branch (verbose)
+  amend = commit --amend            # ammend your last commit
+  ammend = commit --amend           # ammend your last commit
+  co = checkout                     # checkout
+  cp = cherry-pick -x               # grab a change from a branch
+  d = diff                          # diff unstaged changes
+  dc = diff --cached                # diff staged changes
+  l = log --graph --date=short
+  changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
+  short = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\"
+  changelog = log --pretty=format:\" * %s\"
+  shortnocolor = log --pretty=format:\"%h %cr %cn %s\"
+  s = status
+  lastday = log --author=__user_name__ --pretty=oneline --all --since=1.day
+  lastfriday = log --author=__user_name__ --pretty=oneline --all --since='last Friday'
+[format]
+  pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
+[merge]
+  summary = true
+  verbosity = 1
+[apply]
+  whitespace = nowarn
+[branch]
+  autosetupmerge = true
+[push]
+  # 'git push' will push the current branch to its tracking branch
+  # the usual default is to push all branches
+  default = tracking
+[core]
+  autocrlf = false
+  editor = vim -f
+  excludesfile = ~/.gitignore
+[diff]
+  # Git diff will use (i)ndex, (w)ork tree, (c)ommit and (o)bject
+  # instead of a/b/c/d as prefixes for patches
+  mnemonicprefix = true
+[rerere]
+  # Remember my merges
+  # http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
+  enabled = true
+
+[user]
+  name = __user_name__
+  email = __user_email__
+[github]
+  user = __user_nick__
