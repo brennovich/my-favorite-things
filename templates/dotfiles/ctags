@@ -1,4 +1,5 @@
 -e
+
 --langdef=scala
 --langmap=scala:.scala
 --regex-scala=/\bclass\s+(\w+)/\1/c,classes/

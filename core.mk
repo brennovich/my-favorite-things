@@ -69,6 +69,9 @@ packages/web:
 # TODO: Do not forget to re-check this after Xorg updates, modesetting has better performance
 # and less bugs than Intel's SNA AccellMethod.
 #
+# UPDATE: Well, actually using intel DDX drivers is problematic as the system simply freezes
+# when RC6 powersaving is being used which makes it impracticable.
+#
 packages/xorg: /etc/X11/xorg.conf.d/20-intel.conf
 	- sudo pacman -S --noconfirm \
 		rxvt-unicode \
