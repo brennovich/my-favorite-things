@@ -14,6 +14,7 @@ include user.mk
 # Every system configuration such as core packages, tty config, kernel module configs, etc
 system: \
 	packages/aur-helper \
+	packages/bluetooth \
 	packages/core \
 	packages/power \
 	packages/sound \
@@ -24,6 +25,6 @@ system: \
 	/etc/modprobe.d/i915.conf
 
 # Sound infrastructure powered by pulseaudio plus mpd and ncmpcpp for music
-user:  user/sound
+user:  user/media
 
 clean: clean/dotfiles clean/tmp

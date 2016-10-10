@@ -1,9 +1,13 @@
-.PHONY = packages/core \
-	packages/power \
+.PHONY = \
 	packages/aur-helper \
 	packages/aur-helper/cower \
+	packages/bluetooth \
+	packages/core \
+	packages/fonts \
+	packages/power \
 	packages/sound \
-	packages/utils
+	packages/utils \
+	system/disable-beep
 
 packages/aur-helper/cower: clean/tmp
 	- gpg --recv-keys 487EACC08557AD082088DABA1EB2638FF56C0C53 # Dave Reisner, cower maintainer
@@ -72,8 +76,8 @@ packages/web:
 # UPDATE: Well, actually using intel DDX drivers is problematic as the system simply freezes
 # when RC6 powersaving is being used which makes it impracticable.
 #
-packages/xorg: /etc/X11/xorg.conf.d/20-intel.conf
-	- sudo pacman -S --noconfirm \
+packages/xorg: /etc/X11/xorg.conf.d/20-intel.conf /etc/X11/xorg.conf.d/00-keyboard.conf
+	- sudo pacman -S --noconfirm --needed \
 		rxvt-unicode \
 		mesa-vdpau \
 		xf86-input-libinput \
@@ -83,15 +87,31 @@ packages/xorg: /etc/X11/xorg.conf.d/20-intel.conf
 		xorg-xrdb \
 		xorg-server
 
+packages/fonts:
+	- pacaur -S --noconfirm --needed \
+		cairo-infinality \
+		fontconfig-infinality \
+		freetype2-infinality
+
+packages/bluetooth:
+	- sudo pacman -S --noconfirm \
+		bluez \
+		bluez-utils
+	- sudo systemctl enable bluetooth.service
+	- sudo systemctl start bluetooth.service
+
 /etc/vconsole.conf: templates/etc/vconsole.conf
 	- sudo pacman -S --noconfirm terminus-font
 	- sudo cp ./templates/vconsole.conf /etc/vconsole.conf
 
 /etc/modprobe.d/%.conf: templates/etc/modprobe.d/*
-	- sudo cp $< $@
+	- sudo cp templates/etc/modprobe.d/$*.conf $@
 
 /etc/X11/xorg.conf.d/%.conf: templates/etc/X11/xorg.conf.d/*
-	- sudo cp $< $@
+	- sudo cp templates/etc/X11/xorg.conf.d/$*.conf $@
+
+system/disable-beep:
+	- if lsmod | grep pcspkr &> /dev/null; then sudo rmmod pcspkr; fi
 
 clean/tmp: tmp*
 	rm -rf tmp/*

@@ -1,6 +1,11 @@
 include config.mk
 
-.PHONY = user/dotfiles user/media applications/mpd applications/ncmpcpp
+.PHONY = \
+	applications/dropbox \
+	applications/mpd \
+	applications/ncmpcpp \
+	user/dotfiles \
+	user/media
 
 dotfiles = \
 	~/.gitconfig \
@@ -14,15 +19,37 @@ dotfiles = \
 
 user/dotfiles: $(dotfiles)
 
-user/media: applications/mpd applications/ncmpcpp
+user/media: applications/mpd applications/ncmpcpp applications/mplayer
+
+applications/bspwm: ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc ~/.compton.conf
+	- sudo pacman -S --noconfirm --needed \
+		bspwm \
+		compton \
+		dmenu \
+		feh \
+		sxhkd
+	- chmod +x ~/.config/bspwm/bspwmrc
+	- killall compton && /usr/bin/compton --config ~/.compton.conf
+	- ~/.config/bspwm/bspwmrc
+	- pkill -USR1 -x sxhkd
+
+applications/dropbox:
+	- pacaur -S dropbox dropbox-cli --noconfirm --needed
+	- systemctl --user enable dropbox.service
+	- systemctl --user start dropbox.service
+	- dropbox-cli exclude add ~/Dropbox/Backup ~/Dropbox/love-mondays ~/Dropbox/books_da_broderage
+
 
 applications/mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service
-	- mkdir -p ~/.mpd
+	- mkdir -p ~/.mpd/playlists
 	- systemctl --user daemon-reload
 	- systemctl --user enable mpd.service
 	- systemctl --user start mpd.service
 
 applications/ncmpcpp: ~/.ncmpcpp/bindings ~/.ncmpcpp/config
+
+applications/mplayer:
+	- sudo pacman -S --noconfirm mplayer
 
 # Generalistic task to copy dotifles' templates
 ~/.%: templates/dotfiles/*
