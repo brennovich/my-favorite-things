@@ -62,8 +62,11 @@ packages/utils:
 		xsel
 
 packages/web:
-	- sudo pacman -S --noconfirm \
+	- sudo pacman -S --noconfirm --needed \
 		firefox
+	- pacaur -S --noconfirm --needed \
+		google-chrome \
+		telegram-desktop-bin
 
 # Setup Xorg and its basic drivers and tools.
 # 
@@ -86,12 +89,23 @@ packages/xorg: /etc/X11/xorg.conf.d/20-intel.conf /etc/X11/xorg.conf.d/00-keyboa
 		xorg-xrandr \
 		xorg-xrdb \
 		xorg-server
+	- pacaur -S --noconfirm --needed \
+		light-git
+	- pacaur -R --noconfirm \
+		help2man
 
 packages/fonts:
 	- pacaur -S --noconfirm --needed \
 		cairo-infinality \
 		fontconfig-infinality \
-		freetype2-infinality
+		freetype2-infinality \
+		ttf-bitstream-vera \
+		ttf-dejavu \
+		ttf-fira-mono \
+		ttf-fira-sans \
+		ttf-ms-fonts \
+		ttf-roboto \
+		ttf-ubuntu-font-family
 
 packages/bluetooth:
 	- sudo pacman -S --noconfirm \

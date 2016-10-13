@@ -27,6 +27,13 @@ super + ctrl + c
 super + ctrl + k
 	killall compton
 
+# Manage monitor brightness
+XF86MonBrightnessUp
+	light -A 5
+
+XF86MonBrightnessDown
+	light -U 5
+
 ##
 # BSPWM hotkeys
 #

@@ -29,7 +29,7 @@ applications/bspwm: ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc ~/.compton.c
 		feh \
 		sxhkd
 	- chmod +x ~/.config/bspwm/bspwmrc
-	- killall compton && /usr/bin/compton --config ~/.compton.conf
+	- killall compton
 	- ~/.config/bspwm/bspwmrc
 	- pkill -USR1 -x sxhkd
 
