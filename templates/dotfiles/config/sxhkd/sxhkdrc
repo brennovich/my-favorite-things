@@ -34,6 +34,19 @@ XF86MonBrightnessUp
 XF86MonBrightnessDown
 	light -U 5
 
+# Pulse Audio controls
+XF86AudioMicMute
+	pactl set-source-mute 1 toggle
+
+XF86AudioMute
+	pamixer -t
+
+XF86AudioRaiseVolume
+	pamixer -i 5
+
+XF86AudioLowerVolume
+	pamixer -d 5
+
 ##
 # BSPWM hotkeys
 #

@@ -43,10 +43,11 @@ packages/power:
 	- sudo systemctl start tlp.service tlp-sleep.service
 
 packages/sound:
-	- sudo pacman -S --noconfirm \
+	- sudo pacman -S --noconfirm --needed \
 		mpc \
 		mpd \
 		ncmpcpp \
+		pamixer \
 		pavucontrol \
 		pulseaudio \
 		pulseaudio-bluetooth
