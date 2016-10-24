@@ -47,6 +47,13 @@ XF86AudioRaiseVolume
 XF86AudioLowerVolume
 	pamixer -d 5
 
+# Screenshots
+Print
+	scrot ~/Pictures/screenshots/%y-%b-%d_%H%M%S.png
+
+super + @Print
+	scrot -s ~/Pictures/screenshots/%y-%b-%d_%H%M%S.png
+
 ##
 # BSPWM hotkeys
 #

@@ -17,6 +17,21 @@ dotfiles = \
 	~/.Xresources \
 	~/.Xresources.d/urxvt
 
+# Generalistic task to copy dotifles' templates
+~/.%: templates/dotfiles/*
+	- mkdir -p $(@D)
+	- $(macrocmd) \
+		templates/dotfiles/$* \
+		> $@
+
+# User scripts
+~/.bin/%: templates/dotfiles/bin/*
+	- mkdir -p $(@D)
+	- $(macrocmd) \
+		templates/dotfiles/bin/$* \
+		> $@
+	- chmod +x $@
+
 user/dotfiles: $(dotfiles)
 
 user/media: applications/mpd applications/ncmpcpp applications/mplayer
@@ -51,12 +66,9 @@ applications/ncmpcpp: ~/.ncmpcpp/bindings ~/.ncmpcpp/config
 applications/mplayer:
 	- sudo pacman -S --noconfirm mplayer
 
-# Generalistic task to copy dotifles' templates
-~/.%: templates/dotfiles/*
-	- mkdir -p $(@D)
-	- $(macrocmd) \
-		templates/dotfiles/$* \
-		> $@
+applications/scrot:
+	- sudo pacman -S --noconfirm --needed scrot
+	- mkdir -p ~/Pictures/screenshots
 
 clean/dotfiles:
 	rm -rf $(dotfiles)

@@ -42,7 +42,7 @@ packages/power:
 	- sudo systemctl enable tlp.service tlp-sleep.service
 	- sudo systemctl start tlp.service tlp-sleep.service
 
-packages/sound:
+packages/sound: /etc/modprobe.d/blacklist.conf
 	- sudo pacman -S --noconfirm --needed \
 		mpc \
 		mpd \
@@ -119,14 +119,11 @@ packages/bluetooth:
 	- sudo pacman -S --noconfirm terminus-font
 	- sudo cp ./templates/vconsole.conf /etc/vconsole.conf
 
-/etc/modprobe.d/%.conf: templates/etc/modprobe.d/*
-	- sudo cp templates/etc/modprobe.d/$*.conf $@
+/etc/modprobe.d/%: templates/etc/modprobe.d/*
+	- sudo cp templates/etc/modprobe.d/$* $@
 
 /etc/X11/xorg.conf.d/%.conf: templates/etc/X11/xorg.conf.d/*
 	- sudo cp templates/etc/X11/xorg.conf.d/$*.conf $@
-
-system/disable-beep:
-	- if lsmod | grep pcspkr &> /dev/null; then sudo rmmod pcspkr; fi
 
 clean/tmp: tmp*
 	rm -rf tmp/*
