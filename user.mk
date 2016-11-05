@@ -24,6 +24,12 @@ dotfiles = \
 		templates/dotfiles/$* \
 		> $@
 
+# User's System services
+/etc/systemd/system/%: templates/etc/systemd/system/*
+	- $(macrocmd) \
+		templates/etc/systemd/system/$* \
+		| sudo dd of=$@
+
 # User scripts
 ~/.bin/%: templates/dotfiles/bin/*
 	- mkdir -p $(@D)
@@ -69,6 +75,14 @@ applications/mplayer:
 applications/scrot:
 	- sudo pacman -S --noconfirm --needed scrot
 	- mkdir -p ~/Pictures/screenshots
+
+applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service
+	- sudo systemctl enable my-favorite-things-locker.service
+	- cp templates/dotfiles/my-favorite-things/lock-icon.png ~/.my-favorite-things/lock-icon.png
+	- chmod +x ~/.bin/my-favorite-things-locker
+	- pacaur -S --noconfirm --needed \
+		i3lock \
+		imagemagick
 
 clean/dotfiles:
 	rm -rf $(dotfiles)

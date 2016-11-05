@@ -1,0 +1,12 @@
+[Unit]
+Description=Screen locker on top of i3locker, this service is triggered whenever systemd sleep is triggered
+Before=sleep.target
+
+[Service]
+User=__user__
+Type=forking
+Environment=DISPLAY=:0
+ExecStart=/home/__user__/.bin/my-favorite-things-locker
+
+[Install]
+WantedBy=sleep.target
