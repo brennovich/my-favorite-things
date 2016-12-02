@@ -3,6 +3,7 @@
 	packages/aur-helper/cower \
 	packages/bluetooth \
 	packages/core \
+	packages/docker \
 	packages/fonts \
 	packages/power \
 	packages/sound \
@@ -63,11 +64,11 @@ packages/utils:
 		xsel
 
 packages/web:
-	- sudo pacman -S --noconfirm --needed \
-		firefox
 	- pacaur -S --noconfirm --needed \
+		firefox \
 		google-chrome \
-		telegram-desktop-bin
+		telegram-desktop-bin \
+		transmission-gtk
 
 # Setup Xorg and its basic drivers and tools.
 # 
@@ -109,11 +110,18 @@ packages/fonts:
 		ttf-ubuntu-font-family
 
 packages/bluetooth:
-	- sudo pacman -S --noconfirm \
+	- sudo pacman -S --noconfirm --needed \
 		bluez \
 		bluez-utils
 	- sudo systemctl enable bluetooth.service
 	- sudo systemctl start bluetooth.service
+
+packages/docker:
+	- sudo pacman -S --noconfirm --needed \
+		docker \
+		lxc
+	- sudo systemctl enable docker.service
+	- sudo gpasswd -a $(USER) docker
 
 /etc/vconsole.conf: templates/etc/vconsole.conf
 	- sudo pacman -S --noconfirm terminus-font

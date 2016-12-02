@@ -2,8 +2,10 @@ include config.mk
 
 .PHONY = \
 	applications/dropbox \
+	applications/locker \
 	applications/mpd \
 	applications/ncmpcpp \
+	applications/scrot \
 	user/dotfiles \
 	user/media
 
@@ -26,6 +28,7 @@ dotfiles = \
 
 # User's System services
 /etc/systemd/system/%: templates/etc/systemd/system/*
+	- sudo mkdir -p $(@D)
 	- $(macrocmd) \
 		templates/etc/systemd/system/$* \
 		| sudo dd of=$@
