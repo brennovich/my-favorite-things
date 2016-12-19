@@ -116,6 +116,12 @@ packages/bluetooth:
 	- sudo systemctl enable bluetooth.service
 	- sudo systemctl start bluetooth.service
 
+packages/ntp:
+	- sudo pacman -S --noconfirm --needed \
+		ntp
+	- sudo systemctl enable ntpd.service
+	- sudo systemctl start ntpd.service
+
 packages/docker:
 	- sudo pacman -S --noconfirm --needed \
 		docker \
