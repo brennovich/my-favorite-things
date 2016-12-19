@@ -17,6 +17,7 @@ dotfiles = \
 	~/.bash_profile \
 	~/.xinitrc \
 	~/.Xresources \
+	~/.Xresources.d/base16-grayscale-dark.Xresources \
 	~/.Xresources.d/base16-grayscale-dark-256.Xresources \
 	~/.Xresources.d/urxvt
 
@@ -45,6 +46,11 @@ dotfiles = \
 user/dotfiles: $(dotfiles)
 
 user/media: applications/mpd applications/ncmpcpp applications/mplayer
+
+user/fonts:
+	- sudo pacman -S --noconfirm --needed \
+		ttf-fira-mono \
+		ttf-fira-sans
 
 applications/bspwm: ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc ~/.compton.conf
 	- sudo pacman -S --noconfirm --needed \
@@ -87,6 +93,17 @@ applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-fav
 	- pacaur -S --noconfirm --needed \
 		i3lock \
 		imagemagick
+
+applications/vim: ~/.vimrc
+	- sudo pacman -S --noconfirm --needed gvim
+	- rm -rf ~/.vim/bundle
+	- mkdir -p ~/.vim/autoload ~/.vim/backups ~/.vim/bundle
+	- curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+	- cd ~/.vim/bundle \
+		&& git clone https://github.com/chriskempson/base16-vim \
+		&& git clone https://github.com/tpope/vim-fugitive.git \
+		&& git clone https://github.com/tpope/vim-sensible.git \
+		&& git clone https://github.com/tpope/vim-vinegar.git
 
 clean/dotfiles:
 	rm -rf $(dotfiles)

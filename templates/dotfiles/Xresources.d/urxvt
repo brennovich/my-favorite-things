@@ -1,4 +1,5 @@
-URxvt.font: xft:Terminus:size=18
+URxvt.font: xft:Fira Mono:size=13,style=medium
+URxvt.letterSpace: -1
 
 URxvt*borderless: true
 URxvt*saveLines: 20000

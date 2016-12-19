@@ -1,2 +1,4 @@
-export TERM=rxvt-unicode-256color
+export TERM=linux
 export PATH=$HOME/.bin:$PATH
+
+alias ls='ls --color'
