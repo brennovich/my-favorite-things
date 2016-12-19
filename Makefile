@@ -2,7 +2,7 @@ include config.mk
 
 macrocmd = m4 \
 	   -Duser_name="$(user-name)" \
-	   -Duser="$(user-nick)" \
+	   -Duser_nick="$(user-nick)" \
 	   -Duser_email="$(user-email)" \
 	   macros.m4
 

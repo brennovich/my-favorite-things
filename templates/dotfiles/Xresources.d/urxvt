@@ -1,3 +1,9 @@
 URxvt.font: xft:Terminus:size=18
+
+URxvt*borderless: true
+URxvt*saveLines: 20000
+URxvt*scrollBar: false
+URxvt.internalBorder: 10
 URxvt.geometry: 120x40
-URxvt.scrollBar: false
+URxvt.intensityStyles: false
+URxvt.depth: 32

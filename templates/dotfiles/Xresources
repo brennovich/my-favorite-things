@@ -1,1 +1,2 @@
+#include ".Xresources.d/base16-grayscale-dark-256.Xresources"
 #include ".Xresources.d/urxvt"

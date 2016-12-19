@@ -56,4 +56,4 @@
   name = __user_name__
   email = __user_email__
 [github]
-  user = __user_nick__
+  user = __user__

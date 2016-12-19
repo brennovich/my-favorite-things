@@ -17,6 +17,7 @@ dotfiles = \
 	~/.bash_profile \
 	~/.xinitrc \
 	~/.Xresources \
+	~/.Xresources.d/base16-grayscale-dark-256.Xresources \
 	~/.Xresources.d/urxvt
 
 # Generalistic task to copy dotifles' templates
