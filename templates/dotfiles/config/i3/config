@@ -1,0 +1,235 @@
+#############
+# Variables #
+#############
+
+set $mod Mod4
+set $termnial urxvt
+
+set $ws1 1:web
+set $ws2 2:code
+set $ws3 3:misc
+set $ws4 4:four
+set $ws5 5:five
+set $ws6 6:six
+
+set $black3 #002b36
+set $black2 #073642
+set $black1 #586e75
+set $black0 #657b83
+set $white0 #839496
+set $white1 #93a1a1
+set $white2 #eee8d5
+set $white3 #fdf6e3
+
+set $yellow #b58900
+set $orange #cb4b16
+set $red #dc322f
+set $magenta #d33682
+set $violet #6c71c4
+set $blue #268bd2
+set $cyan #2aa198
+set $green #859900
+
+set $wallpaper ~/code/my-favorite-things/wallpapers/popload.jpg
+
+set $font Fira Mono Medium 11
+set $barfont Fira Mono Medium 11
+
+set $border_size 4
+
+set $locker ~/.bin/my-favorite-things-locker
+set $compositor compton --config ~/.compton.conf
+
+####################
+# General Settings #
+####################
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango: $font
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Display popups if it's from same window
+popup_during_fullscreen smart
+
+new_window pixel $border_size
+new_float pixel $border_size
+
+########################
+# Startup Applications #
+########################
+
+# Simple X compositor to improve menus focus
+exec --no-startup-id $compositor
+
+# Set wallpaper
+exec_always --no-startup-id feh --bg-fill $wallpaper
+
+# Set Xresources
+exec_always --no-startup-id xrdb ~/.Xresources
+
+##############
+# Scratchpad #
+##############
+
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+minus scratchpad show
+
+############
+# Bindings #
+############
+
+# Compositor
+bindsym Control+$mod+c exec --no-startup-id $compositor
+bindsym Control+$mod+k exec --no-startup-id killall compton
+
+# Start a terminal
+bindsym $mod+Return exec --no-startup-id $termnial
+
+# Kill focused window
+bindsym $mod+Shift+q kill
+
+# Start dmenu (as program launcher)
+bindsym $mod+d exec --no-startup-id dmenu_run -i -b -nb \$white2 -nf \$black0 -sb \$white2 -sf \$orange -fn 'Fira Mono:style=medium:size=11'
+
+# Change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Split in horizontal orientation
+bindsym $mod+b split h
+
+# Split in vertical orientation
+bindsym $mod+v split v
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# Change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# Focus the parent container
+bindsym $mod+a focus parent
+
+# Switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+
+# Reload the configuration file
+bindsym $mod+Shift+c reload
+
+# Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# Lock screen
+bindsym Control+Mod1+l exec --no-startup-id $locker
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec --no-startup-id light -A 3
+bindsym XF86MonBrightnessDown exec --no-startup-id light -U 3
+
+# Pulse Audio controls
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute 1 toggle
+bindsym XF86AudioMute exec --no-startup-id pamixer -t
+bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer -i 5
+bindsym XF86AudioLowerVolume exec --no-startup-id pamixer -d 5
+
+bindsym XF86PowerOff exec --no-startup-id $locker
+bindsym $mod+XF86PowerOff exec --no-startup-id systemctl suspend
+
+# Screenshots
+bindsym --release Print exec --no-startup-id scrot ~/Pictures/screenshots/%y-%b-%d_%H%M%S.png
+bindsym --release $mod+Print exec --no-startup-id scrot -s ~/Pictures/screenshots/%y-%b-%d_%H%M%S.png
+
+# Resize window (you can also use the mouse for that)
+mode "resize" {
+  bindsym h resize shrink width 5 px or 5 ppt
+  bindsym j resize grow height 5 px or 5 ppt
+  bindsym k resize shrink height 5 px or 5 ppt
+  bindsym l resize grow width 5 px or 5 ppt
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+mode "move workspace" {
+  bindsym h move workspace to output left
+  bindsym j move workspace to output down
+  bindsym k move workspace to output up
+  bindsym l move workspace to output right
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+bindsym $mod+Shift+w mode "move workspace"
+
+set $mode_system system: lock(l), logout(e), suspend(s), hibernate(h), reboot(r), shutdown(Shift+s)
+
+mode "$mode_system" {
+  bindsym l exec --no-startup-id $locker, mode "default"
+  bindsym e exec --no-startup-id i3-msg exit, mode "default"
+  bindsym s exec --no-startup-id systemctl suspend, mode "default"
+  bindsym h exec --no-startup-id systemctl hibernate, mode "default"
+  bindsym r exec --no-startup-id systemctl reboot, mode "default"
+  bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+bindsym $mod+Shift+e mode "$mode_system"
+
+#######################
+# Themes & Status Bar #
+#######################
+
+client.focused $green $green $white3 $green
+client.unfocused $black2 $black2 $white1 $black2
+client.focused_inactive $black1 $black1 $white2 $black1
+client.urgent $magenta $magenta $white2 $magenta
+
+bar {
+  status_command i3status
+
+  colors {
+    separator $black0
+    background $black3
+    statusline $violet
+  }
+}

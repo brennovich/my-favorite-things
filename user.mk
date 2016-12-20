@@ -64,6 +64,14 @@ applications/bspwm: ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc ~/.compton.c
 	- ~/.config/bspwm/bspwmrc
 	- pkill -USR1 -x sxhkd
 
+applications/i3wm: ~/.config/i3/config ~/.compton.conf
+	- sudo pacman -S --noconfirm --needed \
+		dmenu \
+		feh \
+		i3-wm \
+		i3lock \
+		i3status
+
 applications/dropbox:
 	- pacaur -S dropbox dropbox-cli --noconfirm --needed
 	- systemctl --user enable dropbox.service
@@ -100,9 +108,9 @@ applications/vim: ~/.vimrc
 	- mkdir -p ~/.vim/autoload ~/.vim/backups ~/.vim/bundle
 	- curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 	- cd ~/.vim/bundle \
-		&& git clone https://github.com/chriskempson/base16-vim \
 		&& git clone https://github.com/tpope/vim-fugitive.git \
 		&& git clone https://github.com/tpope/vim-sensible.git \
+		&& git clone https://github.com/tpope/vim-sleuth.git \
 		&& git clone https://github.com/tpope/vim-vinegar.git
 
 clean/dotfiles:

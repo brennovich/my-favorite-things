@@ -4,17 +4,8 @@ execute pathogen#infect()
 " General settings
 " ################
 
-syntax on
-filetype plugin indent on
-
-" Reload files changed outside vim
-set autoread
-
 " Show current mode down the bottom
 set showmode
-
-" The encoding displayed
-set encoding=utf-8
 
 " The encoding written to file
 set fileencoding=utf-8
@@ -23,7 +14,6 @@ set fileencoding=utf-8
 " Editing settings
 " ################
 
-set incsearch
 set hlsearch
 
 " Disable swap files and things like that
@@ -57,20 +47,9 @@ set winwidth=80
 set nowrap
 set linebreak
 
-set scrolloff=8
-set listchars=tab:>\ ,trail:·,extends:>,precedes:<,nbsp:+,eol:¬
-
 " ###################
 " Appearence settings
 " ###################
-
-
-" Access colors present in 256 colorspace
-let base16colorspace=256
-colorscheme base16-grayscale-dark
-
-hi! StatusLine ctermbg=4
-hi! Colorcolumn ctermbg=4
 
 " Statusbar
 set statusline=\ %f\  " Filename
