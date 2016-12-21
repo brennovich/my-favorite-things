@@ -64,13 +64,14 @@ applications/bspwm: ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc ~/.compton.c
 	- ~/.config/bspwm/bspwmrc
 	- pkill -USR1 -x sxhkd
 
-applications/i3wm: ~/.config/i3/config ~/.compton.conf
+applications/i3wm: ~/.config/i3/config ~/.compton.conf ~/.config/i3status/config ~/.bin/dual-battery-uevent
 	- sudo pacman -S --noconfirm --needed \
 		dmenu \
 		feh \
 		i3-wm \
 		i3lock \
 		i3status
+	- sudo setcap cap_net_admin=ep $(shell which i3status)
 
 applications/dropbox:
 	- pacaur -S dropbox dropbox-cli --noconfirm --needed

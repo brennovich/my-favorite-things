@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# Concatenate multiple battery uevent reports into one
+
+mkdir -p $HOME/.my-favorite-things
+
+while true; do
+  paste -d ' ' /sys/class/power_supply/BAT{0..1}/uevent | tr '=' ' ' | \
+    awk '/Charging/{ print($1 "=Charging"); next } { print($1 "=" ($2+$4)/2) }' \
+    > $HOME/.my-favorite-things/dual-battery-uevent
+
+  sleep 5
+done

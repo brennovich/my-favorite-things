@@ -1,0 +1,49 @@
+general {
+	colors = false
+	interval = 5
+}
+
+order += "ethernet enp0s31f6"
+order += "wireless wlp4s0"
+order += "load"
+order += "volume master"
+order += "battery 2"
+order += "tztime local"
+
+ethernet enp0s31f6 {
+	format_up = "wired: connected, %speed - %ip"
+	format_down = "wired: down"
+}
+
+wireless wlp4s0 {
+	format_up = "wifi: %quality at %essid"
+	format_down = "wifi: down"
+}
+
+load {
+	format = "load: %1min"
+}
+
+battery 2 {
+	integer_battery_capacity = true
+	last_full_capacity = true
+	path = "/home/__user__/.my-favorite-things/dual-battery-uevent"
+	format = "%status %percentage %remaining"
+	status_chr = "charging"
+	status_bat = "draining"
+	status_full = "full"
+	hide_seconds = true
+	low_threshold = 5
+}
+
+volume master {
+	format = "volume: %volume"
+	format_muted = "volume: muted"
+	device = "default"
+	mixer = "Master"
+	mixer_idx = 0
+}
+
+tztime local {
+	format = "%a %e %b %H:%M"
+}

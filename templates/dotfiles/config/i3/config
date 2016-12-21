@@ -5,37 +5,36 @@
 set $mod Mod4
 set $termnial urxvt
 
-set $ws1 1:web
-set $ws2 2:code
-set $ws3 3:misc
-set $ws4 4:four
-set $ws5 5:five
-set $ws6 6:six
+set $ws1 1
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 5
+set $ws6 6
 
-set $black3 #002b36
-set $black2 #073642
-set $black1 #586e75
-set $black0 #657b83
-set $white0 #839496
-set $white1 #93a1a1
-set $white2 #eee8d5
-set $white3 #fdf6e3
+set $base00 #101010
+set $base01 #252525
+set $base02 #464646
+set $base03 #525252
+set $base04 #ababab
+set $base05 #b9b9b9
+set $base06 #e3e3e3
+set $base07 #f7f7f7
+set $base08 #7c7c7c
+set $base09 #999999
+set $base0A #a0a0a0
+set $base0B #8e8e8e
+set $base0C #868686
+set $base0D #686868
+set $base0E #747474
+set $base0F #5e5e5e
 
-set $yellow #b58900
-set $orange #cb4b16
-set $red #dc322f
-set $magenta #d33682
-set $violet #6c71c4
-set $blue #268bd2
-set $cyan #2aa198
-set $green #859900
-
-set $wallpaper ~/code/my-favorite-things/wallpapers/popload.jpg
+set $wallpaper __my_favorite_things__/wallpapers/republica.jpg
 
 set $font Fira Mono Medium 11
 set $barfont Fira Mono Medium 11
 
-set $border_size 4
+set $border_size 1
 
 set $locker ~/.bin/my-favorite-things-locker
 set $compositor compton --config ~/.compton.conf
@@ -70,6 +69,9 @@ exec_always --no-startup-id feh --bg-fill $wallpaper
 # Set Xresources
 exec_always --no-startup-id xrdb ~/.Xresources
 
+# Dirty Daemons
+exec --no-startup-id ~/.bin/dual-battery-uevent
+
 ##############
 # Scratchpad #
 ##############
@@ -95,7 +97,7 @@ bindsym $mod+Return exec --no-startup-id $termnial
 bindsym $mod+Shift+q kill
 
 # Start dmenu (as program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run -i -b -nb \$white2 -nf \$black0 -sb \$white2 -sf \$orange -fn 'Fira Mono:style=medium:size=11'
+bindsym $mod+d exec --no-startup-id dmenu_run -i -b -nb \$base05 -nf \$base02 -sb \$base0D -sf \$base01 -fn 'Fira Mono:style=medium:size=12'
 
 # Change focus
 bindsym $mod+h focus left
@@ -219,17 +221,22 @@ bindsym $mod+Shift+e mode "$mode_system"
 # Themes & Status Bar #
 #######################
 
-client.focused $green $green $white3 $green
-client.unfocused $black2 $black2 $white1 $black2
-client.focused_inactive $black1 $black1 $white2 $black1
-client.urgent $magenta $magenta $white2 $magenta
+client.focused $base0D $base0D $base00 $base01
+client.focused_inactive $base02 $base02 $base03 $base01
+client.unfocused $base01 $base01 $base03 $base01
+client.urgent $base02 $base08 $base07 $base08
 
 bar {
   status_command i3status
 
   colors {
-    separator $black0
-    background $black3
-    statusline $violet
+    separator $base03
+    background $base01
+    statusline $base05
+
+    focused_workspace $base0C $base0D $base00
+    active_workspace $base02 $base02 $base07
+    inactive_workspace $base01 $base01 $base03
+    urgent_workspace $base08 $base08 $base07
   }
 }
