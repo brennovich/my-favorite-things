@@ -12,22 +12,22 @@ set $ws4 4
 set $ws5 5
 set $ws6 6
 
-set $base00 #101010
-set $base01 #252525
-set $base02 #464646
-set $base03 #525252
-set $base04 #ababab
-set $base05 #b9b9b9
-set $base06 #e3e3e3
-set $base07 #f7f7f7
-set $base08 #7c7c7c
-set $base09 #999999
-set $base0A #a0a0a0
-set $base0B #8e8e8e
-set $base0C #868686
-set $base0D #686868
-set $base0E #747474
-set $base0F #5e5e5e
+set $base00 color_a
+set $base01 color_b
+set $base02 color_c
+set $base03 color_d
+set $base04 color_e
+set $base05 color_f
+set $base06 color_g
+set $base07 color_h
+set $base08 color_i
+set $base09 color_j
+set $base0A color_k
+set $base0B color_l
+set $base0C color_m
+set $base0D color_n
+set $base0E color_o
+set $base0F color_p
 
 set $wallpaper __my_favorite_things__/wallpapers/republica.jpg
 
@@ -221,7 +221,7 @@ bindsym $mod+Shift+e mode "$mode_system"
 # Themes & Status Bar #
 #######################
 
-client.focused $base0D $base0D $base00 $base01
+client.focused $base0D $base0D $base00 $base0D
 client.focused_inactive $base02 $base02 $base03 $base01
 client.unfocused $base01 $base01 $base03 $base01
 client.urgent $base02 $base08 $base07 $base08

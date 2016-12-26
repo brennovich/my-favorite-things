@@ -4,7 +4,8 @@ macrocmd = m4 \
 	   -Duser_name="$(user-name)" \
 	   -Duser_nick="$(user-nick)" \
 	   -Duser_email="$(user-email)" \
-	   macros.m4
+	   macros.m4 \
+	   $(colorscheme).m4
 
 include core.mk
 include user.mk

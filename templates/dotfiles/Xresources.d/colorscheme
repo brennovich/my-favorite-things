@@ -1,0 +1,38 @@
+Xresource_variable base00 color_a
+Xresource_variable base01 color_b
+Xresource_variable base02 color_c
+Xresource_variable base03 color_d
+Xresource_variable base04 color_e
+Xresource_variable base05 color_f
+Xresource_variable base06 color_g
+Xresource_variable base07 color_h
+Xresource_variable base08 color_i
+Xresource_variable base09 color_j
+Xresource_variable base0A color_k
+Xresource_variable base0B color_l
+Xresource_variable base0C color_m
+Xresource_variable base0D color_n
+Xresource_variable base0E color_o
+Xresource_variable base0F color_p
+
+*.foreground: base05
+*.background: base00
+*.cursorColor: base05
+
+*.color0: base00
+*.color1: base08
+*.color2: base0B
+*.color3: base0A
+*.color4: base0D
+*.color5: base0E
+*.color6: base0C
+*.color7: base05
+
+*.color8: base03
+*.color9: base09
+*.color10: base01
+*.color11: base02
+*.color12: base04
+*.color13: base06
+*.color14: base0F
+*.color15: base07

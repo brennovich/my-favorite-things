@@ -12,8 +12,7 @@ set fileencoding=utf-8
 
 " ################
 " Editing settings
-" ################
-
+" ################ 
 set list
 set hlsearch
 
@@ -52,6 +51,12 @@ set linebreak
 " Appearence settings
 " ###################
 
+set t_Co=256
+set background=dark
+colorscheme base16-grayscale-dark
+
+hi! VertSplit ctermbg=NONE
+
 " Statusbar
 set statusline=\ %f\  " Filename
 set statusline+=%{fugitive#statusline()} " Git info
@@ -62,7 +67,7 @@ set statusline+=%y " File type
 set statusline+=[%{strlen(&fenc)?&fenc:'none'}] " File encoding
 set statusline+=[%{&ff}] " File ending
 set statusline+=\ %P\ of\ %L\  " Perc. file
-set statusline+=(%l\:%c) " Line info
+set statusline+=(%l\:%c)\ " Line info
 
 " Column ruler
 set colorcolumn=120

@@ -17,8 +17,7 @@ dotfiles = \
 	~/.bash_profile \
 	~/.xinitrc \
 	~/.Xresources \
-	~/.Xresources.d/base16-grayscale-dark.Xresources \
-	~/.Xresources.d/base16-grayscale-dark-256.Xresources \
+	~/.Xresources.d/colorscheme \
 	~/.Xresources.d/urxvt
 
 # Generalistic task to copy dotifles' templates
@@ -109,6 +108,7 @@ applications/vim: ~/.vimrc
 	- mkdir -p ~/.vim/autoload ~/.vim/backups ~/.vim/bundle
 	- curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 	- cd ~/.vim/bundle \
+		&& git clone https://github.com/chriskempson/base16-vim.git \
 		&& git clone https://github.com/tpope/vim-fugitive.git \
 		&& git clone https://github.com/tpope/vim-sensible.git \
 		&& git clone https://github.com/tpope/vim-sleuth.git \

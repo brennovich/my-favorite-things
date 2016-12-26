@@ -1,6 +1,10 @@
 general {
-	colors = false
+	colors = true
 	interval = 5
+	color_good = "color_c"
+	color_degraded = "color_i"
+	color_bad = "color_g"
+	separator = " "
 }
 
 order += "ethernet enp0s31f6"
