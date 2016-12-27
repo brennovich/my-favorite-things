@@ -18,6 +18,7 @@ dotfiles = \
 	~/.bash_profile \
 	~/.xinitrc \
 	~/.Xresources \
+	~/.Xresources.d/2bwm \
 	~/.Xresources.d/colorscheme \
 	~/.Xresources.d/urxvt
 
@@ -47,7 +48,15 @@ user/dotfiles: $(dotfiles)
 
 user/media: applications/mpd applications/ncmpcpp applications/mplayer
 
-user/desktop: applications/i3wm applications/locker
+user/desktop: applications/2bwm applications/locker
+	- sudo pacman -S --noconfirm --needed \
+		feh \
+		compton \
+		dmenu \
+		xorg-xsetroot
+
+applications/2bwm:
+	- # TODO
 
 user/fonts:
 	- sudo pacman -S --noconfirm --needed \
@@ -56,11 +65,7 @@ user/fonts:
 
 applications/i3wm: ~/.config/i3/config ~/.compton.conf ~/.config/i3status/config ~/.bin/dual-battery-uevent
 	- sudo pacman -S --noconfirm --needed \
-		compton \
-		dmenu \
-		feh \
 		i3-wm \
-		i3lock \
 		i3status
 	- sudo setcap cap_net_admin=ep $(shell which i3status)
 
@@ -79,8 +84,8 @@ applications/mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service
 
 applications/ncmpcpp: ~/.ncmpcpp/bindings ~/.ncmpcpp/config
 
-applications/mplayer:
-	- sudo pacman -S --noconfirm mplayer
+applications/mplayer: ~/.mplayer/config
+	- sudo pacman -S --noconfirm --needed mplayer
 
 applications/scrot:
 	- sudo pacman -S --noconfirm --needed scrot
