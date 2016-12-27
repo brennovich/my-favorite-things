@@ -1,1 +1,17 @@
-exec i3
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# Configs
+xrdb -load ~/.Xresources
+xsetroot -cursor_name Adwaita
+
+# Wallpaper
+feh --bg-fill /home/brennovich/code/my-favorite-things/wallpapers/popload.jpg &
+
+# Start window manager in the background. If it dies, X still lives.
+2bwm &
+
+# Compositor & postprocessors
+compton &
+redshift &
+
+exec urxvt

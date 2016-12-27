@@ -97,7 +97,7 @@ bindsym $mod+Return exec --no-startup-id $termnial
 bindsym $mod+Shift+q kill
 
 # Start dmenu (as program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run -i -b -nb \$base05 -nf \$base02 -sb \$base0D -sf \$base01 -fn 'Fira Mono:style=medium:size=12'
+bindsym $mod+d exec --no-startup-id dmenu_run -i -b -nb \$base05 -nf \$base02 -sb \$base0D -sf \$base01 -fn 'Fira Mono:style=medium:size=11'
 
 # Change focus
 bindsym $mod+h focus left

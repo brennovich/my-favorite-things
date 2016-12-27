@@ -23,7 +23,7 @@
   short = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\"
   changelog = log --pretty=format:\" * %s\"
   shortnocolor = log --pretty=format:\"%h %cr %cn %s\"
-  s = status
+  s = status --short
   lastday = log --author=__user_name__ --pretty=oneline --all --since=1.day
   lastfriday = log --author=__user_name__ --pretty=oneline --all --since='last Friday'
 [format]
@@ -41,7 +41,7 @@
   default = tracking
 [core]
   autocrlf = false
-  editor = vim -f
+  editor = nvim -f
   excludesfile = ~/.gitignore
 [diff]
   # Git diff will use (i)ndex, (w)ork tree, (c)ommit and (o)bject

@@ -1,5 +1,7 @@
-export TERM=xterm
+changequote(`[[[', `]]]')
+export EDITOR=nvim
 export PATH=$HOME/.bin:$PATH
+export TERM=xterm
 
 alias ls='ls --color'
 alias vim='nvim'
@@ -8,7 +10,7 @@ function __parse_git_status {
   index=`if [ -d .git ]; then git status -s | awk '{ print $1 }'; fi;`
 
   case "$index" in
-    *\?\?*)
+    *'??'*)
       printf '¡'
       ;;
     *D*)
@@ -22,4 +24,5 @@ function __parse_git_status {
   esac
 }
 
-export PS1="[\[\e[35m\]\W\[\e[m\]\[\e[37m\]$(__parse_git_status)\[\e[m\]] "
+export PS1="[\[\e[35m\]\W\[\e[m\]\[\e[0;37m\]\$(__parse_git_status)\[\e[m\]] "
+changequote([[[`]]], [[[']]])

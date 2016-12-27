@@ -1,5 +1,5 @@
 divert(-1)dnl
-define(`color_a', `#101009')
+define(`color_a', `#101010')
 define(`color_b', `#252525')
 define(`color_c', `#464646')
 define(`color_d', `#525252')
