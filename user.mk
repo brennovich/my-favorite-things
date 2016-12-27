@@ -6,6 +6,7 @@ include config.mk
 	applications/mpd \
 	applications/ncmpcpp \
 	applications/scrot \
+	user/desktop \
 	user/dotfiles \
 	user/media
 
@@ -46,25 +47,16 @@ user/dotfiles: $(dotfiles)
 
 user/media: applications/mpd applications/ncmpcpp applications/mplayer
 
+user/desktop: applications/i3wm applications/locker
+
 user/fonts:
 	- sudo pacman -S --noconfirm --needed \
 		ttf-fira-mono \
 		ttf-fira-sans
 
-applications/bspwm: ~/.config/bspwm/bspwmrc ~/.config/sxhkd/sxhkdrc ~/.compton.conf
-	- sudo pacman -S --noconfirm --needed \
-		bspwm \
-		compton \
-		dmenu \
-		feh \
-		sxhkd
-	- chmod +x ~/.config/bspwm/bspwmrc
-	- killall compton
-	- ~/.config/bspwm/bspwmrc
-	- pkill -USR1 -x sxhkd
-
 applications/i3wm: ~/.config/i3/config ~/.compton.conf ~/.config/i3status/config ~/.bin/dual-battery-uevent
 	- sudo pacman -S --noconfirm --needed \
+		compton \
 		dmenu \
 		feh \
 		i3-wm \
@@ -102,12 +94,13 @@ applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-fav
 		i3lock \
 		imagemagick
 
-applications/vim: ~/.vimrc
-	- sudo pacman -S --noconfirm --needed gvim
-	- rm -rf ~/.vim/bundle
-	- mkdir -p ~/.vim/autoload ~/.vim/backups ~/.vim/bundle
-	- curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-	- cd ~/.vim/bundle \
+config_path = ~/.config/nvim
+applications/neovim: $(config_path)/init.vim
+	- sudo pacman -S --noconfirm --needed neovim
+	- rm -rf $(config_path)/bundle
+	- mkdir -p $(config_path)/autoload $(config_path)/backups $(config_path)/bundle
+	- curl -LSso $(config_path)/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+	- cd $(config_path)/bundle \
 		&& git clone https://github.com/chriskempson/base16-vim.git \
 		&& git clone https://github.com/tpope/vim-fugitive.git \
 		&& git clone https://github.com/tpope/vim-sensible.git \
