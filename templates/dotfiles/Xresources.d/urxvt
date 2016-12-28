@@ -1,10 +1,11 @@
-URxvt.font: xft:Fira Mono:size=13,style=medium
+URxvt.font: xft:Fira Mono:size=11
+URxvt.boldFont: xft:Fira Mono:size=11,style=medium
 URxvt.letterSpace: -1
+URxvt.lineSpace: 1
 
 URxvt*borderless: true
 URxvt*saveLines: 20000
 URxvt*scrollBar: false
 URxvt.internalBorder: 10
-URxvt.geometry: 120x40
+URxvt.geometry: 84x26
 URxvt.intensityStyles: false
-URxvt.depth: 32

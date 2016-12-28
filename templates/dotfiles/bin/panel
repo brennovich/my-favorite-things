@@ -41,8 +41,13 @@ battery() {
     | grep -wE 'POWER_SUPPLY_CAPACITY' \
     | cut -f 2 -d '=')"
   round_capacity="$(cut -d '.' -f1 <<< $capacity)"
+  status="$(cat ~/.my-favorite-things/dual-battery-uevent \
+    | grep -wE 'POWER_SUPPLY_STATUS' \
+    | cut -f 2 -d '=')"
 
-  if [ $ac -eq 1 ]; then
+  if [ "$status" = "Full" ]; then
+    printf "%s" "charged"
+  elif [ $ac -eq 1 ]; then
     printf "%s%% %s" "$round_capacity" "%{F#e3e3e3}ac%{F-}"
   else
     energy="$(cat ~/.my-favorite-things/dual-battery-uevent \
@@ -106,7 +111,7 @@ volume() {
 while [[ true ]]; do
   printf "D%s\n" "$(current_workspace)"
 
-  sleep .5
+  sleep 1
 done > $panel_fifo &
 
 while [[ true ]]; do
@@ -130,13 +135,13 @@ done > $panel_fifo &
 while [[ true ]]; do
   printf "W %s\n" "$(wifi_status)"
 
-  sleep 5
+  sleep 6
 done > $panel_fifo &
 
 while [[ true ]]; do
   printf "V %s\n" "$(volume)"
 
-  sleep 5
+  sleep 3
 done > $panel_fifo &
 
 parse_fifo() {
@@ -157,7 +162,7 @@ parse_fifo() {
 }
 
 parse_fifo < "$panel_fifo" \
-  | lemonbar -b -B \#F0454545 -F \#ababab -f "Fira Mono Medium:size=11" -g 1920x24+0+0 -u 2 \
+  | lemonbar -b -B \#F0454545 -F \#ababab -f "Fira Mono:size=11" -g 1920x24+0+0 -u 2 \
   | while read line; do eval "$line"; done &
 
 wait
