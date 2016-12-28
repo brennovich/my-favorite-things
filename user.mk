@@ -55,7 +55,7 @@ user/desktop: applications/2bwm applications/locker
 		hsetroot \
 		compton \
 		dmenu \
-		lemonbar-git \
+		lemonbar-xft-git \
 		xorg-xsetroot
 
 applications/2bwm: ~/.bin/panel ~/.bin/launcher
