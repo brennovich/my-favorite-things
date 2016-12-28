@@ -28,9 +28,11 @@ define a coloscheme and your personal info like name and email, please look at `
 
 Here are a few photos, I'm using a grayscale colorscheme with a deep focus intent:
 
-![Clean desktop](https://cloud.githubusercontent.com/assets/379894/21473970/c7ebf358-caf7-11e6-895f-4f7322dbbdd1.png)
-![Colorscheme](https://cloud.githubusercontent.com/assets/379894/21473971/c7f0c162-caf7-11e6-9ee4-c63e512535e7.png)
-![VIm](https://cloud.githubusercontent.com/assets/379894/21473972/c7f1cf6c-caf7-11e6-81ad-f460d0af875a.png)
+![Clean desktop](http://i.imgur.com/pRS9dwL.png)
+![dmenu](http://i.imgur.com/9HZFG7J.png)
+![ncmpcpp](http://i.imgur.com/dkxkeoJ.png)
+![firefox](http://i.imgur.com/rYhXcEE.png)
+![VIm](http://i.imgur.com/5nZztMz.png)
 
 ### Third Party
 
