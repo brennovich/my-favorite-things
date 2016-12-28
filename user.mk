@@ -49,14 +49,14 @@ user/dotfiles: $(dotfiles)
 user/media: applications/mpd applications/ncmpcpp applications/mplayer
 
 user/desktop: applications/2bwm applications/locker
-	- sudo pacman -S --noconfirm --needed \
+	- pacaur -S --noconfirm --needed \
 		feh \
 		compton \
 		dmenu \
+		lemonbar-git \
 		xorg-xsetroot
 
-applications/2bwm:
-	- # TODO
+applications/2bwm: ~/.bin/panel ~/.bin/launcher
 
 user/fonts:
 	- sudo pacman -S --noconfirm --needed \

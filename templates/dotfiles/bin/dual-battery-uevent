@@ -21,6 +21,12 @@
 # POWER_SUPPLY_MANUFACTURER=SANYO
 # POWER_SUPPLY_SERIAL_NUMBER= 1201
 
+if [ $(pgrep -cx dual-battery) -gt 1 ] ; then
+  pkill -o dual-battery
+fi
+
+trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
+
 mkdir -p $HOME/.my-favorite-things
 
 parse_uevent='

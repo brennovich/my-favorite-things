@@ -2,16 +2,20 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Configs
 xrdb -load ~/.Xresources
-xsetroot -cursor_name Adwaita
+xsetroot -cursor_name left_ptr
 
 # Wallpaper
 feh --bg-fill /home/brennovich/code/my-favorite-things/wallpapers/popload.jpg &
 
 # Start window manager in the background. If it dies, X still lives.
 2bwm &
+panel &
 
 # Compositor & postprocessors
 compton &
 redshift &
+
+# Dirty daemons
+dual-battery-uevent &
 
 exec urxvt
