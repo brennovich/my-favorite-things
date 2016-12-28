@@ -31,3 +31,8 @@ Here are a few photos, I'm using a grayscale colorscheme with a deep focus inten
 ![Clean desktop](https://cloud.githubusercontent.com/assets/379894/21473970/c7ebf358-caf7-11e6-895f-4f7322dbbdd1.png)
 ![Colorscheme](https://cloud.githubusercontent.com/assets/379894/21473971/c7f0c162-caf7-11e6-9ee4-c63e512535e7.png)
 ![VIm](https://cloud.githubusercontent.com/assets/379894/21473972/c7f1cf6c-caf7-11e6-81ad-f460d0af875a.png)
+
+### Third Party
+
+- Firefox user style: https://userstyles.org/styles/135593/firefox-edge-light-dark
+- Slack sidebar: `#073642,#002B36,#B58900,#FDF6E3,#CB4B16,#FDF6E3,#2AA198,#DC322F`

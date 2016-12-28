@@ -63,12 +63,17 @@ packages/utils:
 		ctags \
 		xsel
 
-packages/web:
+packages/web: applications/firefox
 	- pacaur -S --noconfirm --needed \
 		firefox \
 		google-chrome \
 		telegram-desktop-bin \
 		transmission-gtk
+
+applications/firefox: ~/.vimperator/vimperatorrc ~/.vimperator/colors/base16-grayscale-dark.vimp
+	- pacaur -S --noconfirm --needed \
+		firefox
+	- ln -fs ~/.vimperator/vimperatorrc ~/.vimperatorrc
 
 # Setup Xorg and its basic drivers and tools.
 # 
