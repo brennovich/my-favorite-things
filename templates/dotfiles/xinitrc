@@ -5,7 +5,7 @@ xrdb -load ~/.Xresources
 xsetroot -cursor_name left_ptr
 
 # Wallpaper
-feh --bg-fill /home/brennovich/code/my-favorite-things/wallpapers/popload.jpg &
+hsetroot -fill __my_favority_things__/wallpapers/popload.jpg
 
 # Start window manager in the background. If it dies, X still lives.
 2bwm &

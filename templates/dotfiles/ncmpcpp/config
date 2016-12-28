@@ -16,7 +16,7 @@ header_visibility = "no"
 titles_visibility = "no"
 enable_window_title = "no"
 statusbar_visibility = "yes"
-song_status_format = "$0%t $5- $0%b by $0%a"
+song_status_format = "$0%t $5- $0%b $5by $0%a"
 discard_colors_if_item_is_selected = "yes"
 
 #######

@@ -47,10 +47,12 @@ dotfiles = \
 user/dotfiles: $(dotfiles)
 
 user/media: applications/mpd applications/ncmpcpp applications/mplayer
+	- pacaur -S --noconfirm --needed \
+		sxiv
 
 user/desktop: applications/2bwm applications/locker
 	- pacaur -S --noconfirm --needed \
-		feh \
+		hsetroot \
 		compton \
 		dmenu \
 		lemonbar-git \
@@ -111,6 +113,12 @@ applications/neovim: $(config_path)/init.vim
 		&& git clone https://github.com/tpope/vim-sensible.git \
 		&& git clone https://github.com/tpope/vim-sleuth.git \
 		&& git clone https://github.com/tpope/vim-vinegar.git
+
+applications/ranger: ~/.config/ranger/rc.conf ~/.bin/previewer ~/.bin/imgt
+	- sudo pacman -S --noconfirm --needed \
+		highlight \
+		ranger \
+		w3m
 
 clean/dotfiles:
 	rm -rf $(dotfiles)
