@@ -16,17 +16,27 @@ trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
 
 mkfifo "$panel_fifo"
 
+# Display list of active desktops
+#
+# It fetchs the total of available desktops and filter the ones that has at
+# least one window or the active one
+#
 current_workspace() {
-  index="$(xprop -root _NET_CURRENT_DESKTOP | cut -d " " -f3)"
   total_desktops="$(xprop -root _NET_NUMBER_OF_DESKTOPS | cut -d " " -f3)"
+  desktops_with_windows="$(for id in $(lsw -a); do \
+    echo "$(xprop _NET_WM_DESKTOP -id $id)"; done | grep "CARDINAL" | cut -d " " -f3 | sort | uniq)"
+
+  index="$(xprop -root _NET_CURRENT_DESKTOP | cut -d " " -f3)"
   current_desktop="$(($index + 1))"
 
-  # Keep last desktop hidden for scratchpad like feature
-  for desktop in $(seq 1 $(($total_desktops - 1))); do
+  for desktop in $(seq 1 "$total_desktops"); do
     if [ "$current_desktop" == "$desktop" ]; then
       printf " %s" "%{F#e3e3e3}%{+u}$desktop%{-u}%{F-}"
     else
-      printf " %s" "$desktop"
+      # Skip if it has no windows
+      if grep -o "^$((desktop - 1))$" <<< "$desktops_with_windows" &>/dev/null; then
+        printf " %s" "$desktop"
+      fi
     fi
   done
 }
