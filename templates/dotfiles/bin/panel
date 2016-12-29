@@ -46,6 +46,8 @@ clock() {
 }
 
 battery() {
+  dual-battery-uevent
+
   ac="$(cat /sys/class/power_supply/AC/online)"
   capacity="$(cat ~/.my-favorite-things/dual-battery-uevent \
     | grep -wE 'POWER_SUPPLY_CAPACITY' \
@@ -133,7 +135,7 @@ done > $panel_fifo &
 while [[ true ]]; do
   printf "B %s\n" "$(battery)"
 
-  sleep 5
+  sleep 10
 done > $panel_fifo &
 
 while [[ true ]]; do

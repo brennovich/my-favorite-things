@@ -1,21 +1,12 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-# Configs
 xrdb -load ~/.Xresources
+xsetroot -name my_favorite_things
 xsetroot -cursor_name left_ptr
-
-# Wallpaper
 hsetroot -fill __my_favorite_things__/wallpapers/popload.jpg
 
-# Start window manager in the background. If it dies, X still lives.
-2bwm &
 panel &
-
-# Compositor & postprocessors
 compton &
 redshift &
 
-# Dirty daemons
-dual-battery-uevent &
-
-exec urxvt
+exec 2bwm
