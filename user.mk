@@ -50,7 +50,7 @@ user/media: applications/mpd applications/ncmpcpp applications/mplayer
 	- pacaur -S --noconfirm --needed \
 		sxiv
 
-user/desktop: applications/2bwm applications/locker ~/.bin/panel
+user/desktop: applications/redshift applications/2bwm applications/locker ~/.bin/panel
 	- pacaur -S --noconfirm --needed \
 		compton \
 		dmenu \
@@ -63,6 +63,10 @@ user/desktop: applications/2bwm applications/locker ~/.bin/panel
 applications/2bwm: ~/.bin/launcher
 	- cd $(PWD)/2bwm-pkgbuild && makepkg -cf
 	- pacaur -U --noconfirm $(PWD)/2bwm-pkgbuild/2bwm-git*.tar.xz
+
+applications/redshift: ~/.config/redshift.conf
+	- pacaur -S --noconfirm --needed \
+		redshift
 
 user/fonts:
 	- sudo pacman -S --noconfirm --needed \
