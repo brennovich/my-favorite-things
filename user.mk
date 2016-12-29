@@ -50,33 +50,30 @@ user/media: applications/mpd applications/ncmpcpp applications/mplayer
 	- pacaur -S --noconfirm --needed \
 		sxiv
 
-user/desktop: applications/2bwm applications/locker
+user/desktop: applications/2bwm applications/locker ~/.bin/panel
 	- pacaur -S --noconfirm --needed \
-		hsetroot \
 		compton \
 		dmenu \
+		hsetroot \
 		lemonbar-xft-git \
+		wmutils-git \
+		xorg-xprop \
 		xorg-xsetroot
 
-applications/2bwm: ~/.bin/panel ~/.bin/launcher
+applications/2bwm: ~/.bin/launcher
+	- cd $(PWD)/2bwm-pkgbuild && makepkg -cf
+	- pacaur -U --noconfirm $(PWD)/2bwm-pkgbuild/2bwm-git*.tar.xz
 
 user/fonts:
 	- sudo pacman -S --noconfirm --needed \
 		ttf-fira-mono \
 		ttf-fira-sans
 
-applications/i3wm: ~/.config/i3/config ~/.compton.conf ~/.config/i3status/config ~/.bin/dual-battery-uevent
-	- sudo pacman -S --noconfirm --needed \
-		i3-wm \
-		i3status
-	- sudo setcap cap_net_admin=ep $(shell which i3status)
-
 applications/dropbox:
 	- pacaur -S dropbox dropbox-cli --noconfirm --needed
 	- systemctl --user enable dropbox.service
 	- systemctl --user start dropbox.service
 	- dropbox-cli exclude add ~/Dropbox/Backup ~/Dropbox/love-mondays ~/Dropbox/books_da_broderage
-
 
 applications/mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service
 	- mkdir -p ~/.mpd/playlists
