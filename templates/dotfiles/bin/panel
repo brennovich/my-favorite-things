@@ -3,7 +3,7 @@
 # It works by outputing content to a fifo in order to achieve better performance
 # and avoid unnecessary frequent refreshes in some components
 #
-
+changecom(`"""')
 panel_fifo=/tmp/panel.fifo
 
 if [ $(pgrep -cx panel) -gt 1 ] ; then
@@ -22,27 +22,23 @@ mkfifo "$panel_fifo"
 # least one window or the active one
 #
 current_workspace() {
-  total_desktops="$(xprop -root _NET_NUMBER_OF_DESKTOPS | cut -d " " -f3)"
   desktops_with_windows="$(for id in $(lsw -a); do \
-    echo "$(xprop _NET_WM_DESKTOP -id $id)"; done | grep "CARDINAL" | cut -d " " -f3 | sort | uniq)"
+    echo "$(xprop _NET_WM_DESKTOP -id $id)"; done \
+    | grep -o " [0-9]\{1,2\}$" | tr -d " ")"
+  current_desktop="$(xprop -root _NET_CURRENT_DESKTOP | cut -d " " -f3)"
+  active_desktops="$(printf "%s\n%s" "$desktops_with_windows" "$current_desktop" | sort | uniq)"
 
-  index="$(xprop -root _NET_CURRENT_DESKTOP | cut -d " " -f3)"
-  current_desktop="$(($index + 1))"
-
-  for desktop in $(seq 1 "$total_desktops"); do
+  for desktop in $active_desktops; do
     if [ "$current_desktop" == "$desktop" ]; then
-      printf " %s" "%{F#e3e3e3}%{+u}$desktop%{-u}%{F-}"
+      printf " %s" "%{F#e3e3e3}%{+u}$(($desktop + 1))%{-u}%{F-}"
     else
-      # Skip if it has no windows
-      if grep -o "^$((desktop - 1))$" <<< "$desktops_with_windows" &>/dev/null; then
-        printf " %s" "$desktop"
-      fi
+      printf " %s" "$(($desktop + 1))"
     fi
   done
 }
 
 clock() {
-  date "+%a %e %I:%M %P "
+  date "+%a %e %I:%M%P "
 }
 
 battery() {
@@ -135,7 +131,7 @@ done > $panel_fifo &
 while [[ true ]]; do
   printf "B %s\n" "$(battery)"
 
-  sleep 10
+  sleep 15
 done > $panel_fifo &
 
 while [[ true ]]; do
@@ -157,7 +153,7 @@ while [[ true ]]; do
 done > $panel_fifo &
 
 parse_fifo() {
-  separator="%{F#767676}|%{F-}"
+  separator="%{color_o}|%{F-}"
 
   while read -r line ; do
     case $line in
@@ -174,7 +170,8 @@ parse_fifo() {
 }
 
 parse_fifo < "$panel_fifo" \
-  | lemonbar -b -B \#F0454545 -F \#ababab -f "Fira Mono:size=11" -g 1920x24+0+0 -u 2 \
+  | lemonbar -b -B \patsubst(color_c, `#', `#F0') -F \color_e -f "Fira Mono:size=11" -g 1920x24+0+0 -u 2 \
   | while read line; do eval "$line"; done &
 
 wait
+changecom(`#')
