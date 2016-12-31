@@ -110,6 +110,7 @@ applications/neovim: $(config_path)/init.vim
 	- curl -LSso $(config_path)/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 	- cd $(config_path)/bundle \
 		&& git clone https://github.com/chriskempson/base16-vim.git \
+		&& git clone https://github.com/derekwyatt/vim-scala.git \
 		&& git clone https://github.com/tpope/vim-fugitive.git \
 		&& git clone https://github.com/tpope/vim-sensible.git \
 		&& git clone https://github.com/tpope/vim-sleuth.git \
@@ -120,6 +121,11 @@ applications/ranger: ~/.config/ranger/rc.conf ~/.bin/previewer ~/.bin/imgt
 		highlight \
 		ranger \
 		w3m
+
+applications/zathura:
+	- sudo pacman -S --noconfirm --needed \
+		zathura \
+		zathura-pdf-mupdf
 
 clean/dotfiles:
 	rm -rf $(dotfiles)

@@ -10,6 +10,9 @@ set showmode
 " The encoding written to file
 set fileencoding=utf-8
 
+" Tags
+set tags+=.git/tags
+
 " ################
 " Editing settings
 " ################ 
@@ -41,7 +44,7 @@ set wildignore+=log/**
 set wildignore+=tmp/**
 
 " Set min-width of buffer, very useful when spliting panes
-set winwidth=80
+set winwidth=84
 
 " Wrap lines is for fools
 set nowrap
