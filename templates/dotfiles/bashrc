@@ -2,6 +2,7 @@ changequote(`[[[', `]]]')
 export EDITOR=nvim
 export PATH=$HOME/.bin:$PATH
 export TERM=xterm
+export HISTSIZE=20000
 
 alias ls='ls --color'
 alias vim='nvim'
