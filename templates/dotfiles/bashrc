@@ -6,6 +6,8 @@ export HISTSIZE=20000
 
 alias ls='ls --color'
 alias vim='nvim'
+alias nv='nvim'
+alias grep='grep --color=auto --exclude-dir=.git --line-number --dereference-recursive --binary-files=without-match'
 
 function __parse_git_status {
   index=`if [ -d .git ]; then git status -s | awk '{ print $1 }'; fi;`

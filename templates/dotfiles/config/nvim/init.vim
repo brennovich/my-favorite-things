@@ -74,3 +74,46 @@ set statusline+=(%l\:%c)\ " Line info
 
 " Column ruler
 set colorcolumn=120
+
+" ###################
+" Selecta Integration
+" ###################
+
+function! SelectaCommand(choice_command, selecta_args, vim_command)
+  let dict = { 'buf': bufnr('%'), 'vim_command': a:vim_command, 'temps': { 'result': tempname() }, 'name': 'SelectaCommand' }
+
+  function! dict.on_exit(id, code)
+    bd!
+
+    if a:code != 0
+      return 1
+    endif
+
+    if filereadable(self.temps.result)
+      let l:selection = readfile(self.temps.result)[0]
+
+      exec self.vim_command." ".l:selection
+    else
+      echom "selecta: error: can't read selection from (".self.temps.result.")"
+    endif
+  endfunction
+
+  if line('$') != 1 && getline(1) != ''
+    exec 'split '.dict.buf
+  endif
+
+  call termopen(a:choice_command." | selecta ".a:selecta_args." > ".dict.temps.result, dict)
+
+  setf dict
+  startinsert
+endfunction
+
+function! SelectaBuffer()
+  let bufnrs = filter(range(1, bufnr("$")), 'buflisted(v:val)')
+  let buffers = map(bufnrs, 'bufname(v:val)')
+
+  call SelectaCommand('echo "' . join(buffers, "\n") . '"', "", ":b")
+endfunction
+
+nnoremap <leader>b :call SelectaBuffer()<cr>
+nnoremap <leader>p :call SelectaCommand("__list_repo", "--height full", ":e")<cr>

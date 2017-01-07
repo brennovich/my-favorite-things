@@ -17,12 +17,12 @@ max_width=$(($FONTW * $COLUMNS))
 max_height=$(($FONTH * $(($LINES - 2)))) # substract one line for prompt
 
 if test $width -gt $max_width; then
-height=$(($height * $max_width / $width))
-width=$max_width
+  height=$(($height * $max_width / $width))
+  width=$max_width
 fi
 if test $height -gt $max_height; then
-width=$(($width * $max_height / $height))
-height=$max_height
+  width=$(($width * $max_height / $height))
+  height=$max_height
 fi
 
 w3m_command="0;1;0;0;$width;$height;;;;;$FILENAME\n4;\n3;"

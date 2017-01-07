@@ -1,0 +1,3 @@
+#!/bin/bash
+
+find . -type f ! -path 'vendor/bundle/*' ! -path 'log/*' ! -path '*/tmp/*' ! -path '*/.git/*' | sed 's/\.\///'

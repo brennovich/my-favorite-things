@@ -1,0 +1,7 @@
+set colored-stats on
+set visible-stats on
+
+"\C-xq": "\eb\"\ef\""
+"\C-l": clear-screen
+"\C-n": next-history
+"\C-p": previous-history
