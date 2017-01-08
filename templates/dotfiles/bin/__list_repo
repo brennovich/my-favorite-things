@@ -1,3 +1,4 @@
 #!/bin/bash
 
-find . -type f ! -path 'vendor/bundle/*' ! -path 'log/*' ! -path '*/tmp/*' ! -path '*/.git/*' | sed 's/\.\///'
+find . -type f ! -path '*/project/target/*' ! -path '*/target/*' ! -path 'vendor/bundle/*' ! -path 'log/*' ! -path '*/tmp/*' ! -path '*/.git/*' | sed 's/\.\///'
+

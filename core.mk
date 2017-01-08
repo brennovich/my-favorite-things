@@ -88,8 +88,9 @@ applications/firefox: ~/.vimperator/vimperatorrc ~/.vimperator/colors/base16-gra
 #
 packages/xorg: /etc/X11/xorg.conf.d/20-intel.conf /etc/X11/xorg.conf.d/00-keyboard.conf
 	- sudo pacman -S --noconfirm --needed \
+		libva-intel-driver \
+		libvdpau-va-gl \
 		rxvt-unicode \
-		mesa-vdpau \
 		xf86-input-libinput \
 		xf86-video-intel \
 		xorg-xinit \

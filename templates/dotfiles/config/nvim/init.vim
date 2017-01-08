@@ -58,7 +58,14 @@ set t_Co=256
 set background=dark
 colorscheme base16-grayscale-dark
 
-hi! VertSplit ctermbg=NONE
+augroup color_tweaks
+  au!
+  autocmd ColorScheme * hi VertSplit ctermbg=NONE
+  autocmd ColorScheme * hi SignColumn ctermbg=NONE
+  autocmd ColorScheme * hi NeomakeErrorSign ctermbg=NONE
+  autocmd ColorScheme * hi NeomakeInfoSign ctermbg=NONE
+  autocmd ColorScheme * hi NeomakeWarningSign ctermbg=NONE
+augroup END
 
 " Statusbar
 set statusline=\ %f\  " Filename
@@ -117,3 +124,10 @@ endfunction
 
 nnoremap <leader>b :call SelectaBuffer()<cr>
 nnoremap <leader>p :call SelectaCommand("__list_repo", "--height full", ":e")<cr>
+
+autocmd! BufWritePost,BufEnter * Neomake
+
+let g:neomake_warning_sign = {
+      \   'text': '*',
+      \   'texthl': 'NeomakeWarningSign',
+      \ }

@@ -46,7 +46,7 @@ dotfiles = \
 
 user/dotfiles: $(dotfiles)
 
-user/media: applications/mpd applications/ncmpcpp applications/mplayer
+user/media: applications/mpd applications/ncmpcpp applications/mpv
 	- pacaur -S --noconfirm --needed \
 		sxiv
 
@@ -87,8 +87,8 @@ applications/mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service
 
 applications/ncmpcpp: ~/.ncmpcpp/bindings ~/.ncmpcpp/config
 
-applications/mplayer: ~/.mplayer/config
-	- sudo pacman -S --noconfirm --needed mplayer
+applications/mpv:
+	- sudo pacman -S --noconfirm --needed mpv
 
 applications/scrot:
 	- sudo pacman -S --noconfirm --needed scrot
@@ -111,6 +111,7 @@ applications/neovim: $(config_path)/init.vim
 	- cd $(config_path)/bundle \
 		&& git clone https://github.com/chriskempson/base16-vim.git \
 		&& git clone https://github.com/derekwyatt/vim-scala.git \
+		&& git clone https://github.com/neomake/neomake.git \
 		&& git clone https://github.com/tpope/vim-fugitive.git \
 		&& git clone https://github.com/tpope/vim-sensible.git \
 		&& git clone https://github.com/tpope/vim-sleuth.git \
