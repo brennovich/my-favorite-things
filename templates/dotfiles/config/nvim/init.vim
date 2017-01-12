@@ -12,10 +12,11 @@ set fileencoding=utf-8
 
 " Tags
 set tags+=.git/tags
+set tags+=.git/tags-deps
 
 " ################
 " Editing settings
-" ################ 
+" ################
 set list
 set hlsearch
 
@@ -125,9 +126,19 @@ endfunction
 nnoremap <leader>b :call SelectaBuffer()<cr>
 nnoremap <leader>p :call SelectaCommand("__list_repo", "--height full", ":e")<cr>
 
+" #######
+" Neomake
+" #######
+
 autocmd! BufWritePost,BufEnter * Neomake
 
 let g:neomake_warning_sign = {
       \   'text': '*',
       \   'texthl': 'NeomakeWarningSign',
       \ }
+
+" ##################
+" Language Specifics
+" ##################
+
+let g:scala_sort_across_groups = 1

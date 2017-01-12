@@ -134,6 +134,7 @@ applications/selecta:
 	- curl -o ~/.bin/selecta "https://raw.githubusercontent.com/garybernhardt/selecta/master/selecta"
 	- chmod +x ~/.bin/selecta
 
+environments/scala: ~/.sbt/0.13/sbt-ctags.sbt ~/.sbt/0.13/plugins/plugins.sbt
 
 clean/dotfiles:
 	rm -rf $(dotfiles)
