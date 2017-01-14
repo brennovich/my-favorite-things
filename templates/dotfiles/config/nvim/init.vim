@@ -66,6 +66,7 @@ augroup color_tweaks
   autocmd ColorScheme * hi NeomakeErrorSign ctermbg=NONE
   autocmd ColorScheme * hi NeomakeInfoSign ctermbg=NONE
   autocmd ColorScheme * hi NeomakeWarningSign ctermbg=NONE
+  autocmd ColorScheme * hi EnErrorStyle ctermbg=10
 augroup END
 
 " Statusbar
@@ -142,3 +143,16 @@ let g:neomake_warning_sign = {
 " ##################
 
 let g:scala_sort_across_groups = 1
+let g:scala_scaladoc_indent = 1
+
+" ######
+" Ensime
+" ######
+
+autocmd BufWritePost *.scala silent :EnTypeCheck
+
+au FileType scala nnoremap <localleader>df :EnDeclaration<CR>
+au FileType scala nnoremap <localleader>sdf :EnDeclaration<CR>
+au FileType scala nnoremap <localleader>tt :EnType<CR>
+au FileType scala nnoremap <localleader>ti :EnInspectType<CR>
+au FileType scala nnoremap <localleader>oi :EnOrganizeImports<CR>

@@ -104,13 +104,18 @@ applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-fav
 
 config_path = ~/.config/nvim
 applications/neovim: $(config_path)/init.vim
-	- sudo pacman -S --noconfirm --needed neovim
+	- sudo pacman -S --noconfirm --needed \
+		neovim \
+		python2 \
+		python2-pip
+	- sudo pip2 install websocket-client sexpdata neovim
 	- rm -rf $(config_path)/bundle
 	- mkdir -p $(config_path)/autoload $(config_path)/backups $(config_path)/bundle
 	- curl -LSso $(config_path)/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 	- cd $(config_path)/bundle \
 		&& git clone https://github.com/chriskempson/base16-vim.git \
 		&& git clone https://github.com/derekwyatt/vim-scala.git \
+		&& git clone https://github.com/ensime/ensime-vim.git \
 		&& git clone https://github.com/neomake/neomake.git \
 		&& git clone https://github.com/tpope/vim-fugitive.git \
 		&& git clone https://github.com/tpope/vim-sensible.git \
