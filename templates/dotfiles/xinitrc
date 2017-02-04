@@ -4,7 +4,8 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 xrdb -load ~/.Xresources
 xsetroot -name my_favorite_things
 xsetroot -cursor_name left_ptr
-hsetroot -fill __my_favorite_things__/wallpapers/popload.jpg
+# hsetroot -fill __my_favorite_things__/wallpapers/popload.jpg
+hsetroot -addd "#$(< /dev/urandom tr -dc '3-6' | head -c 6)" 50 -addd "#$(< /dev/urandom tr -dc '4-7' | head -c 6)" 10 -gradient $(shuf -i 0-15 -n 1)
 
 panel &
 compton &

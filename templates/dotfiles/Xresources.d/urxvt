@@ -1,5 +1,5 @@
-URxvt.font: xft:Fira Mono:size=11
-URxvt.boldFont: xft:Fira Mono:size=11,style=medium
+URxvt.font: xft:Fira Mono:size=13
+URxvt.boldFont: xft:Fira Mono:size=13,style=medium
 URxvt.letterSpace: -1
 URxvt.lineSpace: 1
 
