@@ -5,4 +5,4 @@ dmenu_run -i -b \
   -nf \color_c \
   -sb \color_n \
   -sf \color_b \
-  -fn "Fira Mono:style=medium:size=11"
+  -fn "Tamzen:style=bold:size=16"

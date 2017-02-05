@@ -58,6 +58,7 @@ user/desktop: applications/redshift applications/2bwm applications/locker ~/.bin
 		lemonbar-xft-git \
 		wmutils-git \
 		xorg-xprop \
+		xorg-xfd \
 		xorg-xsetroot
 
 applications/2bwm: ~/.bin/launcher
@@ -69,7 +70,9 @@ applications/redshift: ~/.config/redshift.conf
 		redshift
 
 user/fonts:
-	- sudo pacman -S --noconfirm --needed \
+	- pacaur -S --noconfirm --needed \
+		siji-git \
+		tamzen-font-git \
 		ttf-fira-mono \
 		ttf-fira-sans
 

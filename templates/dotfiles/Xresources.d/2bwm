@@ -1,5 +1,5 @@
-twobwm.border_width: 8
-twobwm.outer_border: 4
+twobwm.border_width: 6
+twobwm.outer_border: 3
 twobwm.focus_color: color_g
 twobwm.unfocus_color: color_e
 twobwm.fixed_color: color_c
