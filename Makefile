@@ -9,6 +9,7 @@ macrocmd = m4 \
 
 include core.mk
 include user.mk
+include applications.mk
 
 .PHONY = system user
 
@@ -25,7 +26,6 @@ system: \
 	/etc/vconsole.conf \
 	/etc/modprobe.d/i915.conf
 
-# Sound infrastructure powered by pulseaudio plus mpd and ncmpcpp for music
-user:  user/media
+user:  user/media user/fonts user/desktop user/dotfiles
 
 clean: clean/dotfiles clean/tmp

@@ -47,6 +47,16 @@ parse_uevent='
       break
     }
 
+    if (a[3] == "Discharging" || b[1] == "Discharging") {
+      $5 = "Discharging"
+      break
+    }
+
+    if (a[3] == "Full" || b[1] == "Full") {
+      $5 = "Full"
+      break
+    }
+
     if (a[3] == "Unknown") {
       $5 = b[1]
 

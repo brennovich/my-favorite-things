@@ -9,3 +9,7 @@ URxvt*scrollBar: false
 URxvt.internalBorder: 10
 URxvt.geometry: 84x26
 URxvt.intensityStyles: false
+
+URxvt.perl-ext-common: default,matcher
+URxvt.url-launcher: /usr/bin/xdg-open
+URxvt.matcher.button: 1
