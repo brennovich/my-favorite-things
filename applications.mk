@@ -51,6 +51,10 @@ applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-fav
 		i3lock \
 		imagemagick
 
+applications/emacs: ~/.emacs.d/init.el
+	- pacaur -S --noconfirm --needed \
+		emacs
+
 config_path = ~/.config/nvim
 applications/neovim: $(config_path)/init.vim
 	- sudo pacman -S --noconfirm --needed \
