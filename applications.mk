@@ -14,7 +14,7 @@
 	applications/weechat \
 	applications/zathura
 
-applications/2bwm: ~/.bin/launcher
+applications/2bwm: ~/.bin/launcher ~/.bin/random-gradient-wallpaper
 	- cd $(PWD)/2bwm-pkgbuild && makepkg -cf
 	- pacaur -U --noconfirm $(PWD)/2bwm-pkgbuild/2bwm-git*.tar.xz
 

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+changecom(`"""')
+hsetroot -addd "#$(< /dev/urandom tr -dc '3-6' | head -c 6)" 50 -addd "#$(< /dev/urandom tr -dc '4-7' | head -c 6)" 10 -gradient $(shuf -i 0-360 -n 1)
+changecom(`#')
