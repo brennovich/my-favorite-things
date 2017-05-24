@@ -30,4 +30,4 @@
 /set weechat.bar.title.conditions "${inactive}"
 /set weechat.bar.title.separator on
 /set weechat.bar.title.color_bg 0
-/set weechat.bar.title.color_fg 6
+/set weechat.bar.title.color_fg 15

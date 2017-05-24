@@ -1,3 +1,4 @@
+changequote(`[', `]')
 ;;;;
 ;; Packages
 ;;;;
@@ -6,7 +7,7 @@
 (require 'package)
 
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
+             '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives
              '("gnu" . "http://elpa.gnu.org/packages/"))
 
@@ -22,8 +23,11 @@
 '(
   base16-theme
   ensime
+  ido-vertical-mode
   magit
+  markdown-mode
   org
+  projectile
   ))
 
 (dolist (p my-packages)
@@ -41,7 +45,10 @@
 (load-theme 'base16-grayscale-dark t)
  
 ;; Set some padding to emacs window
-(set-frame-parameter nil 'internal-border-width 0)
+(set-frame-parameter nil 'internal-border-width 12)
+(custom-theme-set-faces
+ 'base16-grayscale-dark
+ `(fringe ((t (:background, (plist-get base16-grayscale-dark-colors :base00))))))
 
 ;; Turn off the menu bar and tool bar at the top of each frame because it's distracting
 (menu-bar-mode -1)
@@ -93,12 +100,23 @@
 ;; Always reload the file if it changed on disk
 (global-auto-revert-mode 1)
 
-;; Navigate through symbols under cursor
-(smartscan-mode 1)
-
 ;;;;
 ;; Modes
 ;;;;
 
 ;;; Org
 (setq org-src-fontify-natively t)
+
+;;; IDO
+(require 'ido-vertical-mode)
+
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+
+(ido-mode 1)
+(ido-vertical-mode 1)
+
+;;; Projectile
+(projectile-global-mode)
+
+changequote([`], ['])
