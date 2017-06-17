@@ -1,8 +1,10 @@
 changequote(`[[[', `]]]')
 export EDITOR=nvim
 export PATH=$HOME/.bin:$PATH
-export TERM=xterm-256color
+export TERM=xterm-color
 export HISTSIZE=20000
+export GOPATH="$HOME/code/go"
+export PATH=$GOPATH/bin:$PATH
 
 alias ls='ls --color'
 alias vim='nvim'
