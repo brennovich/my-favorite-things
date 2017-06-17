@@ -1,7 +1,12 @@
-changequote(`[', `]')
-;;;;
-;; Packages
-;;;;
+;;; init.el --- brennovich's Emacs settings
+
+;;; Commentary:
+
+;;   This tries to be simplier as possible.
+;;
+;; m4 template instruction: changequote(`[', `]')
+
+;;; Code:
 
 ;; Define package repositories
 (require 'package)
@@ -11,44 +16,69 @@ changequote(`[', `]')
 (add-to-list 'package-archives
              '("gnu" . "http://elpa.gnu.org/packages/"))
 
-;; Load and activate emacs packages. Do this first so that the
-;; packages are loaded before you start trying to modify them.
-;; This also sets the load path.
+;; Install `use-package.el`
 (package-initialize)
+(if (not (package-installed-p 'use-package))
+    (progn
+      (package-refresh-contents)
+      (package-install 'use-package)))
 
-;; The packages you want installed. You can also install these
-;; manually with M-x package-install
-;; Add in your own as you wish:
-(defvar my-packages
-'(
-  base16-theme
-  ensime
-  ido-vertical-mode
-  magit
-  markdown-mode
-  org
-  projectile
-  ))
+(require 'use-package)
 
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
+(use-package base16-theme
+  :ensure t
+  :config (load-theme 'base16-grayscale-dark t))
+
+(use-package ensime
+  :ensure t)
+
+(use-package flycheck
+  :ensure t
+  :config (global-flycheck-mode))
+
+(use-package go-mode
+  :ensure t
+  :config (setenv "GOPATH" "/home/brennovich/code/go"))
+
+(use-package ido-vertical-mode
+  :ensure t
+  :init
+  (setq ido-enable-flex-matching t
+        ido-everywhere t)
+  (ido-mode 1)
+  :config (ido-vertical-mode 1))
+
+(use-package magit
+  :ensure t
+  :bind ("C-c C-g s" . magit-status))
+
+(use-package markdown-mode
+  :ensure t)
+
+(use-package org
+  :ensure t
+  :init (setq org-src-fontify-natively t
+              org-completion-use-ido t
+              org-startup-indented t
+              org-default-notes-file "~/Dropbox/orgs/my-life.org"))
+
+(use-package projectile
+  :ensure t
+  :config (projectile-global-mode))
 
 ;;;;
 ;; Appearance
 ;;;;
 
-;; increase font size for better readability
+;; Fonts
 (set-face-attribute 'default nil :font "Tamzen 20")
+;; (set-face-attribute 'default nil :font "Fira Code 12")
 
-;; Color theme
-(load-theme 'base16-grayscale-dark t)
- 
 ;; Set some padding to emacs window
 (set-frame-parameter nil 'internal-border-width 12)
 (custom-theme-set-faces
  'base16-grayscale-dark
- `(fringe ((t (:background, (plist-get base16-grayscale-dark-colors :base00))))))
+ `(fringe ((t (:background, (plist-get 'base16-grayscale-dark-colors :base00))))))
 
 ;; Turn off the menu bar and tool bar at the top of each frame because it's distracting
 (menu-bar-mode -1)
@@ -58,38 +88,38 @@ changequote(`[', `]')
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-;; Display line number in statusbar
-(setq column-number-mode t)
-
-;; Go straight to scratch buffer on startup
-(setq inhibit-startup-message t)
-
-;; no bell
-(setq ring-bell-function 'ignore)
-
 ;; These settings relate to how emacs interacts with your operating system
-(setq ;; makes killing/yanking interact with the clipboard
-      x-select-enable-clipboard t
+(setq
+ ;; Save clipboard strings into kill ring before replacing them.
+ ;; When one selects something in another program to paste it into Emacs,
+ ;; but kills something in Emacs before actually pasting it,
+ ;; this selection is gone unless this variable is non-nil
+ save-interprogram-paste-before-kill t
 
-      ;; I'm actually not sure what this does but it's recommended?
-      x-select-enable-primary t
+ ;; Mouse yank commands yank at point instead of at click.
+ mouse-yank-at-point t
 
-      ;; Save clipboard strings into kill ring before replacing them.
-      ;; When one selects something in another program to paste it into Emacs,
-      ;; but kills something in Emacs before actually pasting it,
-      ;; this selection is gone unless this variable is non-nil
-      save-interprogram-paste-before-kill t
+ ;; Display line number in statusbar
+ column-number-mode t
 
-      ;; Shows all options when running apropos. For more info,
-      ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Apropos.html
-      apropos-do-all t
+ ;; Go straight to scratch buffer on startup
+ inhibit-startup-message t
 
-      ;; Mouse yank commands yank at point instead of at click.
-      mouse-yank-at-point t)
+ ;; no bell
+ ring-bell-function 'ignore)
 
 ;;;;
 ;; Editing
 ;;;;
+
+;; Stop spreading backup files
+(make-directory "~/.emacs.d/backup/" t)
+(setq backup-directory-alist `(("." . "~/.emacs.d/backup"))
+      backup-by-copying t
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
 
 ;; Highlights matching parenthesis
 (show-paren-mode 1)
@@ -100,23 +130,19 @@ changequote(`[', `]')
 ;; Always reload the file if it changed on disk
 (global-auto-revert-mode 1)
 
-;;;;
-;; Modes
-;;;;
+;; hippie expand is dabbrev expand on steroids
+(global-set-key (kbd "M-/") 'hippie-expand)
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev
+                                         try-expand-dabbrev-all-buffers
+                                         try-expand-dabbrev-from-kill
+                                         try-complete-file-name-partially
+                                         try-complete-file-name
+                                         try-expand-all-abbrevs
+                                         try-expand-list
+                                         try-expand-line
+                                         try-complete-lisp-symbol-partially
+                                         try-complete-lisp-symbol))
 
-;;; Org
-(setq org-src-fontify-natively t)
+;; m4 template instruction: changequote([`], ['])
 
-;;; IDO
-(require 'ido-vertical-mode)
-
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-
-(ido-mode 1)
-(ido-vertical-mode 1)
-
-;;; Projectile
-(projectile-global-mode)
-
-changequote([`], ['])
+;;; init.el ends here

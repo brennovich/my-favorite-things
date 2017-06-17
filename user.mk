@@ -62,7 +62,8 @@ user/fonts:
 		siji-git \
 		tamzen-font-git \
 		ttf-fira-mono \
-		ttf-fira-sans
+		ttf-fira-sans \
+		ttf-fira-code
 
 environments/scala: ~/.sbt/0.13/sbt-ctags.sbt ~/.sbt/0.13/plugins/plugins.sbt
 
