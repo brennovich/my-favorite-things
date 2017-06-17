@@ -66,6 +66,9 @@
   :ensure t
   :config (projectile-global-mode))
 
+(use-package yaml-mode
+  :ensure t)
+
 ;;;;
 ;; Appearance
 ;;;;
@@ -80,7 +83,7 @@
  'base16-grayscale-dark
  `(fringe ((t (:background, (plist-get 'base16-grayscale-dark-colors :base00))))))
 
-;; Turn off the menu bar and tool bar at the top of each frame because it's distracting
+;; turn off the menu bar and tool bar at the top of each frame because it's distracting
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
@@ -142,6 +145,40 @@
                                          try-expand-line
                                          try-complete-lisp-symbol-partially
                                          try-complete-lisp-symbol))
+
+;; Changes all yes/no questions to y/n type
+(fset 'yes-or-no-p 'y-or-n-p)
+
+
+;; When you visit a file, point goes to the last place where it
+;; was when you previously visited the same file.
+;; http://www.emacswiki.org/emacs/SavePlace
+(require 'saveplace)
+(setq-default save-place t)
+(setq save-place-file (concat user-emacs-directory "backup"))
+
+;; Toggle comments
+(defun toggle-comment ()
+    "Comments or uncomments the region or the current line if there's no active region."
+    (interactive)
+    (let (beg end)
+        (if (region-active-p)
+            (setq beg (region-beginning) end (region-end))
+            (setq beg (line-beginning-position) end (line-end-position)))
+        (comment-or-uncomment-region beg end)
+        (next-line)))
+(global-set-key (kbd "C-;") 'toggle-comment)
+
+
+;; Whitespace mode
+(setq whitespace-line-column 120
+      whitespace-style (quote (tabs newline tab-mark newline-mark))
+      whitespace-display-mappings
+      '((space-mark 32 [183] [46])
+        (newline-mark 10 [172 10])
+        (tab-mark 9 [9655 9] [92 9])))
+
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; m4 template instruction: changequote([`], ['])
 
