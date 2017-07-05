@@ -36,9 +36,24 @@
   :ensure t
   :config (global-flycheck-mode))
 
+(use-package go-eldoc
+  :ensure t)
+
+(defun go-mode-custom ()
+  (go-eldoc-setup)
+  (setq gofmt-command "goimports")
+  (if (not (string-match "go" compile-command))
+      (set (make-local-variable 'compile-command)
+	   "go build -v && go test -v && go vet"))
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  (local-set-key (kbd "M-.") 'godef-jump)
+  (local-set-key (kbd "M-,") 'pop-tag-mark))
 (use-package go-mode
   :ensure t
-  :config (setenv "GOPATH" "/home/brennovich/code/go"))
+  :init
+  (setenv "GOPATH" "/home/brennovich/code/go")
+  :config
+  (add-hook 'go-mode-hook 'go-mode-custom))
 
 (use-package ido-vertical-mode
   :ensure t
