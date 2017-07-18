@@ -39,6 +39,9 @@
 (use-package go-eldoc
   :ensure t)
 
+(use-package protobuf-mode
+  :ensure t)
+
 (defun go-mode-custom ()
   (go-eldoc-setup)
   (setq gofmt-command "goimports")
