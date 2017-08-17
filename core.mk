@@ -44,12 +44,12 @@ packages/power:
 	- sudo systemctl start tlp.service tlp-sleep.service
 
 packages/sound: /etc/modprobe.d/blacklist.conf
-	- sudo pacman -S --noconfirm --needed \
+	- sudo pacaur -S --noconfirm --needed \
 		mpc \
 		mpd \
 		ncmpcpp \
 		pamixer \
-		pavucontrol \
+		pulsemixer \
 		pulseaudio \
 		pulseaudio-bluetooth
 

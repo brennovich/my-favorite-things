@@ -87,6 +87,9 @@
 (use-package yaml-mode
   :ensure t)
 
+(use-package dtrt-indent
+  :ensure t)
+
 ;;;;
 ;; Appearance
 ;;;;
