@@ -15,6 +15,9 @@
 	applications/zathura
 
 applications/2bwm: ~/.bin/launcher ~/.bin/random-gradient-wallpaper
+	- pacman -S --noconfirm --needed \
+		xcb-util-keysyms \
+		xcb-util-xrm
 	- cd $(PWD)/2bwm-pkgbuild && makepkg -cf
 	- pacaur -U --noconfirm $(PWD)/2bwm-pkgbuild/2bwm-git*.tar.xz
 

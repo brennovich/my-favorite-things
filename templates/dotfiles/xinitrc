@@ -4,7 +4,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 xrdb -load ~/.Xresources
 xsetroot -name my_favorite_things
 xsetroot -cursor_name left_ptr
-~/random-gradient-wallpaper
+~/.bin/random-gradient-wallpaper
 
 panel &
 compton &
