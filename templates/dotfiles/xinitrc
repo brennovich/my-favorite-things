@@ -6,11 +6,8 @@ xsetroot -name my_favorite_things
 xsetroot -cursor_name left_ptr
 ~/.bin/random-gradient-wallpaper
 
-panel &
 compton &
 redshift &
 
-# Draw darken border on top of panel
-tail -f /dev/null | lemonbar -b -g 1920x2+0+23 -B \patsubst(color_a, `#', `#F0') &
 changecom(`#')
 exec 2bwm

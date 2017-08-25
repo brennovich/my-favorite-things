@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dmenu_run -i -b \
+dmenu_run -i \
   -nb \color_f \
   -nf \color_c \
   -sb \color_n \
