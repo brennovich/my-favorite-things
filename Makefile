@@ -30,14 +30,25 @@ dotfiles = \
 	~/.Xresources.d/urxvt
 user/dotfiles: $(dotfiles)
 
-user/desktop: applications/redshift applications/2bwm applications/locker applications/urxvt ~/.compton.conf ~/.bin/launcher
+user/desktop: applications/redshift \
+		applications/2bwm \
+		applications/locker \
+		applications/urxvt \
+		~/.compton.conf \
+		~/.bin/launcher
 	- pacaur -S --noconfirm --needed \
 		compton \
 		dmenu \
 		hsetroot \
 		xorg-xsetroot
 
-environments/scala: ~/.sbt/0.13/sbt-ctags.sbt ~/.sbt/0.13/plugins/plugins.sbt
+user/environments/scala: ~/.sbt/0.13/sbt-ctags.sbt ~/.sbt/0.13/plugins/plugins.sbt
+user/environments/golang:
+	- sudo pacman -S --noconfirm --needed \
+		go \
+		go-tools
+	- go get -u github.com/rogpeppe/godef
+	- go get -u github.com/nsf/gocode
 
 # Applications
 #
@@ -189,7 +200,7 @@ core/aur-helper/cower: clean/tmp
 		&& makepkg -sri --noconfirm
 
 # Setup Xorg and its basic drivers and tools.
-# 
+#
 # NOTICE: Isn't possible to eliminate DDX intel drivers yet as modesetting generic driver has
 # heavy tearing under Thinkpad 460s Skylake Intel GPU.
 #
@@ -205,11 +216,11 @@ core/xorg: /etc/X11/xorg.conf.d/20-intel.conf /etc/X11/xorg.conf.d/00-keyboard.c
 		libvdpau-va-gl \
 		xf86-input-libinput \
 		xf86-video-intel \
-		xterm \
+		xorg-server \
 		xorg-xinit \
 		xorg-xrandr \
 		xorg-xrdb \
-		xorg-server
+		xterm
 
 # System
 #
@@ -244,8 +255,9 @@ system/bluetooth:
 #
 
 device/x200: /etc/thinkfan.conf
-	- sudo pacman -S --noconfirm --needed \
+	- sudo pacaur -S --noconfirm --needed \
 		acpi_call \
+		libva-intel-driver-g45-h264 \
 		thinkfan \
 		tp_smapi
 	- sudo rmmod thinkpad_acpi
