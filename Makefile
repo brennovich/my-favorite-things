@@ -49,6 +49,7 @@ user/environments/golang:
 		go-tools
 	- go get -u github.com/rogpeppe/godef
 	- go get -u github.com/nsf/gocode
+	- curl https://glide.sh/get | sh
 
 # Applications
 #
