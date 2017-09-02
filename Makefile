@@ -43,13 +43,19 @@ user/desktop: applications/redshift \
 		xorg-xsetroot
 
 user/environments/scala: ~/.sbt/0.13/sbt-ctags.sbt ~/.sbt/0.13/plugins/plugins.sbt
-user/environments/golang:
+
+user/environments/golang: ~/.env-golang
 	- sudo pacman -S --noconfirm --needed \
 		go \
 		go-tools
 	- go get -u github.com/rogpeppe/godef
 	- go get -u github.com/nsf/gocode
 	- curl https://glide.sh/get | sh
+
+user/environments/rust: ~/.env-rust
+	- curl https://sh.rustup.rs -sSf \
+		| sh -s -- --no-modify-path
+
 
 # Applications
 #
@@ -158,7 +164,6 @@ applications/docker:
 	- sudo pacman -S --noconfirm --needed \
 		docker \
 		lxc
-	- sudo systemctl enable docker.service
 	- sudo gpasswd -a $(USER) docker
 
 # Core

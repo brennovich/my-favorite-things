@@ -1,10 +1,17 @@
 changequote(`[[[', `]]]')
+
+if [ -s ~/.env-golang ]; then
+  source ~/.env-golang
+fi
+
+if [ -s ~/.env-rust ]; then
+  source ~/.env-rust
+fi
+
 export EDITOR=nvim
 export PATH=$HOME/.bin:$PATH
 export TERM=xterm-color
 export HISTSIZE=-1
-export GOPATH="$HOME/code/go"
-export PATH=$GOPATH/bin:$PATH
 
 alias ls='ls --color'
 alias vim='nvim'
@@ -14,7 +21,8 @@ alias grepd='grep --color=auto --exclude-dir=.git --line-number --dereference-re
 alias presentation-term='urxvt -fn "xft:Fira Mono:size=20:style=regular" -fb "xft:Fira Mono:size=20:style=Bold"'
 
 function __parse_git_status {
-  index=`if [ -d .git ]; then git status -s | awk '{ print $1 }'; fi;`
+  repo_check=$(git status &> /dev/null; echo $?)
+  index=`if [ ${repo_check} -eq 0 ]; then git status -s | awk '{ print $1 }'; fi;`
 
   case "$index" in
     *'??'*)
@@ -32,4 +40,5 @@ function __parse_git_status {
 }
 
 export PS1="[\[\e[35m\]\W\[\e[m\]\[\e[0;37m\]\$(__parse_git_status)\[\e[m\]] "
+
 changequote([[[`]]], [[[']]])
