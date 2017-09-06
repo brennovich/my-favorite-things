@@ -90,19 +90,24 @@
 (use-package dtrt-indent
   :ensure t)
 
+(use-package rust-mode
+  :ensure t
+  :config (setq rust-format-on-save t)
+  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
+
 ;;;;
 ;; Appearance
 ;;;;
 
 ;; Fonts
-(set-face-attribute 'default nil :font "Tamzen 20")
+(set-face-attribute 'default nil :font "Tamzen 12")
 ;; (set-face-attribute 'default nil :font "Fira Code 12")
 
 ;; Set some padding to emacs window
-(set-frame-parameter nil 'internal-border-width 12)
-(custom-theme-set-faces
- 'base16-grayscale-dark
- `(fringe ((t (:background, (plist-get 'base16-grayscale-dark-colors :base00))))))
+;; (set-frame-parameter nil 'internal-border-width 12)
+;; (custom-theme-set-faces
+;;  'base16-grayscale-dark
+;;  `(fringe ((t (:background, (plist-get 'base16-grayscale-dark-colors :base00))))))
 
 ;; turn off the menu bar and tool bar at the top of each frame because it's distracting
 (menu-bar-mode -1)

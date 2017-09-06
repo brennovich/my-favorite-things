@@ -52,10 +52,17 @@ user/environments/golang: ~/.env-golang
 	- go get -u github.com/nsf/gocode
 	- curl https://glide.sh/get | sh
 
+user/environments/js:
+	- sudo pacman -S --noconfirm --needed \
+		nodejs-lts-boron \
+		npm
+
 user/environments/rust: ~/.env-rust
 	- curl https://sh.rustup.rs -sSf \
 		| sh -s -- --no-modify-path
-
+	- rustup install nightly
+	- rustup default nightly
+	- rustup run nightly cargo install rustfmt-nightly
 
 # Applications
 #
@@ -73,8 +80,9 @@ applications/redshift: ~/.config/redshift.conf
 		redshift
 
 applications/emacs: ~/.emacs.d/init.el
-	- pacaur -S --noconfirm --needed \
-		emacs
+	- sudo pacman -S --noconfirm --needed \
+		emacs \
+		ispell
 
 config_path = ~/.config/nvim
 applications/neovim: $(config_path)/init.vim
@@ -183,6 +191,9 @@ core/fonts:
 		siji-git \
 		tamzen-font-git \
 		ttf-bitstream-vera \
+		ttf-opensans \
+		ttf-xorg-fonts-misc \
+		ttf-xorg-fonts-alias \
 		ttf-dejavu \
 		ttf-fira-mono \
 		ttf-fira-sans \
