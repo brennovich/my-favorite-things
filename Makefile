@@ -137,12 +137,6 @@ applications/zathura:
 		zathura \
 		zathura-pdf-mupdf
 
-applications/selecta:
-	- sudo pacman -S --noconfirm --needed \
-		ruby
-	- curl -o ~/.bin/selecta "https://raw.githubusercontent.com/garybernhardt/selecta/master/selecta"
-	- chmod +x ~/.bin/selecta
-
 applications/taskwarrior: ~/.taskrc
 	- sudo pacman -S --noconfirm --needed \
 		task

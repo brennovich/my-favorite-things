@@ -23,7 +23,7 @@ discard_colors_if_item_is_selected = "yes"
 # MPD #
 #######
 
-mpd_music_dir = "~/Music/"
+mpd_music_dir = "~/music/"
 
 ##############
 # Visualizer #
