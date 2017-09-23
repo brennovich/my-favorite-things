@@ -12,7 +12,7 @@
 (require 'package)
 
 (add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/"))
+             '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives
              '("gnu" . "http://elpa.gnu.org/packages/"))
 
@@ -101,13 +101,6 @@
 
 ;; Fonts
 (set-face-attribute 'default nil :font "Tamzen 12")
-;; (set-face-attribute 'default nil :font "Fira Code 12")
-
-;; Set some padding to emacs window
-;; (set-frame-parameter nil 'internal-border-width 12)
-;; (custom-theme-set-faces
-;;  'base16-grayscale-dark
-;;  `(fringe ((t (:background, (plist-get 'base16-grayscale-dark-colors :base00))))))
 
 ;; turn off the menu bar and tool bar at the top of each frame because it's distracting
 (menu-bar-mode -1)

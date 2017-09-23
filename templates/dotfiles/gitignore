@@ -26,3 +26,4 @@ Cchfile
 *.ensime_cache
 *ensime
 TAGS
+.tags

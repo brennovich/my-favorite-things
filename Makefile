@@ -42,7 +42,9 @@ user/desktop: applications/redshift \
 		hsetroot \
 		xorg-xsetroot
 
-user/environments/scala: ~/.sbt/0.13/sbt-ctags.sbt ~/.sbt/0.13/plugins/plugins.sbt
+user/environments/scala:
+	- sudo pacman -S --noconfirm --needed \
+		sbt
 
 user/environments/golang: ~/.env-golang
 	- sudo pacman -S --noconfirm --needed \
@@ -84,24 +86,32 @@ applications/emacs: ~/.emacs.d/init.el
 		emacs \
 		ispell
 
-config_path = ~/.config/nvim
-applications/neovim: $(config_path)/init.vim
+applications/nextcloud: ~/.config/systemd/user/nextcloud-client.service
+	- pacaur -S --noconfirm --needed \
+		gnome-keyring \
+		nextcloud-client
+	- systemctl --user enable nextcloud-client.service
+
+config_path = ~/.vim
+applications/vim: ~/.vimrc
 	- sudo pacman -S --noconfirm --needed \
-		neovim \
-		python2 \
-		python2-pip
-	- sudo pip2 install websocket-client sexpdata neovim
-	- rm -rf $(config_path)/bundle
-	- mkdir -p $(config_path)/autoload $(config_path)/backups $(config_path)/bundle
-	- curl -LSso $(config_path)/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-	- cd $(config_path)/bundle \
+		ctags \
+		gvim \
+		vim-spell-en
+	- rm -rf $(config_path)/pack
+	- mkdir -p $(config_path)/backups $(config_path)/pack/plugins/start
+	- cd $(config_path)/pack/plugins/start \
 		&& git clone https://github.com/chriskempson/base16-vim.git \
 		&& git clone https://github.com/derekwyatt/vim-scala.git \
-		&& git clone https://github.com/ensime/ensime-vim.git \
-		&& git clone https://github.com/neomake/neomake.git \
+		&& git clone https://github.com/fatih/vim-go.git \
+		&& git clone https://github.com/jceb/vim-orgmode.git \
 		&& git clone https://github.com/tpope/vim-fugitive.git \
+		&& git clone https://github.com/tpope/vim-markdown.git \
+		&& git clone https://github.com/tpope/vim-repeat.git \
+		&& git clone https://github.com/tpope/vim-rsi.git \
 		&& git clone https://github.com/tpope/vim-sensible.git \
 		&& git clone https://github.com/tpope/vim-sleuth.git \
+		&& git clone https://github.com/tpope/vim-surround.git \
 		&& git clone https://github.com/tpope/vim-vinegar.git
 
 applications/mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service

@@ -8,14 +8,12 @@ if [ -s ~/.env-rust ]; then
   source ~/.env-rust
 fi
 
-export EDITOR=nvim
+export EDITOR=vim
 export PATH=$HOME/.bin:$PATH
 export TERM=xterm-color
 export HISTSIZE=-1
 
 alias ls='ls --color'
-alias vim='nvim'
-alias nv='nvim'
 alias grepc='grep --color=auto --exclude-dir=.git --line-number --binary-files=without-match'
 alias grepd='grep --color=auto --exclude-dir=.git --line-number --dereference-recursive --binary-files=without-match'
 alias presentation-term='urxvt -fn "xft:Fira Mono:size=20:style=regular" -fb "xft:Fira Mono:size=20:style=Bold"'

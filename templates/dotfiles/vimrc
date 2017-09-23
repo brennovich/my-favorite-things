@@ -1,5 +1,3 @@
-execute pathogen#infect()
-
 " ################
 " General settings
 " ################
@@ -11,6 +9,7 @@ set showmode
 set fileencoding=utf-8
 
 " Tags
+set tags+=.tags
 set tags+=.git/tags
 set tags+=.git/tags-deps
 
@@ -31,8 +30,8 @@ set undodir=~/.vim/backups
 set undofile
 
 " Completion
-set wildmode=list:longest
 set wildmenu
+set wildmode=list:longest
 set wildignore=*.o,*.obj,*~
 set wildignore+=*vim/backups*
 set wildignore+=*sass-cache*
@@ -43,6 +42,8 @@ set wildignore+=*.gem
 set wildignore+=.tags
 set wildignore+=log/**
 set wildignore+=tmp/**
+set wildignore+=node_modules/**
+set wildignore+=target/**
 
 " Set min-width of buffer, very useful when spliting panes
 set winwidth=84
@@ -63,9 +64,6 @@ augroup color_tweaks
   au!
   autocmd ColorScheme * hi VertSplit ctermbg=NONE
   autocmd ColorScheme * hi SignColumn ctermbg=NONE
-  autocmd ColorScheme * hi NeomakeErrorSign ctermbg=NONE
-  autocmd ColorScheme * hi NeomakeInfoSign ctermbg=NONE
-  autocmd ColorScheme * hi NeomakeWarningSign ctermbg=NONE
   autocmd ColorScheme * hi EnErrorStyle ctermbg=10
 augroup END
 
@@ -84,32 +82,17 @@ set statusline+=(%l\:%c)\ " Line info
 " Column ruler
 set colorcolumn=120
 
-" #######
-" Neomake
-" #######
-
-autocmd! BufWritePost,BufEnter * Neomake
-
-let g:neomake_warning_sign = {
-      \   'text': '*',
-      \   'texthl': 'NeomakeWarningSign',
-      \ }
-
 " ##################
 " Language Specifics
 " ##################
 
+let g:go_fmt_command = "goimports"
+let g:go_fmt_autosave = 1
+
 let g:scala_sort_across_groups = 1
 let g:scala_scaladoc_indent = 1
 
-" ######
-" Ensime
-" ######
+let g:markdown_minlines = 100
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'ruby', 'scala', 'go']
 
-autocmd BufWritePost *.scala silent :EnTypeCheck
-
-au FileType scala nnoremap <localleader>df :EnDeclaration<CR>
-au FileType scala nnoremap <localleader>sdf :EnDeclaration<CR>
-au FileType scala nnoremap <localleader>tt :EnType<CR>
-au FileType scala nnoremap <localleader>ti :EnInspectType<CR>
-au FileType scala nnoremap <localleader>oi :EnOrganizeImports<CR>
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
