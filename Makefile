@@ -27,7 +27,9 @@ dotfiles = \
 	~/.Xresources \
 	~/.Xresources.d/2bwm \
 	~/.Xresources.d/colorscheme \
-	~/.Xresources.d/urxvt
+	~/.Xresources.d/urxvt \
+	~/.Xresources.d/xterm
+
 user/dotfiles: $(dotfiles)
 
 user/desktop: applications/redshift \
@@ -69,22 +71,27 @@ user/environments/rust: ~/.env-rust
 # Applications
 #
 
-applications/2bwm:
+applications/i3wm: ~/.xinitrc \
+	~/.config/i3/config \
+	~/.config/i3status/config \
+	applications/redshift \
+	applications/zathura \
+	applications/ranger \
+	applications/locker
 	- sudo pacman -S --noconfirm --needed \
-		xcb-util-keysyms \
-		xcb-util-wm \
-		xcb-util-xrm
-	- cd $(PWD)/2bwm-pkgbuild && makepkg -cf
-	- sudo pacman -U --noconfirm $(PWD)/2bwm-pkgbuild/2bwm-git*.tar.xz
+		compton \
+		gnome-keyring \
+		gnome-power-manager \
+		i3-wm \
+		i3lock \
+		i3status \
+		maim \
+		sxiv \
+		xorg-xrandr
 
 applications/redshift: ~/.config/redshift.conf
 	- pacaur -S --noconfirm --needed \
 		redshift
-
-applications/emacs: ~/.emacs.d/init.el
-	- sudo pacman -S --noconfirm --needed \
-		emacs \
-		ispell
 
 applications/nextcloud: ~/.config/systemd/user/nextcloud-client.service
 	- pacaur -S --noconfirm --needed \
@@ -104,7 +111,6 @@ applications/vim: ~/.vimrc
 		&& git clone https://github.com/chriskempson/base16-vim.git \
 		&& git clone https://github.com/derekwyatt/vim-scala.git \
 		&& git clone https://github.com/fatih/vim-go.git \
-		&& git clone https://github.com/jceb/vim-orgmode.git \
 		&& git clone https://github.com/tpope/vim-fugitive.git \
 		&& git clone https://github.com/tpope/vim-markdown.git \
 		&& git clone https://github.com/tpope/vim-repeat.git \
@@ -156,17 +162,18 @@ applications/urxvt: ~/.Xresources.d/urxvt
 		rxvt-unicode \
 		urxvt-perls
 
-applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service applications/scrot
+applications/xterm: ~/.Xresources.d/xterm
+	- sudo pacman -S --noconfirm --needed \
+		xterm \
+
+applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service
 	- sudo systemctl enable my-favorite-things-locker.service
 	- cp templates/dotfiles/my-favorite-things/lock-icon.png ~/.my-favorite-things/lock-icon.png
 	- chmod +x ~/.bin/my-favorite-things-locker
 	- sudo pacman -S --noconfirm --needed \
+		maim \
 		i3lock \
 		imagemagick
-
-applications/scrot:
-	- sudo pacman -S --noconfirm --needed scrot
-	- mkdir -p ~/Pictures/screenshots
 
 applications/firefox:
 	- pacaur -S --noconfirm --needed \
@@ -201,8 +208,8 @@ core/fonts:
 		ttf-dejavu \
 		ttf-fira-mono \
 		ttf-fira-sans \
-		ttf-ms-fonts \
 		ttf-roboto \
+		ttf-droid \
 		ttf-ubuntu-font-family
 
 core/aur-helper: core/aur-helper/cower

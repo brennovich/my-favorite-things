@@ -1,8 +1,5 @@
 #!/bin/bash
 
-dmenu_run -i \
-  -nb \color_f \
-  -nf \color_c \
-  -sb \color_n \
-  -sf \color_b \
-  -fn "Tamzen:style=bold:size=16"
+rofi -combi-modi window,drun -show run \
+  -hide-scrollbar \
+  -matching fuzzy

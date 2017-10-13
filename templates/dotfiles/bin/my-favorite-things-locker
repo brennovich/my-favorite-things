@@ -1,6 +1,6 @@
 #!/bin/bash
 
-scrot /tmp/screen.png
+maim /tmp/screen.png
 convert /tmp/screen.png -scale 16% -scale 626% -fill black -colorize 25% /tmp/screen.png
 
 lock_icon=$HOME/.my-favorite-things/lock-icon.png

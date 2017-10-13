@@ -1,18 +1,2 @@
 changecom(`"""')
-export _JAVA_AWT_WM_NONREPARENTING=1
-
-xrdb -load ~/.Xresources
-xsetroot -name my_favorite_things
-xsetroot -cursor_name left_ptr
-~/.bin/random-gradient-wallpaper
-
-dbus-update-activation-environment --systemd DISPLAY
-gnome-keyring-daemon -d -r
-
-urxvtd &
-compton &
-redshift &
-nextcloud &
-
-changecom(`#')
-exec 2bwm
+exec i3

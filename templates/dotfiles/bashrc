@@ -10,7 +10,6 @@ fi
 
 export EDITOR=vim
 export PATH=$HOME/.bin:$PATH
-export TERM=xterm-color
 export HISTSIZE=-1
 
 alias ls='ls --color'
