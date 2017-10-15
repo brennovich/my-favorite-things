@@ -4,11 +4,12 @@ general {
 	color_good = "color_f"
 	color_degraded = "color_e"
 	color_bad = "color_d"
-	separator = " "
+	separator = ""
 }
 
 order += "ethernet enp0s25"
 order += "wireless wlp2s0"
+order += "cpu_temperature 0"
 order += "load"
 order += "volume master"
 order += "battery 0"
@@ -24,18 +25,21 @@ wireless wlp2s0 {
 	format_down = "w:down"
 }
 
+cpu_temperature 0 {
+	format = "c:%degrees°C"
+}
+
 load {
-	format = "l:%1min"
+	format = "%1min"
 }
 
 battery 0 {
 	integer_battery_capacity = true
 	last_full_capacity = true
-	# path = "/home/__user__/.my-favorite-things/dual-battery-uevent"
-	format = "%status:%percentage %remaining"
+	format = "b:%percentage %remaining%status"
 	status_chr = "c"
 	status_bat = "d"
-	status_full = ""
+	status_full = "f"
 	hide_seconds = true
 	low_threshold = 10
 }

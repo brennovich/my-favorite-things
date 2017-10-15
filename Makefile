@@ -32,10 +32,9 @@ dotfiles = \
 
 user/dotfiles: $(dotfiles)
 
-user/desktop: applications/redshift \
-		applications/2bwm \
-		applications/locker \
+user/desktop: applications/i3wm \
 		applications/urxvt \
+		applications/dunst \
 		~/.compton.conf \
 		~/.bin/launcher
 	- pacaur -S --noconfirm --needed \
@@ -89,6 +88,13 @@ applications/i3wm: ~/.xinitrc \
 		sxiv \
 		xorg-xrandr
 
+applications/dunst:
+	- pacaur -S --noconfirm --needed \
+		dunst-git \
+		dunst-service
+	- systemctl --user enable dunst.service
+	- systemctl --user start dunst.service
+
 applications/redshift: ~/.config/redshift.conf
 	- pacaur -S --noconfirm --needed \
 		redshift
@@ -138,15 +144,6 @@ applications/ranger: ~/.config/ranger/rc.conf ~/.bin/previewer ~/.bin/imgt
 		highlight \
 		ranger \
 		w3m
-
-applications/weechat:
-	- sudo pacman -S --noconfirm --needed \
-		python2 \
-		python2-pip \
-		weechat
-	- pip2 install websocket-client
-	- mkdir -p ~/.weechat/python/autoload
-	- curl -o ~/.weechat/python/autoload/wee_slack.py "https://raw.githubusercontent.com/rawdigits/wee-slack/master/wee_slack.py"
 
 applications/zathura:
 	- sudo pacman -S --noconfirm --needed \
