@@ -30,7 +30,7 @@ cpu_temperature 0 {
 }
 
 load {
-	format = "%1min"
+	format = "%1min %5min %15min"
 }
 
 battery 0 {

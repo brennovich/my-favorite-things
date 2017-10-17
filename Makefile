@@ -77,18 +77,19 @@ applications/i3wm: ~/.xinitrc \
 	applications/zathura \
 	applications/ranger \
 	applications/locker
+	- pacaur -S --noconfirm --needed \
+		i3-gaps
 	- sudo pacman -S --noconfirm --needed \
 		compton \
 		gnome-keyring \
 		gnome-power-manager \
-		i3-wm \
 		i3lock \
 		i3status \
 		maim \
 		sxiv \
 		xorg-xrandr
 
-applications/dunst:
+applications/dunst: ~/.config/dunst/dunstrc
 	- pacaur -S --noconfirm --needed \
 		dunst-git \
 		dunst-service

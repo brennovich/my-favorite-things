@@ -1,5 +1,4 @@
 set $mod Mod4
-set $termnial urxvt
 
 set $ws1 1
 set $ws2 2
@@ -31,8 +30,11 @@ font pango: Tamzen 12
 floating_modifier $mod
 popup_during_fullscreen smart
 
-new_window normal 1
-new_float normal 1
+new_window normal 0
+new_float normal 0
+
+gaps inner 10
+smart_gaps on
 
 for_window [class="Firefox"] border pixel 1
 
@@ -94,14 +96,16 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exit
 
 bindsym $mod+Return exec --no-startup-id urxvtc
-bindsym Control+Mod1+l exec --no-startup-id $locker
-bindsym XF86Launch1 exec --no-startup-id ~/.bin/launcher
 bindsym $mod+d exec --no-startup-id ~/.bin/launcher
+bindsym $mod+XF86PowerOff exec --no-startup-id systemctl suspend
+bindsym Control+Mod1+l exec --no-startup-id $locker
+bindsym XF86ScreenSaver exec --no-startup-id $locker
+bindsym XF86MonBrightnessUp exec --no-startup-id ~/.bin/notify-brightness
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/.bin/notify-brightness
+bindsym XF86Launch1 exec --no-startup-id ~/.bin/launcher
 bindsym XF86AudioMute exec --no-startup-id pulsemixer --toggle-mute
 bindsym XF86AudioRaiseVolume exec --no-startup-id pulsemixer --change-volume +5
 bindsym XF86AudioLowerVolume exec --no-startup-id pulsemixer --change-volume -5
-bindsym XF86PowerOff exec --no-startup-id $locker
-bindsym $mod+XF86PowerOff exec --no-startup-id systemctl suspend
 bindsym --release Control+Shift+Print exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
 bindsym --release Shift+Print exec --no-startup-id maim -s ~/$(date +%Y-%m-%d-%H:%M:%S).png
 bindsym --release Control+Print exec --no-startup-id maim | xclip -selection clipboard -t image/png
