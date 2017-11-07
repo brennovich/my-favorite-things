@@ -19,6 +19,8 @@ if [[ -f $lock_icon ]]; then
     srox=$(echo $res | cut -d'x' -f 2 | cut -d'+' -f 2) # x offset
     sroy=$(echo $res | cut -d'x' -f 2 | cut -d'+' -f 3) # y offset
 
+    sr="$(echo $sr | tr -d '(normal')"
+
     px=$(($srox + $srx/2 - $rx/2))
     py=$(($sroy + $sry/2 - $ry/2))
 
