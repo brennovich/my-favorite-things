@@ -184,6 +184,26 @@ applications/docker:
 		docker.io
 	- sudo gpasswd -a $(USER) docker
 
+applications/sc-im:
+	sudo apt-get install -y \
+		bison \
+		libncurses5-dev \
+		libncursesw5-dev \
+		libxml2-dev \
+		libzip-dev
+	rm -rf tmp/* && mkdir -p tmp
+	cd tmp \
+		&& git clone https://github.com/jmcnamara/libxlsxwriter.git
+	cd tmp/libxlsxwriter \
+		&& make \
+		&& sudo make install
+	sudo ldconfig
+	cd tmp \
+		&& git clone https://github.com/andmarti1424/sc-im.git
+	cd tmp/sc-im/src \
+		&& make \
+		&& sudo make install
+
 # Core
 #
 
