@@ -48,5 +48,6 @@ function __parse_git_status {
 }
 
 export PS1="[\[\e[35m\]\W\[\e[m\]\[\e[0;37m\]\$(__parse_git_status)\[\e[m\]] "
+export GPG_TTY=$(tty)
 
 changequote([[[`]]], [[[']]])

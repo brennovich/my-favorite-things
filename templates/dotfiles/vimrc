@@ -63,8 +63,10 @@ colorscheme base16-grayscale-light
 
 augroup color_tweaks
   au!
-  autocmd ColorScheme * hi Visual term=reverse cterm=reverse
   autocmd ColorScheme * hi Search ctermbg=15
+  autocmd ColorScheme * hi SpellBad cterm=underline
+  autocmd ColorScheme * hi VertSplit ctermbg=NONE
+  autocmd ColorScheme * hi Visual term=reverse cterm=reverse
 augroup END
 
 " Statusbar

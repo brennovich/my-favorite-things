@@ -28,7 +28,7 @@ Here are a few photos, I'm using a grayscale colorscheme with a deep focus inten
 ![Desktop II](https://user-images.githubusercontent.com/379894/34344275-5a2cd550-e9cb-11e7-9ba1-6d09bf71def8.png)
 
 - **File browser**: ranger
-- **Bar**: 13bar
+- **Bar**: i3bar
 - **Player**: ncmpcpp
 - **Wallpaper**: dinamically generated via hsetroot
 - **Fonts**: terminus
