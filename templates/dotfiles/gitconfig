@@ -57,3 +57,5 @@
   email = __user_email__
 [github]
   user = __user__
+[commit]
+  gpgsign = true
