@@ -159,9 +159,12 @@ applications/zathura:
 		zathura-ps
 
 applications/urxvt: ~/.Xresources.d/urxvt ~/.bashrc ~/.bash_profile
-	git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+	if ! [ -d ~/.config/base16-shell ]; then git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell; fi
 	sudo apt-get install -y \
 		rxvt-unicode-256color
+	mkdir -p ~/.urxvt/ext/
+	curl -SL -o ~/.urxvt/ext/keyboard-select "https://raw.githubusercontent.com/muennich/urxvt-perls/master/keyboard-select"
+	xrdb -load ~/.Xresources
 
 applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service
 	sudo systemctl enable my-favorite-things-locker.service
@@ -198,10 +201,17 @@ core/fonts:
 		ttf-bitstream-vera \
 		xfonts-terminus \
 		xfonts-terminus-oblique \
+		fonts-cantarell \
 		fonts-dejavu \
 		fonts-firacode \
 		fonts-roboto \
 		fonts-noto-color-emoji
+	echo "deb http://ppa.launchpad.net/no1wantdthisname/ppa/ubuntu xenial main\ndeb-src http://ppa.launchpad.net/no1wantdthisname/ppa/ubuntu xenial main" \
+		| sudo tee /etc/apt/sources.list.d/infinality.list
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E985B27B
+	sudo apt-get update
+	sudo apt-get install fontconfig-infinality
+
 
 # Setup Xorg and its basic drivers and tools.
 #

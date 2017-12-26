@@ -10,7 +10,7 @@ URxvt.internalBorder: 24
 URxvt.geometry: 80x24
 URxvt.intensityStyles: false
 
-URxvt.perl-ext-common: default,matcher
-! URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.perl-ext-common: default,matcher,keyboard-select
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
 URxvt.url-launcher: /usr/bin/xdg-open
 URxvt.matcher.button: 1
