@@ -164,6 +164,7 @@ applications/urxvt: ~/.Xresources.d/urxvt ~/.bashrc ~/.bash_profile
 		rxvt-unicode-256color
 	mkdir -p ~/.urxvt/ext/
 	curl -SL -o ~/.urxvt/ext/keyboard-select "https://raw.githubusercontent.com/muennich/urxvt-perls/master/keyboard-select"
+	curl -SL -o ~/.urxvt/ext/resize-font "https://raw.githubusercontent.com/simmel/urxvt-resize-font/master/resize-font"
 	xrdb -load ~/.Xresources
 
 applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service

@@ -26,7 +26,7 @@ set $base0F color_p
 
 set $locker ~/.bin/my-favorite-things-locker
 
-font pango: Terminus 9
+font -*-terminus-medium-r-*-*-12-120-72-72-c-60-iso8859-16
 floating_modifier $mod
 popup_during_fullscreen smart
 
@@ -134,16 +134,16 @@ bindsym $mod+Shift+w mode "move workspace"
 
 client.focused $base0D $base0D $base06 $base0D
 client.focused_inactive $base02 $base02 $base0D $base01
-client.unfocused $base01 $base01 $base03 $base01
+client.unfocused $base01 $base01 $base05 $base01
 client.urgent $base02 $base08 $base07 $base08
 
 bar {
-  mode dock
+  mode hide
   output primary
   position bottom
   status_command i3status
   tray_output none
-  font pango:Terminus 9
+  font -*-terminus-medium-r-*-*-12-120-72-72-c-60-iso8859-16
   separator_symbol " "
 
   colors {
