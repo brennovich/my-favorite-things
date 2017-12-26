@@ -1,0 +1,300 @@
+# Configuration
+#
+# Variables used in m4 templates
+user-email = brennolncosta@gmail.com
+user-name = Brenno Costa
+user-nick = $(USER)
+colorscheme = base16-dark
+
+# Template parsing command
+macrocmd = m4 \
+	   -Duser_name="$(user-name)" \
+	   -Duser_nick="$(user-nick)" \
+	   -Duser_email="$(user-email)" \
+	   macros.m4 \
+	   $(colorscheme).m4
+
+# Userspace
+#
+
+dotfiles = \
+	~/.gitconfig \
+	~/.gitignore \
+	~/.ctags \
+	~/.bashrc \
+	~/.bash_profile \
+	~/.xinitrc \
+	~/.Xresources \
+	~/.Xresources.d/colorscheme \
+	~/.Xresources.d/urxvt \
+	~/.Xresources.d/rofi
+
+user/dotfiles: $(dotfiles)
+
+user/desktop: applications/i3wm \
+		applications/urxvt \
+		applications/dunst \
+		~/.compton.conf \
+		~/.xinitrc \
+		~/.bin/launcher
+	sudo apt-get install -y \
+		compton \
+		rofi \
+		hsetroot \
+
+user/environments/scala:
+	echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+	sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+	sudo apt-get update
+	sudo apt-get install -y \
+		openjdk-9-jdk-headless \
+		sbt
+
+user/environments/golang: ~/.env-golang
+	sudo apt-get install -y \
+		golang
+	source ~/.env-golang
+	go get -u github.com/rogpeppe/godef
+	go get -u github.com/nsf/gocode
+	curl https://glide.sh/get | sh
+
+user/environments/js:
+	sudo apt-get install -y \
+		nodejs \
+		npm
+
+user/environments/rust: ~/.env-rust
+	curl https://sh.rustup.rs -sSf \
+		| sh -s -- --no-modify-path
+	source ~/.env-rust
+	rustup install nightly
+	rustup default nightly
+	rustup run nightly cargo install rustfmt-nightly
+
+# Applications
+#
+
+applications/i3wm: ~/.xinitrc \
+	~/.config/i3/config \
+	~/.config/i3status/config \
+	applications/redshift \
+	applications/zathura \
+	applications/ranger \
+	applications/locker
+	sudo apt-get install -y \
+		compton \
+		gnome-keyring \
+		gnome-power-manager \
+		i3-wm \
+		i3lock \
+		i3status \
+		maim \
+		sxiv \
+		x11-utils \
+		x11-session-utils
+
+applications/dunst: ~/.config/dunst/dunstrc
+	sudo apt-get install -y \
+		dunst
+	systemctl --user enable dunst.service
+	systemctl --user start dunst.service
+
+applications/redshift: ~/.config/redshift.conf
+	sudo apt-get install -y \
+		redshift
+
+applications/nextcloud: ~/.config/systemd/user/nextcloud-client.service
+	sudo apt-get install -y \
+		gnome-keyring \
+		nextcloud-client
+	systemctl --user enable nextcloud-client.service
+
+config_path = ~/.vim
+applications/vim: ~/.vimrc
+	- sudo apt-get install -y \
+		exuberant-ctags \
+		vim-gtk3
+	- rm -rf $(config_path)/pack
+	- mkdir -p $(config_path)/backups $(config_path)/pack/plugins/start
+	- cd $(config_path)/pack/plugins/start \
+		&& git clone https://github.com/chriskempson/base16-vim.git \
+		&& git clone https://github.com/derekwyatt/vim-scala.git \
+		&& git clone https://github.com/fatih/vim-go.git \
+		&& git clone https://github.com/tpope/vim-fugitive.git \
+		&& git clone https://github.com/tpope/vim-markdown.git \
+		&& git clone https://github.com/tpope/vim-repeat.git \
+		&& git clone https://github.com/tpope/vim-rsi.git \
+		&& git clone https://github.com/tpope/vim-sensible.git \
+		&& git clone https://github.com/tpope/vim-sleuth.git \
+		&& git clone https://github.com/tpope/vim-surround.git \
+		&& git clone https://github.com/tpope/vim-vinegar.git
+
+applications/mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service
+	sudo apt-get install -y \
+		mpd \
+		mpc
+	mkdir -p ~/.mpd/playlists
+	systemctl --user daemon-reload
+	systemctl --user enable mpd.service
+	systemctl --user start mpd.service
+
+applications/mpv:
+	sudo apt-get install -y \
+		mpv
+
+applications/ncmpcpp: ~/.ncmpcpp/bindings ~/.ncmpcpp/config
+	sudo apt-get install -y \
+		ncmpcpp
+
+applications/ranger: ~/.config/ranger/rc.conf ~/.bin/previewer ~/.bin/imgt
+	sudo apt-get install -y \
+		highlight \
+		ranger \
+		w3m
+
+applications/zathura:
+	sudo apt-get install -y \
+		zathura \
+		zathura-pdf-poppler \
+		zathura-ps
+
+applications/urxvt: ~/.Xresources.d/urxvt ~/.bashrc ~/.bash_profile
+	git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+	sudo apt-get install -y \
+		rxvt-unicode-256color
+
+applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service
+	sudo systemctl enable my-favorite-things-locker.service
+	cp templates/dotfiles/my-favorite-things/lock-icon.png ~/.my-favorite-things/lock-icon.png
+	chmod +x ~/.bin/my-favorite-things-locker
+	sudo apt-get install -y \
+		maim \
+		i3lock \
+		imagemagick
+
+applications/firefox:
+	sudo apt-get install -y \
+		firefox
+
+applications/docker:
+	sudo apt-get install -y \
+		docker.io
+	- sudo gpasswd -a $(USER) docker
+
+# Core
+#
+
+core/utils:
+	sudo apt-get install -y \
+		bash-completion \
+		exuberant-ctags \
+		git \
+		openssh-client  \
+		unzip \
+		xsel
+
+core/fonts:
+	sudo apt-get install -y \
+		ttf-bitstream-vera \
+		xfonts-terminus \
+		xfonts-terminus-oblique \
+		fonts-dejavu \
+		fonts-firacode \
+		fonts-roboto \
+		fonts-noto-color-emoji
+
+# Setup Xorg and its basic drivers and tools.
+#
+# NOTICE: Isn't possible to eliminate DDX intel drivers yet as modesetting generic driver has
+# heavy tearing under Thinkpad 460s Skylake Intel GPU.
+#
+# TODO: Do not forget to re-check this after Xorg updates, modesetting has better performance
+# and less bugs than Intel's SNA AccellMethod.
+#
+# UPDATE: Well, actually using intel DDX drivers is problematic as the system simply freezes
+# when RC6 powersaving is being used which makes it impracticable.
+#
+core/xorg: /etc/X11/xorg.conf ~/.drirc
+	sudo apt-get install -y \
+		libva2 \
+		libva-drm2 \
+		libva-glx2 \
+		libva-x11-2 \
+		xserver-xorg-input-libinput \
+		xserver-xorg-video-intel \
+		xserver-xorg \
+		xserver-common \
+		x11-utils \
+		x11-session-utils
+
+# System
+#
+
+system/power: /etc/modprobe.d/i915.conf
+	sudo apt-get install -y \
+		acpi \
+		ethtool \
+		powertop \
+		rfkill \
+		tlp
+	sudo systemctl enable tlp.service tlp-sleep.service
+	sudo systemctl start tlp.service tlp-sleep.service
+
+system/sound: /etc/modprobe.d/blacklist.conf /etc/modprobe.d/snd_hda_intel.conf
+	sudo apt-get install -y \
+		pulsemixer \
+		pulseaudio \
+		pulseaudio-module-bluetooth
+	- pulseaudio -D
+
+system/bluetooth:
+	sudo apt-get install -y \
+		bluez \
+		bluez-tools
+	sudo systemctl enable bluetooth.service
+	sudo systemctl start bluetooth.service
+
+# Device specific
+#
+
+device/x200:
+	sudo apt-get install -y \
+		i965-va-driver
+
+# Task utils
+#
+
+/etc/vconsole.conf: core/fonts templates/etc/vconsole.conf
+	- sudo cp ./templates/vconsole.conf /etc/vconsole.conf
+
+/etc/modprobe.d/%: templates/etc/modprobe.d/*
+	- sudo cp templates/etc/modprobe.d/$* $@
+
+/etc/%: templates/etc/*
+	- sudo cp templates/etc/$* $@
+
+/etc/X11/xorg.conf.d/%.conf: templates/etc/X11/xorg.conf.d/*
+	- sudo cp templates/etc/X11/xorg.conf.d/$*.conf $@
+
+~/.%: templates/dotfiles/*
+	- mkdir -p $(@D)
+	- $(macrocmd) \
+		templates/dotfiles/$* \
+		> $@
+
+/etc/systemd/system/%: templates/etc/systemd/system/*
+	- sudo mkdir -p $(@D)
+	- $(macrocmd) \
+		templates/etc/systemd/system/$* \
+		| sudo dd of=$@
+
+~/.bin/%: templates/dotfiles/bin/*
+	- mkdir -p $(@D)
+	- $(macrocmd) \
+		templates/dotfiles/bin/$* \
+		> $@
+	- chmod +x $@
+
+clean/tmp:
+	- mkdir -p tmp
+	- rm -rf tmp/*
