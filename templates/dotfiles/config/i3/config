@@ -26,7 +26,7 @@ set $base0F color_p
 
 set $locker ~/.bin/my-favorite-things-locker
 
-font pango: Tamzen 12
+font pango: Terminus 9
 floating_modifier $mod
 popup_during_fullscreen smart
 
@@ -143,7 +143,7 @@ bar {
   position bottom
   status_command i3status
   tray_output none
-  font pango:Tamzen 10
+  font pango:Terminus 9
   separator_symbol " "
 
   colors {

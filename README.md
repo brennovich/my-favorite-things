@@ -28,13 +28,14 @@ define a coloscheme and your personal info like name and email, please look at `
 
 Here are a few photos, I'm using a grayscale colorscheme with a deep focus intent:
 
-![Desktop](http://i.imgur.com/VsM9bFc.png)
+![Desktop I](https://user-images.githubusercontent.com/379894/34344274-5a04aab2-e9cb-11e7-8762-a3032185ccd2.png)
+![Desktop II](https://user-images.githubusercontent.com/379894/34344275-5a2cd550-e9cb-11e7-9ba1-6d09bf71def8.png)
 
 - **File browser**: ranger
-- **Bar**: lemonbar
+- **Bar**: 13bar
 - **Player**: ncmpcpp
 - **Wallpaper**: dinamically generated via hsetroot
-- **Fonts**: tamzenm, siji
+- **Fonts**: terminus
 
 ### Third Party
 

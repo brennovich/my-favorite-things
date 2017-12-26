@@ -3,7 +3,6 @@
 ######
 
 progressbar_look = "━━╸"
-progressbar_boldness = "no"
 user_interface = "classic"
 
 song_list_format = "$5%a$9 | $1$9%t$1$9  $R$1$9%l$1$9"
@@ -34,4 +33,3 @@ visualizer_in_stereo = "no"
 visualizer_type = "spectrum"
 visualizer_look = "●▋"
 visualizer_color = "yellow" 
-visualizer_sample_multiplier = "0.8"

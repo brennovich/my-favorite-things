@@ -56,15 +56,15 @@ set linebreak
 " Appearence settings
 " ###################
 
+let base16colorspace=256
 set t_Co=256
-set background=dark
-colorscheme base16-grayscale-dark
+set background=light
+colorscheme base16-grayscale-light
 
 augroup color_tweaks
   au!
-  autocmd ColorScheme * hi VertSplit ctermbg=NONE
-  autocmd ColorScheme * hi SignColumn ctermbg=NONE
-  autocmd ColorScheme * hi EnErrorStyle ctermbg=10
+  autocmd ColorScheme * hi Visual term=reverse cterm=reverse
+  autocmd ColorScheme * hi Search ctermbg=15
 augroup END
 
 " Statusbar

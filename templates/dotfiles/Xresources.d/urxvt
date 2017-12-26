@@ -1,16 +1,16 @@
-URxvt.font: xft:Tamzen:style=regular:pixelsize=16:size=16:antialias=false
-URxvt.boldFont: xft:Tamzen:style=bold:size=16:pixelsize=16:antialias=false
+URxvt.font: xft:Terminus:style=regular:pixelsize=14:antialias=false
+URxvt.boldFont: xft:Terminus:style=bold:pixelsize=14:antialias=false
 ! URxvt.letterSpace: -1
 ! URxvt.lineSpace: 1
 
 URxvt*borderless: true
 URxvt*saveLines: 20000
 URxvt*scrollBar: false
-URxvt.internalBorder: 10
+URxvt.internalBorder: 24
 URxvt.geometry: 80x24
 URxvt.intensityStyles: false
 
-URxvt.perl-ext-common: default,matcher,keyboard-select
-URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.perl-ext-common: default,matcher
+! URxvt.keysym.M-Escape: perl:keyboard-select:activate
 URxvt.url-launcher: /usr/bin/xdg-open
 URxvt.matcher.button: 1

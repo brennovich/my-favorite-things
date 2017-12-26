@@ -1,7 +1,7 @@
 # vim:ft=cfg
 
 [global]
-  font = "Tamzen 12"
+  font = "Terminus 9"
   allow_markup = no
 
   # The format of the message. Possible variables are:

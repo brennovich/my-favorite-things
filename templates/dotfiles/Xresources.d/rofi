@@ -1,6 +1,6 @@
 changecom(`"""')
 rofi.color-enabled: true
-rofi.font: Tamzen 12
+rofi.font: Terminus 9
 rofi.hide-scrollbar: true
 rofi.lines: 8
 rofi.matching: fuzzy
