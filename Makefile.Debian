@@ -285,6 +285,12 @@ core/xorg: /etc/X11/xorg.conf ~/.drirc
 # System
 #
 
+system/fingerprint-auth:
+	sudo apt-get install -y \
+		libpam-fprintd \
+		fprintd
+	sudo sed -i "1s/^/auth	[success=2 default=ignore]	pam_fprintd.so\n/" /etc/pam.d/common-auth
+
 system/power: /etc/modprobe.d/i915.conf
 	sudo apt-get install -y \
 		acpi \
