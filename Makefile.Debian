@@ -6,6 +6,8 @@ user-name = Brenno Costa
 user-nick = $(USER)
 colorscheme = base16-dark
 
+root-dir = $(PWD)
+
 $(shell mkdir -p tmp)
 
 # Template parsing command
@@ -242,15 +244,19 @@ core/utils:
 		xsel
 
 core/fonts:
+	cd tmp \
+		&& curl -S -L -o firacode.zip "https://github.com/tonsky/FiraCode/releases/download/1.204/FiraCode_1.204.zip" \
+		&& mkdir -p ~/.fonts/FiraCode \
+		&& cd ~/.fonts/FiraCode \
+		&& unzip $(root-dir)/tmp/firacode.zip
 	sudo apt-get install -y \
 		ttf-bitstream-vera \
 		xfonts-terminus \
 		xfonts-terminus-oblique \
 		fonts-cantarell \
 		fonts-dejavu \
-		fonts-firacode \
 		fonts-roboto \
-		fonts-noto-color-emoji
+		fonts-noto-color-emoj/tmp/firacode.zipi
 	echo "deb http://ppa.launchpad.net/no1wantdthisname/ppa/ubuntu xenial main\ndeb-src http://ppa.launchpad.net/no1wantdthisname/ppa/ubuntu xenial main" \
 		| sudo tee /etc/apt/sources.list.d/infinality.list
 	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E985B27B
