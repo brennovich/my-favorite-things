@@ -23,6 +23,15 @@ export EDITOR=vim
 export PATH=$HOME/.bin:/sbin:$PATH
 export HISTSIZE=-1
 
+XDG_DESKTOP_DIR="$HOME/desktop"
+XDG_DOCUMENTS_DIR="$HOME/documents"
+XDG_DOWNLOAD_DIR="$HOME/downloads"
+XDG_MUSIC_DIR="$HOME/music"
+XDG_PICTURES_DIR="$HOME/pictures"
+XDG_PUBLICSHARE_DIR="$HOME/shared"
+XDG_TEMPLATES_DIR="$HOME/templates"
+XDG_VIDEOS_DIR="$HOME/videos"
+
 alias ls='ls --color'
 alias grepc='grep --color=auto --exclude-dir=.git --line-number --binary-files=without-match'
 alias grepd='grep --color=auto --exclude-dir=.git --line-number --dereference-recursive --binary-files=without-match'

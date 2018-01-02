@@ -3,10 +3,11 @@ general {
 	interval = 5
 	color_good = "color_f"
 	color_degraded = "color_e"
-	color_bad = "color_d"
+	color_bad = "color_h"
 	separator = ""
 }
 
+order += "path_exists vpn"
 order += "ethernet enp0s25"
 order += "wireless wlp2s0"
 order += "cpu_temperature 0"
@@ -15,14 +16,19 @@ order += "volume master"
 order += "battery 0"
 order += "tztime local"
 
+path_exists vpn {
+        path = "/proc/sys/net/ipv4/conf/tun0"
+	format_down = ""
+}
+
 ethernet enp0s25 {
 	format_up = "e:%speed - %ip"
-	format_down = "e:down"
+	format_down = ""
 }
 
 wireless wlp2s0 {
 	format_up = "w:%essid"
-	format_down = "w:down"
+	format_down = ""
 }
 
 cpu_temperature 0 {
