@@ -20,27 +20,27 @@ macrocmd = m4 \
 dotfiles = \
 	~/.gitconfig \
 	~/.gitignore \
+	~/.compton.conf \
 	~/.ctags \
 	~/.bashrc \
 	~/.bash_profile \
-	~/.xinitrc \
 	~/.Xresources \
-	~/.Xresources.d/colorscheme \
-	~/.Xresources.d/urxvt \
-	~/.Xresources.d/rofi \
+	~/.Xresources.d/colorscheme
 
-user/dotfiles: $(dotfiles)
-
-user/desktop: applications/i3wm \
-		applications/urxvt \
-		applications/dunst \
-		~/.compton.conf \
-		~/.xinitrc \
-		~/.bin/launcher
+user/desktop: $(dotfiles) \
+	applications/dunst \
+	applications/i3wm \
+	applications/launcher \
+	applications/locker \
+	applications/ranger \
+	applications/redshift \
+	applications/urxvt \
+	applications/zathura
 	pacaur -S --noconfirm --needed \
 		compton \
-		rofi \
-		hsetroot
+		gnome-keyring \
+		hsetroot \
+		sxiv
 
 user/environments/scala:
 	sudo pacman -S --noconfirm --needed \
@@ -50,6 +50,7 @@ user/environments/golang: ~/.env-golang
 	sudo pacman -S --noconfirm --needed \
 		go \
 		go-tools
+	source ~/.env-golang
 	vim +GoInstallBinaries +qall
 	curl https://glide.sh/get | sh
 
@@ -70,27 +71,20 @@ user/environments/rust: ~/.env-rust
 
 applications/i3wm: ~/.xinitrc \
 	~/.config/i3/config \
-	~/.config/i3status/config \
-	applications/redshift \
-	applications/zathura \
-	applications/ranger \
-	applications/locker
-	pacaur -S --noconfirm --needed \
-		i3-gaps
+	~/.config/i3status/config
 	sudo pacman -S --noconfirm --needed \
-		compton \
-		gnome-keyring \
-		gnome-power-manager \
+		i3-wm \
 		i3lock \
 		i3status \
-		maim \
-		sxiv \
-		xorg-xrandr
+
+applications/launcher: ~/.bin/launcher \
+	~/.Xresources.d/rofi
+	sudo pacman -S --noconfirm --needed \
+		rofi
 
 applications/dunst: ~/.config/dunst/dunstrc
 	pacaur -S --noconfirm --needed \
-		dunst-git \
-		dunst-service
+		dunst-git
 	systemctl --user enable dunst.service
 	systemctl --user start dunst.service
 
@@ -146,23 +140,27 @@ applications/zathura:
 		zathura-pdf-mupdf
 
 applications/urxvt: ~/.Xresources.d/urxvt
+	if ! [ -d ~/.config/base16-shell ]; then git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell; fi
 	sudo pacman -S --noconfirm --needed \
 		rxvt-unicode \
 		urxvt-perls
+	mkdir -p ~/.urxvt/ext/
+	curl -SL -o ~/.urxvt/ext/keyboard-select "https://raw.githubusercontent.com/muennich/urxvt-perls/master/keyboard-select"
+	curl -SL -o ~/.urxvt/ext/resize-font "https://raw.githubusercontent.com/simmel/urxvt-resize-font/master/resize-font"
+	xrdb -load ~/.Xresources
 
-applications/locker: ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service
-	sudo systemctl --user enable my-favorite-things-locker.service
-	cp templates/dotfiles/my-favorite-things/lock-icon.png ~/.my-favorite-things/lock-icon.png
-	chmod +x ~/.bin/my-favorite-things-locker
+applications/locker: ~/.bin/my-favorite-things-locker ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service
+	sudo systemctl enable my-favorite-things-locker.service
+	mkdir -p ~/.my-favorite-things/ \
+		&& cp templates/dotfiles/my-favorite-things/lock-icon.png ~/.my-favorite-things/lock-icon.png
 	sudo pacman -S --noconfirm --needed \
 		maim \
 		i3lock \
 		imagemagick
-	sudo systemctl --user start my-favorite-things-locker.service
 
 applications/firefox:
 	pacaur -S --noconfirm --needed \
-		firefox
+		iceweasel
 
 applications/docker:
 	sudo pacman -S --noconfirm --needed \
@@ -180,11 +178,15 @@ core/utils:
 		git-core \
 		openssh  \
 		unzip \
+		xclip \
 		xsel
 
 core/fonts:
 	pacaur -S --noconfirm --needed \
+		fontconfig-infinality-ultimate \
+		cairo-infinality-ultimate \
 		bdf-creep \
+		cantarell-fonts \
 		scientifica-font \
 		siji-git \
 		tamzen-font-git \
@@ -194,10 +196,8 @@ core/fonts:
 		ttf-fira-mono \
 		ttf-fira-sans \
 		ttf-opensans \
-		ttf-ubuntu-font-family \
 		ttf-twemoji-color \
-		ttf-xorg-fonts-alias \
-		ttf-xorg-fonts-misc
+		xorg-fonts-alias
 
 core/aur-helper: core/aur-helper/cower
 	cd tmp \
@@ -205,6 +205,7 @@ core/aur-helper: core/aur-helper/cower
 		&& tar -xvf pacaur.tar.gz \
 		&& cd pacaur \
 		&& makepkg -sri --noconfirm
+
 core/aur-helper/cower: clean/tmp
 	gpg --recv-keys 487EACC08557AD082088DABA1EB2638FF56C0C53 # Dave Reisner, cower maintainer
 	mkdir -p tmp \
@@ -225,7 +226,9 @@ core/aur-helper/cower: clean/tmp
 # UPDATE: Well, actually using intel DDX drivers is problematic as the system simply freezes
 # when RC6 powersaving is being used which makes it impracticable.
 #
-core/xorg: /etc/X11/xorg.conf.d/20-intel.conf /etc/X11/xorg.conf.d/00-keyboard.conf ~/.drirc
+core/xorg: 
+	sudo mkdir -p /etc/X11/xorg.conf.d
+	$(MAKE) /etc/X11/xorg.conf.d/20-intel.conf /etc/X11/xorg.conf.d/00-keyboard.conf
 	- sudo pacman -S --noconfirm --needed \
 		libva-intel-driver \
 		xf86-input-libinput \

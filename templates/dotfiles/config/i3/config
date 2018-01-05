@@ -26,7 +26,7 @@ set $base0F color_p
 
 set $locker ~/.bin/my-favorite-things-locker
 
-font -*-terminus-medium-r-*-*-12-120-72-72-c-60-iso8859-16
+font -romeovs-scientifica-medium-r-normal-*-11-*-100-100-c-50-iso10646-1
 floating_modifier $mod
 popup_during_fullscreen smart
 
@@ -143,7 +143,7 @@ bar {
   position bottom
   status_command i3status
   tray_output none
-  font -*-terminus-medium-r-*-*-12-120-72-72-c-60-iso8859-16
+  font -romeovs-scientifica-medium-r-normal-*-11-*-100-100-c-50-iso10646-1
   separator_symbol " "
 
   colors {

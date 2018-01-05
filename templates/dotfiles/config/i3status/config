@@ -12,8 +12,8 @@ order += "ethernet enp0s25"
 order += "wireless wlp2s0"
 order += "cpu_temperature 0"
 order += "load"
-order += "volume master"
 order += "battery 0"
+order += "volume master"
 order += "tztime local"
 
 path_exists vpn {
@@ -22,42 +22,47 @@ path_exists vpn {
 }
 
 ethernet enp0s25 {
-	format_up = "e:%speed - %ip"
+	format_up = "\
+ %speed - %ip"
 	format_down = ""
 }
 
 wireless wlp2s0 {
-	format_up = "w:%essid"
+	format_up = "\
+	%essid"
 	format_down = ""
 }
 
 cpu_temperature 0 {
-	format = "c:%degrees°C"
+	format = "\
+	%degrees°C"
 }
 
 load {
-	format = "%1min %5min %15min"
+	format = "\
+	%1min %5min %15min"
 }
 
 battery 0 {
 	integer_battery_capacity = true
 	last_full_capacity = true
-	format = "b:%percentage %remaining%status"
-	status_chr = "c"
-	status_bat = "d"
-	status_full = "f"
+	format = "%status\
+	%percentage %remaining - %consumption"
+	status_chr = ""
+	status_bat = ""
+	status_full = ""
+	status_unk = ""
 	hide_seconds = true
 	low_threshold = 10
 }
 
 volume master {
-	format = "v:%volume"
-	format_muted = "v:muted"
-	# device = "default"
-	# mixer = "Master"
-	# mixer_idx = 0
+	format = "\
+	%volume"
+	format_muted = ""
 }
 
 tztime local {
-	format = "%a %e %b %H:%M"
+	format = "\
+	%a %e %b %H:%M"
 }
