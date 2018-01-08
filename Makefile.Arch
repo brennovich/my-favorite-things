@@ -1,7 +1,7 @@
 # Configuration
 #
 # Variables used in m4 templates
-user-email = brennolncosta@gmail.com
+user-email = brennovich@riseup,net
 user-name = Brenno Costa
 user-nick = $(USER)
 colorscheme = base16-dark
@@ -92,12 +92,10 @@ applications/redshift: ~/.config/redshift.conf
 	pacaur -S --noconfirm --needed \
 		redshift
 
-applications/nextcloud: ~/.config/systemd/user/nextcloud-client.service
+applications/nextcloud:
 	pacaur -S --noconfirm --needed \
 		gnome-keyring \
 		nextcloud-client
-	systemctl --user enable nextcloud-client.service
-	systemctl --user start nextcloud-client.service
 
 config_path = ~/.vim
 applications/vim: ~/.vimrc
@@ -264,6 +262,11 @@ system/bluetooth:
 		bluez-utils
 	sudo systemctl enable bluetooth.service
 	sudo systemctl start bluetooth.service
+
+system/fingerprint-auth:
+	sudo pacman -S --noconfirm --needed \
+		fprintd
+	sudo sed -i "1s/^/auth	sufficient	pam_fprintd.so\n/" /etc/pam.d/system-local-login
 
 # Device specific
 #
