@@ -7,9 +7,9 @@ general {
 	separator = ""
 }
 
-order += "path_exists vpn"
 order += "ethernet enp0s25"
 order += "wireless wlp2s0"
+order += "path_exists vpn"
 order += "cpu_temperature 0"
 order += "load"
 order += "battery 0"

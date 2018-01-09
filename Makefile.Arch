@@ -20,6 +20,7 @@ macrocmd = m4 \
 dotfiles = \
 	~/.gitconfig \
 	~/.gitignore \
+	~/.config/user-dirs.dirs \
 	~/.compton.conf \
 	~/.ctags \
 	~/.bashrc \
