@@ -33,10 +33,9 @@ popup_during_fullscreen smart
 new_window pixel 1
 new_float pixel 1
 
-for_window [class="Firefox"] border pixel 0
+for_window [class="Iceweasel"] border pixel 0
 
 exec --no-startup-id urxvtd
-exec --no-startup-id redshift
 exec --no-startup-id xrandr --output LVDS1 --primary
 exec --no-startup-id /usr/lib/gnome-settings-daemon/gsd-xsettings
 exec --no-startup-id dbus-update-activation-environment --systemd DISPLAY
@@ -143,7 +142,7 @@ bar {
   position bottom
   status_command i3status
   tray_output none
-  font -romeovs-scientifica-medium-r-normal-*-11-*-100-100-c-50-iso10646-1
+  font pango: FontAwesome, scientifica, siji 7
   separator_symbol " "
 
   colors {

@@ -11,7 +11,7 @@ if [[ -f $lock_icon ]]; then
   r=$(file $lock_icon | grep -o '[0-9]* x [0-9]*')
   rx=$(echo $r | cut -d' ' -f 1)
   ry=$(echo $r | cut -d' ' -f 3)
-  sr=$(xrandr --query | grep ' connected' | sed 's/primary //' | cut -f3 -d' ')
+  sr=$(xrandr --query | grep ' connected' | sed 's/primary //' | cut -f3 -d' ' | tr -d '(normal')
 
   for res in $sr; do
     srx=$(echo $res | cut -d'x' -f 1)                   # x pos
