@@ -119,9 +119,15 @@ applications/vim: ~/.vimrc
 		&& git clone https://github.com/tpope/vim-surround.git \
 		&& git clone https://github.com/tpope/vim-vinegar.git
 
-applications/cmus: 
-	sudo pacman -S --noconfirm --needed \
-		cmus
+applications/mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service
+	sudo pacman -S --noconfirm --needed mpd mpc
+	mkdir -p ~/.mpd/playlists
+	systemctl --user daemon-reload
+	systemctl --user enable mpd.service
+	systemctl --user start mpd.service
+
+applications/ncmpcpp: ~/.ncmpcpp/bindings ~/.ncmpcpp/config
+	sudo pacman -S --noconfirm --needed ncmpcpp
 
 applications/mpv:
 	sudo pacman -S --noconfirm --needed \
