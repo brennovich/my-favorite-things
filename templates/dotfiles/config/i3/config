@@ -26,14 +26,14 @@ set $base0F color_p
 
 set $locker ~/.bin/my-favorite-things-locker
 
-font -romeovs-scientifica-medium-r-normal-*-11-*-100-100-c-50-iso10646-1
+font pango: FontAwesome, scientifica, siji 7
 floating_modifier $mod
-popup_during_fullscreen smart
+hide_edge_borders both
 
-new_window pixel 1
-new_float pixel 1
+new_window pixel 0
+new_float pixel 0
 
-for_window [class="Iceweasel"] border pixel 0
+for_window [class=".*"] title_format "  %title"
 
 exec --no-startup-id urxvtd
 exec --no-startup-id xrandr --output LVDS1 --primary
@@ -41,8 +41,7 @@ exec --no-startup-id /usr/lib/gnome-settings-daemon/gsd-xsettings
 exec --no-startup-id dbus-update-activation-environment --systemd DISPLAY
 exec --no-startup-id gnome-keyring-daemon -d -r
 
-exec_always --no-startup-id ~/.bin/random-gradient-wallpaper
-exec_always --no-startup-id $(pkill compton; exit 0) && compton
+exec_always --no-startup-id ~/.bin/random-gradient-wallpaper exec_always --no-startup-id $(pkill compton; exit 0) && compton
 exec_always --no-startup-id xrdb -load ~/.Xresources
 
 bindsym $mod+q kill
@@ -101,6 +100,10 @@ bindsym XF86ScreenSaver exec --no-startup-id $locker
 bindsym XF86MonBrightnessUp exec --no-startup-id ~/.bin/notify-brightness
 bindsym XF86MonBrightnessDown exec --no-startup-id ~/.bin/notify-brightness
 bindsym XF86Launch1 exec --no-startup-id ~/.bin/launcher
+bindsym XF86AudioPlay exec --no-startup-id mpc toggle
+bindsym XF86AudioPrev exec --no-startup-id mpc prev
+bindsym XF86AudioNext exec --no-startup-id mpc next
+bindsym XF86AudioStop exec --no-startup-id mpc stop
 bindsym XF86AudioMute exec --no-startup-id pulsemixer --toggle-mute
 bindsym XF86AudioRaiseVolume exec --no-startup-id pulsemixer --change-volume +5
 bindsym XF86AudioLowerVolume exec --no-startup-id pulsemixer --change-volume -5
@@ -137,7 +140,7 @@ client.unfocused $base01 $base01 $base05 $base01
 client.urgent $base02 $base08 $base07 $base08
 
 bar {
-  mode hide
+  mode dock
   output primary
   position bottom
   status_command i3status
