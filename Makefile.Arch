@@ -29,18 +29,14 @@ dotfiles = \
 	~/.Xresources.d/colorscheme
 
 user/desktop: $(dotfiles) \
-	applications/dunst \
-	applications/i3wm \
+	applications/sway \
 	applications/launcher \
 	applications/locker \
 	applications/ranger \
-	applications/redshift \
-	applications/urxvt \
+	applications/termite \
 	applications/zathura
 	pacaur -S --noconfirm --needed \
-		compton \
 		gnome-keyring \
-		hsetroot \
 		sxiv
 
 user/environments/scala:
@@ -63,35 +59,35 @@ user/environments/js:
 user/environments/rust: ~/.env-rust
 	curl https://sh.rustup.rs -sSf \
 		| sh -s -- --no-modify-path
-	rustup install nightly
-	rustup default nightly
-	rustup run nightly cargo install rustfmt-nightly
+	rustup install stable
+	rustup default stable
+	rustup run stable cargo install rustfmt
 
 # Applications
 #
+
+applications/sway: ~/.config/sway/config ~/.bin/sway-session
+	sudo pacman -S --noconfirm --needed \
+		i3status \
+		sway
 
 applications/i3wm: ~/.xinitrc \
 	~/.config/i3/config \
 	~/.config/i3status/config
 	sudo pacman -S --noconfirm --needed \
-		i3-wm \
+		i3-gaps \
 		i3lock \
-		i3status \
+		i3status
 
-applications/launcher: ~/.bin/launcher \
-	~/.Xresources.d/rofi
+applications/launcher: ~/.bin/launcher
 	sudo pacman -S --noconfirm --needed \
-		rofi
+		dmenu
 
 applications/dunst: ~/.config/dunst/dunstrc
 	pacaur -S --noconfirm --needed \
 		dunst-git
 	systemctl --user enable dunst.service
 	systemctl --user start dunst.service
-
-applications/redshift: ~/.config/redshift.conf
-	pacaur -S --noconfirm --needed \
-		redshift
 
 applications/nextcloud:
 	pacaur -S --noconfirm --needed \
@@ -114,6 +110,7 @@ applications/vim: ~/.vimrc
 		&& git clone https://github.com/tpope/vim-markdown.git \
 		&& git clone https://github.com/tpope/vim-repeat.git \
 		&& git clone https://github.com/tpope/vim-rsi.git \
+		&& git clone https://github.com/rust-lang/rust.vim.git \
 		&& git clone https://github.com/tpope/vim-sensible.git \
 		&& git clone https://github.com/tpope/vim-sleuth.git \
 		&& git clone https://github.com/tpope/vim-surround.git \
@@ -144,22 +141,16 @@ applications/zathura:
 		zathura \
 		zathura-pdf-mupdf
 
-applications/urxvt: ~/.Xresources.d/urxvt
-	if ! [ -d ~/.config/base16-shell ]; then git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell; fi
+applications/termite: ~/.bin/colorful-termite ~/.config/termite/config ~/.config/gtk-3.0/gtk.css
+	if ! [ -d ~/.config/base16-termite ]; then git clone https://github.com/khamer/base16-termite.git ~/.config/base16-termite; fi
 	sudo pacman -S --noconfirm --needed \
-		rxvt-unicode \
-		urxvt-perls
-	mkdir -p ~/.urxvt/ext/
-	curl -SL -o ~/.urxvt/ext/keyboard-select "https://raw.githubusercontent.com/muennich/urxvt-perls/master/keyboard-select"
-	curl -SL -o ~/.urxvt/ext/resize-font "https://raw.githubusercontent.com/simmel/urxvt-resize-font/master/resize-font"
-	xrdb -load ~/.Xresources
+		termite
 
 applications/locker: ~/.bin/my-favorite-things-locker ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service
 	sudo systemctl enable my-favorite-things-locker.service
 	mkdir -p ~/.my-favorite-things/ \
 		&& cp templates/dotfiles/my-favorite-things/lock-icon.png ~/.my-favorite-things/lock-icon.png
 	sudo pacman -S --noconfirm --needed \
-		maim \
 		i3lock \
 		imagemagick
 

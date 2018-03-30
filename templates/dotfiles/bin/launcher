@@ -1,5 +1,8 @@
 #!/bin/bash
 
-rofi -combi-modi window,drun -show run \
-  -hide-scrollbar \
-  -matching fuzzy
+dmenu_run -i -b \
+  -nb \color_f \
+  -nf \color_c \
+  -sb \color_m \
+  -sf \color_b \
+  -fn "Scientifica:size=11:style=bold"

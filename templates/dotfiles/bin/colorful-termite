@@ -1,0 +1,8 @@
+#!/bin/bash
+
+files=(~/.config/base16-termite/themes/*)
+random_color="${files[RANDOM % ${#files[@]}]}"
+
+cat ~/.config/termite/config > /tmp/termite-config \
+  && cat ${random_color} >> /tmp/termite-config \
+  && termite -c /tmp/termite-config

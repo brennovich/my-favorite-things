@@ -26,26 +26,17 @@ set $base0F color_p
 
 set $locker ~/.bin/my-favorite-things-locker
 
-font pango: FontAwesome, Scientifica, Siji 7
+font pango: Scientifica
 floating_modifier $mod
 hide_edge_borders both
+output * bg ~/.my-favorite-things/wallpaper.png fill
 
 new_window pixel 0
-new_float pixel 0
-for_window [class=".*"] title_format "  %title"
+new_float normal 1
 
-gaps inner 8
-gaps inner 8
+gaps inner 4px
+gaps inner 4px
 smart_gaps on
-
-exec --no-startup-id xrandr --output LVDS1 --primary
-exec --no-startup-id /usr/lib/gnome-settings-daemon/gsd-xsettings
-exec --no-startup-id dbus-update-activation-environment --systemd DISPLAY
-exec --no-startup-id gnome-keyring-daemon -d -r
-
-exec_always --no-startup-id ~/.bin/random-gradient-wallpaper
-exec_always --no-startup-id $(pkill compton; exit 0) && compton
-exec_always --no-startup-id xrdb -load ~/.Xresources
 
 bindsym $mod+q kill
 
@@ -90,30 +81,29 @@ bindsym $mod+Shift+5 move container to workspace $ws5
 bindsym $mod+Shift+6 move container to workspace $ws6
 
 bindsym $mod+Shift+c reload
-bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exit
 
-bindsym $mod+Return exec --no-startup-id urxvtc
+bindsym $mod+Return exec --no-startup-id colorful-termite
 bindsym $mod+d exec --no-startup-id ~/.bin/launcher
 bindsym $mod+XF86PowerOff exec --no-startup-id systemctl suspend
 bindsym Control+Mod1+l exec --no-startup-id $locker
 bindsym XF86Display exec --no-startup-id xrandr --output LVDS1 --auto --primary --output VGA1 --off
 bindsym $mod+XF86Display exec --no-startup-id xrandr --output VGA1 --auto --primary --output LVDS1 --off
 bindsym XF86ScreenSaver exec --no-startup-id $locker
-bindsym XF86MonBrightnessUp exec --no-startup-id light -A 10 && ~/.bin/notify-brightness
-bindsym XF86MonBrightnessDown exec --no-startup-id light -U 10 && ~/.bin/notify-brightness
+bindsym XF86MonBrightnessUp exec --no-startup-id light -A 5 && ~/.bin/notify-brightness
+bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5 && ~/.bin/notify-brightness
 bindsym XF86Launch1 exec --no-startup-id ~/.bin/launcher
 bindsym XF86AudioPlay exec --no-startup-id mpc toggle
 bindsym XF86AudioPrev exec --no-startup-id mpc prev
 bindsym XF86AudioNext exec --no-startup-id mpc next
 bindsym XF86AudioStop exec --no-startup-id mpc stop
-bindsym XF86AudioNext exec --no-startup-id mpc next
+bindsym XF86AudioMute exec --no-startup-id pulsemixer --toggle-mute
 bindsym XF86AudioRaiseVolume exec --no-startup-id pulsemixer --change-volume +5
 bindsym XF86AudioLowerVolume exec --no-startup-id pulsemixer --change-volume -5
-bindsym --release Control+Shift+Print exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
-bindsym --release Shift+Print exec --no-startup-id maim -s ~/$(date +%Y-%m-%d-%H:%M:%S).png
-bindsym --release Control+Print exec --no-startup-id maim | xclip -selection clipboard -t image/png
-bindsym --release Print exec --no-startup-id maim ~/$(date +%Y-%m-%d-%H:%M:%S).png
+bindsym --release Control+Shift+Print exec --no-startup-id echo /tmp/$(date +%F_%H-%M-%S_%N).png > /tmp/ss && swaygrab --focused $(cat /tmp/ss) && xclip -selection clipboard -t image/png -i $(cat /tmp/ss)
+bindsym --release Shift+Print exec --no-startup-id echo /tmp/$(date +%F_%H-%M-%S_%N).png > /tmp/ss && swaygrab $(cat /tmp/ss) && xclip -selection clipboard -t image/png -i $(cat /tmp/ss)
+bindsym --release Control+Print exec --no-startup-id swaygrab --focused
+bindsym --release Print exec --no-startup-id swaygrab
 
 mode "resize" {
   bindsym h resize shrink width 5 px or 5 ppt
@@ -143,12 +133,9 @@ client.unfocused $base01 $base01 $base05 $base01
 client.urgent $base02 $base08 $base07 $base08
 
 bar {
-  mode dock
-  output primary
   position bottom
   status_command i3status
-  tray_output none
-  font pango: FontAwesome, Scientifica, Siji 7
+  font pango: FontAwesome, scientifica, siji 7
   separator_symbol " "
 
   colors {

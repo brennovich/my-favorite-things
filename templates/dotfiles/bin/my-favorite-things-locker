@@ -1,6 +1,21 @@
 #!/bin/bash
 
-maim /tmp/screen.png
+# Handle being called from systemd service
+if [ -z "$XDG_RUNTIME_DIR" ] && [ -z "$SWAYSOCK"]; then
+  uid=$(id -u $USER)
+
+  export XDG_RUNTIME_DIR="/run/user/"$uid"/"
+  export SWAYSOCK="$(find $XDG_RUNTIME_DIR -iname sway*sock)"
+fi
+
+if [[ ${SWAYSOCK:+1} ]]; then
+  lock='swaylock --font "Fira Sans" --indicator-radius 100 --indicator-thickness 20 --separatorcolor FFFFFF0C'
+  swaygrab /tmp/screen.png
+else
+  lock=i3lock
+  maim /tmp/screen.png
+fi
+
 convert /tmp/screen.png -scale 16% -scale 626% -fill black -colorize 25% /tmp/screen.png
 
 lock_icon=$HOME/.my-favorite-things/lock-icon.png
@@ -19,8 +34,6 @@ if [[ -f $lock_icon ]]; then
     srox=$(echo $res | cut -d'x' -f 2 | cut -d'+' -f 2) # x offset
     sroy=$(echo $res | cut -d'x' -f 2 | cut -d'+' -f 3) # y offset
 
-    sr="$(echo $sr | tr -d '(normal')"
-
     px=$(($srox + $srx/2 - $rx/2))
     py=$(($sroy + $sry/2 - $ry/2))
 
@@ -28,4 +41,4 @@ if [[ -f $lock_icon ]]; then
   done
 fi
 
-i3lock -e -f -i /tmp/screen.png
+$lock  -f -i /tmp/screen.png

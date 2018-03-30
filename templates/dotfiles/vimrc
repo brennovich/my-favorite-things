@@ -88,6 +88,8 @@ set colorcolumn=120
 " Language Specifics
 " ##################
 
+let g:rustfmt_autosave = 1
+
 let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1
 
