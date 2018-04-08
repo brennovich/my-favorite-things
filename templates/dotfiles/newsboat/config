@@ -1,0 +1,20 @@
+color background	white	black
+color listnormal	white	black
+color listfocus	black	blue
+color listnormal_unread	magenta	black
+color listfocus_unread	black	blue
+color info	black	green
+color article	white	black
+
+auto-reload yes
+external-url-viewer "urlview"
+
+bind-key j down
+bind-key k up
+bind-key j next articlelist
+bind-key k prev articlelist
+bind-key G end
+bind-key g home
+
+bind-key J next-feed articlelist
+bind-key K prev-feed articlelist

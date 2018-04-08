@@ -83,6 +83,16 @@ applications/launcher: ~/.bin/launcher
 	sudo pacman -S --noconfirm --needed \
 		dmenu
 
+applications/newsboat: ~/.bin/url_handler.sh ~/.newsboat/config
+	sudo pacman -S --noconfirm --needed \
+		newsboat
+
+applications/youtube: applications/newsboat applications/mpv
+	sudo pacman -S --noconfirm --needed \
+		mps-youtube \
+		youtube-dl
+
+
 applications/dunst: ~/.config/dunst/dunstrc
 	pacaur -S --noconfirm --needed \
 		dunst-git
