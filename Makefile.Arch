@@ -116,14 +116,13 @@ applications/vim: ~/.vimrc
 		&& git clone https://github.com/chriskempson/base16-vim.git \
 		&& git clone https://github.com/derekwyatt/vim-scala.git \
 		&& git clone https://github.com/fatih/vim-go.git \
+		&& git clone https://github.com/tpope/vim-apathy.git \
 		&& git clone https://github.com/tpope/vim-fugitive.git \
 		&& git clone https://github.com/tpope/vim-markdown.git \
 		&& git clone https://github.com/tpope/vim-repeat.git \
-		&& git clone https://github.com/tpope/vim-rsi.git \
 		&& git clone https://github.com/rust-lang/rust.vim.git \
 		&& git clone https://github.com/tpope/vim-sensible.git \
 		&& git clone https://github.com/tpope/vim-sleuth.git \
-		&& git clone https://github.com/tpope/vim-surround.git \
 		&& git clone https://github.com/tpope/vim-vinegar.git
 
 applications/mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service
