@@ -57,10 +57,39 @@ function lb() {
         | sed -rn "s/md-([[:digit:]]*)-/md:\1\\n\\t/p"
       ;;
     *)
+      tags="$(echo :$@: | sed 's/ /:/g')"
+
       vim \
         -c 'set wrap' \
         -c 'set spell' \
-        ~/nuvenzinha/Notes/logbook/$(date '+%Y-%m-%d').md
+        -c 'set filetype=markdown' \
+        -c "execute \"normal! i${tags}\<cr>$(seq -s '-' $(echo ${tags} | wc -c) | sed 's/[0-9]//g')\<cr>\"" \
+        ~/logbook/$(date '+%Y-%m-%d').md
+      ;;
+  esac
+}
+
+function lk() {
+  case "$1" in
+    "tag")
+      # Far from optimal but fair printing searh by tag
+      grep -nH -A 2 ":$2:" ~/links/* \
+        | grep -v "\-\-\-\-\|\:$2\:" \
+        | sed -rn "s/md-([[:digit:]]*)-/md:\1\\n\\t/p"
+      ;;
+    *)
+      link="${1}" && shift
+      [[ $link == http* ]] || link="https://${link}"
+
+      tags="$(echo :$@: | sed 's/ /:/g')"
+      title="${link} - $(curl -sSL ${link} | grep -oP '(?<=title>).*(?=<\/title>)')"
+
+      vim \
+        -c 'set wrap' \
+        -c 'set spell' \
+        -c 'set filetype=markdown' \
+        -c "execute \"normal! O${tags}\<cr>$(seq -s '-' $(echo ${tags} | wc -c) | sed 's/[0-9]//g')\<cr>${title}\<cr>\"" \
+        ~/links/$(date '+%Y-%m-%d').md
       ;;
   esac
 }
