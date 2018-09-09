@@ -72,7 +72,7 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ 0,               XF86XK_MonBrightnessUp, spawn,          {.v = brightnessupcmd } },
 	{ 0,             XF86XK_MonBrightnessDown, spawn,          {.v = brightnessdowncmd } },
-	{ 0,                   XF86XK_ScreenSaver, spawn,          SHCMD("~/.bin/my-favorite-things-locker") },
+	{ 0,                   XF86XK_ScreenSaver, spawn,          SHCMD("xautolock -locknow") },
 	{ 0,                     XF86XK_AudioPlay, spawn,          MPDCMD("toggle") },
 	{ 0,                     XF86XK_AudioPrev, spawn,          MPDCMD("prev") },
 	{ 0,                     XF86XK_AudioNext, spawn,          MPDCMD("next") },

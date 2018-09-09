@@ -4,3 +4,9 @@
 [submodule "slstatus"]
 	path = slstatus
 	url = git://git.suckless.org/slstatus
+[submodule "slock"]
+	path = slock
+	url = https://git.suckless.org/slock
+[submodule "dmenu"]
+	path = dmenu
+	url = https://git.suckless.org/dmenu

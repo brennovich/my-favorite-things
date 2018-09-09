@@ -6,4 +6,6 @@ compton &
 dbus-update-activation-environment --systemd DISPLAY &
 gnome-keyring-daemon -d -r &
 
+xautolock -time 10 -locker slock &
+
 exec dwm

@@ -17,7 +17,20 @@ dwm:
 slstatus:
 	cp slstatus.h slstatus/config.h
 	cd slstatus \
+		&& git co . \
 		&& for p in ../patches/slstatus/*; do git apply $$p; done \
+		&& sudo make clean install
+slock: /etc/systemd/system/locker.service
+	yay -S xautolock --needed
+	cp slock.h slock/config.h
+	cd slock \
+		&& git co . \
+		&& sudo make clean install
+	sudo systemctl enable locker.service
+	sudo systemctl start locker.service
+dmenu:
+	cp dmenu.h dmenu/config.h
+	cd dmenu \
 		&& sudo make clean install
 
 scala:
@@ -58,19 +71,19 @@ youtube: applications/newsboat applications/mpv
 		youtube-dl
 
 
-applications/dunst: ~/.config/dunst/dunstrc
-	pacaur -S --noconfirm --needed \
+dunst: ~/.config/dunst/dunstrc
+	yay -S --noconfirm --needed \
 		dunst-git
 	systemctl --user enable dunst.service
 	systemctl --user start dunst.service
 
-applications/nextcloud:
-	pacaur -S --noconfirm --needed \
+nextcloud:
+	yay -S --noconfirm --needed \
 		gnome-keyring \
 		nextcloud-client
 
 config_path = ~/.vim
-applications/vim: ~/.vimrc
+vim: ~/.vimrc
 	sudo pacman -S --noconfirm --needed \
 		ctags \
 		gvim \
@@ -90,43 +103,35 @@ applications/vim: ~/.vimrc
 		&& git clone https://github.com/tpope/vim-sleuth.git \
 		&& git clone https://github.com/tpope/vim-vinegar.git
 
-applications/mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service
+mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service
 	sudo pacman -S --noconfirm --needed mpd mpc
 	mkdir -p ~/.mpd/playlists
 	systemctl --user daemon-reload
 	systemctl --user enable mpd.service
 	systemctl --user start mpd.service
 
-applications/ncmpcpp: ~/.ncmpcpp/bindings ~/.ncmpcpp/config
+ncmpcpp: ~/.ncmpcpp/bindings ~/.ncmpcpp/config
 	sudo pacman -S --noconfirm --needed ncmpcpp
 
-applications/mpv:
+mpv:
 	sudo pacman -S --noconfirm --needed \
 		mpv
 
-applications/ranger: ~/.config/ranger/rc.conf ~/.bin/previewer ~/.bin/imgt
+ranger: ~/.config/ranger/rc.conf ~/.bin/previewer ~/.bin/imgt
 	sudo pacman -S --noconfirm --needed \
 		highlight \
 		ranger \
 		w3m
 
-applications/zathura:
+zathura:
 	sudo pacman -S --noconfirm --needed \
 		zathura \
 		zathura-pdf-mupdf
 
-applications/termite: ~/.bin/colorful-termite ~/.config/termite/config ~/.config/gtk-3.0/gtk.css
+termite: ~/.bin/colorful-termite ~/.config/termite/config ~/.config/gtk-3.0/gtk.css
 	if ! [ -d ~/.config/base16-termite ]; then git clone https://github.com/khamer/base16-termite.git ~/.config/base16-termite; fi
 	sudo pacman -S --noconfirm --needed \
 		termite
-
-locker: ~/.bin/my-favorite-things-locker ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service
-	sudo systemctl enable my-favorite-things-locker.service
-	mkdir -p ~/.my-favorite-things/ \
-		&& cp dotfiles/my-favorite-things/lock-icon.png ~/.my-favorite-things/lock-icon.png
-	sudo pacman -S --noconfirm --needed \
-		i3lock \
-		imagemagick
 
 utils:
 	sudo pacman -S --noconfirm \
@@ -193,12 +198,11 @@ x200: /etc/thinkfan.conf
 
 /etc/systemd/system/%: etc/systemd/system/*
 	sudo mkdir -p $(@D)
-	etc/systemd/system/$* \
-		| sudo dd of=$@
+	sudo cp etc/systemd/system/$* $@
 
 ~/.bin/%: dotfiles/bin/*
 	mkdir -p $(@D)
 	cp dotfiles/bin/$* $@
 	chmod +x $@
 
-.PHONY: dwm slstatus
+.PHONY: dwm slstatus slock dmenu
