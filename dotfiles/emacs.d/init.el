@@ -3,8 +3,6 @@
 ;;; Commentary:
 
 ;;   This tries to be simplier as possible.
-;;
-;; m4 template instruction: changequote(`[', `]')
 
 ;;; Code:
 
@@ -198,7 +196,5 @@
         (tab-mark 9 [9655 9] [92 9])))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; m4 template instruction: changequote([`], ['])
 
 ;;; init.el ends here

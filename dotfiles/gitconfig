@@ -53,9 +53,9 @@
   enabled = true
 
 [user]
-  name = __user_name__
-  email = __user_email__
+  name = Brenno Costa
+  email = brennovich@riseup.net
 [github]
-  user = __user__
+  user = brennovich
 [commit]
   gpgsign = true

@@ -58,15 +58,15 @@ set linebreak
 
 let base16colorspace=256
 set t_Co=256
-set background=light
-colorscheme base16-grayscale-light
+set background=dark
+colorscheme base16-grayscale-dark
 
 augroup color_tweaks
   au!
   autocmd ColorScheme * hi Search ctermbg=15
   autocmd ColorScheme * hi SpellBad cterm=underline
   autocmd ColorScheme * hi VertSplit ctermbg=NONE
-  autocmd ColorScheme * hi Visual term=reverse cterm=reverse
+  autocmd ColorScheme * hi Visual ctermbg=white
 augroup END
 
 " Statusbar

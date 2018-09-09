@@ -1,0 +1,9 @@
+slstatus &
+hsetroot -tile ~/.my-favorite-things/wallpaper.png &
+compton &
+
+/usr/lib/gnome-settings-daemon/gsd-xsettings &
+dbus-update-activation-environment --systemd DISPLAY &
+gnome-keyring-daemon -d -r &
+
+exec dwm

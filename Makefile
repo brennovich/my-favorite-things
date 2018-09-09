@@ -1,22 +1,3 @@
-# Configuration
-#
-# Variables used in m4 templates
-user-email = brennovich@riseup,net
-user-name = Brenno Costa
-user-nick = $(USER)
-colorscheme = base16-dark
-
-# Template parsing command
-macrocmd = m4 \
-	   -Duser_name="$(user-name)" \
-	   -Duser_nick="$(user-nick)" \
-	   -Duser_email="$(user-email)" \
-	   macros.m4 \
-	   $(colorscheme).m4
-
-# Userspace
-#
-
 dotfiles = \
 	~/.gitconfig \
 	~/.gitignore \
@@ -25,25 +6,25 @@ dotfiles = \
 	~/.ctags \
 	~/.bashrc \
 	~/.bash_profile \
-	~/.Xresources \
-	~/.Xresources.d/colorscheme
 
-user/desktop: $(dotfiles) \
-	applications/sway \
-	applications/launcher \
-	applications/locker \
-	applications/ranger \
-	applications/termite \
-	applications/zathura
-	pacaur -S --noconfirm --needed \
-		gnome-keyring \
-		sxiv
+dwm:
+	mkdir -p ~/.my-favorite-things/ \
+		&& cp wallpapers/cats.png ~/.my-favorite-things/wallpaper.png
+	cp dwm.h dwm/config.h
+	cd dwm \
+		&& sudo make clean install
 
-user/environments/scala:
+slstatus:
+	cp slstatus.h slstatus/config.h
+	cd slstatus \
+		&& for p in ../patches/slstatus/*; do git apply $$p; done \
+		&& sudo make clean install
+
+scala:
 	sudo pacman -S --noconfirm --needed \
 		sbt
 
-user/environments/golang: ~/.env-golang
+golang: ~/.env-golang
 	sudo pacman -S --noconfirm --needed \
 		go \
 		go-tools
@@ -51,43 +32,27 @@ user/environments/golang: ~/.env-golang
 	vim +GoInstallBinaries +qall
 	curl https://glide.sh/get | sh
 
-user/environments/js:
+js:
 	sudo pacman -S --noconfirm --needed \
 		nodejs-lts-boron \
 		npm
 
-user/environments/rust: ~/.env-rust
+rust: ~/.env-rust
 	curl https://sh.rustup.rs -sSf \
 		| sh -s -- --no-modify-path
 	rustup install stable
 	rustup default stable
 	rustup run stable cargo install rustfmt
 
-# Applications
-#
-
-applications/sway: ~/.config/sway/config ~/.bin/sway-session
-	sudo pacman -S --noconfirm --needed \
-		i3status \
-		sway
-
-applications/i3wm: ~/.xinitrc \
-	~/.config/i3/config \
-	~/.config/i3status/config
-	sudo pacman -S --noconfirm --needed \
-		i3-gaps \
-		i3lock \
-		i3status
-
-applications/launcher: ~/.bin/launcher
+launcher: ~/.bin/launcher
 	sudo pacman -S --noconfirm --needed \
 		dmenu
 
-applications/newsboat: ~/.bin/url_handler.sh ~/.newsboat/config
+newsboat: ~/.bin/url_handler.sh ~/.newsboat/config
 	sudo pacman -S --noconfirm --needed \
 		newsboat
 
-applications/youtube: applications/newsboat applications/mpv
+youtube: applications/newsboat applications/mpv
 	sudo pacman -S --noconfirm --needed \
 		mps-youtube \
 		youtube-dl
@@ -155,28 +120,15 @@ applications/termite: ~/.bin/colorful-termite ~/.config/termite/config ~/.config
 	sudo pacman -S --noconfirm --needed \
 		termite
 
-applications/locker: ~/.bin/my-favorite-things-locker ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service
+locker: ~/.bin/my-favorite-things-locker ~/.bin/my-favorite-things-locker /etc/systemd/system/my-favorite-things-locker.service
 	sudo systemctl enable my-favorite-things-locker.service
 	mkdir -p ~/.my-favorite-things/ \
-		&& cp templates/dotfiles/my-favorite-things/lock-icon.png ~/.my-favorite-things/lock-icon.png
+		&& cp dotfiles/my-favorite-things/lock-icon.png ~/.my-favorite-things/lock-icon.png
 	sudo pacman -S --noconfirm --needed \
 		i3lock \
 		imagemagick
 
-applications/firefox:
-	pacaur -S --noconfirm --needed \
-		iceweasel
-
-applications/docker:
-	sudo pacman -S --noconfirm --needed \
-		docker \
-		lxc
-	sudo gpasswd -a $(USER) docker
-
-# Core
-#
-
-core/utils:
+utils:
 	sudo pacman -S --noconfirm \
 		bash-completion \
 		ctags \
@@ -186,52 +138,7 @@ core/utils:
 		xclip \
 		xsel
 
-core/fonts:
-	pacaur -S --noconfirm --needed \
-		fontconfig-infinality-ultimate \
-		cairo-infinality-ultimate \
-		bdf-creep \
-		cantarell-fonts \
-		scientifica-font \
-		siji-git \
-		tamzen-font-git \
-		ttf-bitstream-vera \
-		ttf-dejavu \
-		ttf-droid \
-		ttf-fira-mono \
-		ttf-fira-sans \
-		ttf-opensans \
-		ttf-twemoji-color \
-		xorg-fonts-alias
-
-core/aur-helper: core/aur-helper/cower
-	cd tmp \
-		&& curl -L -O "https://aur.archlinux.org/cgit/aur.git/snapshot/pacaur.tar.gz" \
-		&& tar -xvf pacaur.tar.gz \
-		&& cd pacaur \
-		&& makepkg -sri --noconfirm
-
-core/aur-helper/cower: clean/tmp
-	gpg --recv-keys 487EACC08557AD082088DABA1EB2638FF56C0C53 # Dave Reisner, cower maintainer
-	mkdir -p tmp \
-		&& cd tmp \
-		&& curl -L -O "https://aur.archlinux.org/cgit/aur.git/snapshot/cower.tar.gz" \
-		&& tar -xvf cower.tar.gz \
-		&& cd cower \
-		&& makepkg -sri --noconfirm
-
-# Setup Xorg and its basic drivers and tools.
-#
-# NOTICE: Isn't possible to eliminate DDX intel drivers yet as modesetting generic driver has
-# heavy tearing under Thinkpad 460s Skylake Intel GPU.
-#
-# TODO: Do not forget to re-check this after Xorg updates, modesetting has better performance
-# and less bugs than Intel's SNA AccellMethod.
-#
-# UPDATE: Well, actually using intel DDX drivers is problematic as the system simply freezes
-# when RC6 powersaving is being used which makes it impracticable.
-#
-core/xorg: 
+xorg: 
 	sudo mkdir -p /etc/X11/xorg.conf.d
 	$(MAKE) /etc/X11/xorg.conf.d/20-intel.conf /etc/X11/xorg.conf.d/00-keyboard.conf
 	- sudo pacman -S --noconfirm --needed \
@@ -246,7 +153,7 @@ core/xorg:
 # System
 #
 
-system/power: /etc/modprobe.d/i915.conf
+power: /etc/modprobe.d/i915.conf
 	sudo pacman -S --noconfirm \
 		ethtool \
 		powertop \
@@ -256,69 +163,42 @@ system/power: /etc/modprobe.d/i915.conf
 	sudo systemctl enable tlp.service tlp-sleep.service
 	sudo systemctl start tlp.service tlp-sleep.service
 
-system/sound: /etc/modprobe.d/blacklist.conf /etc/modprobe.d/snd_hda_intel.conf
+sound: /etc/modprobe.d/blacklist.conf /etc/modprobe.d/snd_hda_intel.conf
 	pacaur -S --noconfirm --needed \
 		pulsemixer \
 		pulseaudio \
 		pulseaudio-bluetooth
 	pulseaudio -D
 
-system/bluetooth:
+bluetooth:
 	sudo pacman -S --noconfirm --needed \
 		bluez \
 		bluez-utils
 	sudo systemctl enable bluetooth.service
 	sudo systemctl start bluetooth.service
 
-system/fingerprint-auth:
-	sudo pacman -S --noconfirm --needed \
-		fprintd
-	sudo sed -i "1s/^/auth	sufficient	pam_fprintd.so\n/" /etc/pam.d/system-local-login
-
-# Device specific
-#
-
-device/x200: /etc/thinkfan.conf
+x200: /etc/thinkfan.conf
 	sudo pacaur -S --noconfirm --needed \
 		acpi_call \
 		libva-intel-driver-g45-h264 \
 		tp_smapi
 
-# Task utils
-#
-
 /etc/vconsole.conf: templates/etc/vconsole.conf
 	sudo pacman -S --noconfirm terminus-font
 	sudo cp ./templates/vconsole.conf /etc/vconsole.conf
 
-/etc/modprobe.d/%: templates/etc/modprobe.d/*
-	sudo cp templates/etc/modprobe.d/$* $@
-
-/etc/%: templates/etc/*
-	sudo cp templates/etc/$* $@
-
-/etc/X11/xorg.conf.d/%.conf: templates/etc/X11/xorg.conf.d/*
-	sudo cp templates/etc/X11/xorg.conf.d/$*.conf $@
-
-~/.%: templates/dotfiles/*
+~/.%: dotfiles/*
 	mkdir -p $(@D)
-	$(macrocmd) \
-		templates/dotfiles/$* \
-		> $@
+	cp dotfiles/$* $@
 
-/etc/systemd/system/%: templates/etc/systemd/system/*
+/etc/systemd/system/%: etc/systemd/system/*
 	sudo mkdir -p $(@D)
-	$(macrocmd) \
-		templates/etc/systemd/system/$* \
+	etc/systemd/system/$* \
 		| sudo dd of=$@
 
-~/.bin/%: templates/dotfiles/bin/*
+~/.bin/%: dotfiles/bin/*
 	mkdir -p $(@D)
-	$(macrocmd) \
-		templates/dotfiles/bin/$* \
-		> $@
+	cp dotfiles/bin/$* $@
 	chmod +x $@
 
-clean/tmp:
-	mkdir -p tmp
-	rm -rf tmp/*
+.PHONY: dwm slstatus

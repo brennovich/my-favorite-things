@@ -1,8 +1,0 @@
-#!/bin/bash
-
-files=(~/nuvenzinha/pictures/gradients/*)
-random_wallpaper="${files[RANDOM % ${#files[@]}]}"
-
-cp ${random_wallpaper} ~/.my-favorite-things/wallpaper.png
-
-exec SWAY_CURSOR_THEME="Adwaita" XKB_DEFAULT_OPTIONS=ctrl:nocaps dbus-launch --sh-syntax --exit-with-session sway

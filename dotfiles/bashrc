@@ -1,5 +1,3 @@
-changequote(`[[[', `]]]')
-
 if [ -s ~/.env-golang ]; then
   source ~/.env-golang
 fi
@@ -24,29 +22,7 @@ fi
 export EDITOR=vim
 export TERM=xterm-256color
 export HISTSIZE=-1
-
-alias ls='ls --color'
-alias grepc='grep --color=auto --exclude-dir=.git --line-number --binary-files=without-match'
-alias grepd='grep --color=auto --exclude-dir=.git --line-number --dereference-recursive --binary-files=without-match'
-
-function __parse_git_status {
-  repo_check=$(git status &> /dev/null; echo $?)
-  index=`if [ ${repo_check} -eq 0 ]; then git status -s | awk '{ print $1 }'; fi;`
-
-  case "${index}" in
-    *'??'*)
-      printf '¡'
-      ;;
-    *D*)
-      printf '-'
-      ;;
-    *M*)
-      printf '*'
-      ;;
-    *)
-      ;;
-  esac
-}
+export PATH=~/.bin:$PATH
 
 function lb() {
   case "$1" in
@@ -94,7 +70,5 @@ function lk() {
   esac
 }
 
-export PS1="[\[\e[35m\]\W\[\e[m\]\[\e[0;37m\]\$(__parse_git_status)\[\e[m\]] "
+export PS1="\$ "
 export GPG_TTY=$(tty)
-
-changequote([[[`]]], [[[']]])
