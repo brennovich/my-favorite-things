@@ -1,5 +1,5 @@
 diff --git i/components/battery.c w/components/battery.c
-index 1178f20..db565b6 100644
+index 1178f20..829a7bd 100644
 --- i/components/battery.c
 +++ w/components/battery.c
 @@ -50,8 +50,8 @@
@@ -13,3 +13,12 @@ index 1178f20..db565b6 100644
  		};
  		size_t i;
  		char path[PATH_MAX], state[12];
+@@ -110,7 +110,7 @@
+ 			h = timeleft;
+ 			m = (timeleft - (double)h) * 60;
+ 
+-			return bprintf("%juh %jum", h, m);
++			return bprintf("(%juh %jum)", h, m);
+ 		}
+ 
+ 		return "";

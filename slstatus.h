@@ -66,6 +66,6 @@ static const struct arg args[] = {
 	{ load_avg,           "load: %s ",      NULL },
 	{ battery_state,      "%s: ",           "BAT0" },
 	{ battery_perc,       "%s%%",           "BAT0" },
-	{ battery_remaining,  "(%s) ",          "BAT0" },
-	{ datetime,           "%s ",            "%a %e %I:%M%P" },
+	{ battery_remaining,  " %s",            "BAT0" },
+	{ datetime,           " %s ",           "%a %e %I:%M%P" },
 };

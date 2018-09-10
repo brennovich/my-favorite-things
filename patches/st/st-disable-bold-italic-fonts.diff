@@ -1,0 +1,44 @@
+diff --git i/config.def.h w/config.def.h
+index 82b1b09..ce3e4aa 100644
+--- i/config.def.h
++++ w/config.def.h
+@@ -8,6 +8,11 @@
+ static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
+ static int borderpx = 2;
+ 
++/* disable bold, italic and roman fonts globally */
++int disablebold = 0;
++int disableitalic = 0;
++int disableroman = 0;
++
+ /*
+  * What program is execed by st depends of these precedence rules:
+  * 1: program passed with -e
+diff --git i/x.c w/x.c
+index 00cb6b1..da830cc 100644
+--- i/x.c
++++ w/x.c
+@@ -957,17 +957,20 @@ xloadfonts(char *fontstr, double fontsize)
+ 	win.ch = ceilf(dc.font.height * chscale);
+ 
+ 	FcPatternDel(pattern, FC_SLANT);
+-	FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ITALIC);
++	if (!disableitalic)
++		FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ITALIC);
+ 	if (xloadfont(&dc.ifont, pattern))
+ 		die("can't open font %s\n", fontstr);
+ 
+ 	FcPatternDel(pattern, FC_WEIGHT);
+-	FcPatternAddInteger(pattern, FC_WEIGHT, FC_WEIGHT_BOLD);
++	if (!disablebold)
++		FcPatternAddInteger(pattern, FC_WEIGHT, FC_WEIGHT_BOLD);
+ 	if (xloadfont(&dc.ibfont, pattern))
+ 		die("can't open font %s\n", fontstr);
+ 
+ 	FcPatternDel(pattern, FC_SLANT);
+-	FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ROMAN);
++	if (!disableroman)
++		FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ROMAN);
+ 	if (xloadfont(&dc.bfont, pattern))
+ 		die("can't open font %s\n", fontstr);
+ 

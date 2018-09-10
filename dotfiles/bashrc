@@ -1,3 +1,5 @@
+source ~/.config/base16-shell/scripts/base16-grayscale-dark.sh
+
 if [ -s ~/.env-golang ]; then
   source ~/.env-golang
 fi

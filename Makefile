@@ -12,6 +12,8 @@ dwm:
 		&& cp wallpapers/cats.png ~/.my-favorite-things/wallpaper.png
 	cp dwm.h dwm/config.h
 	cd dwm \
+		&& git co . \
+		&& for p in ../patches/dwm/*; do git apply $$p; done \
 		&& sudo make clean install
 
 slstatus:
@@ -20,6 +22,7 @@ slstatus:
 		&& git co . \
 		&& for p in ../patches/slstatus/*; do git apply $$p; done \
 		&& sudo make clean install
+
 slock: /etc/systemd/system/locker.service
 	yay -S xautolock --needed
 	cp slock.h slock/config.h
@@ -28,9 +31,17 @@ slock: /etc/systemd/system/locker.service
 		&& sudo make clean install
 	sudo systemctl enable locker.service
 	sudo systemctl start locker.service
+
 dmenu:
 	cp dmenu.h dmenu/config.h
 	cd dmenu \
+		&& sudo make clean install
+
+st:
+	cp st.h st/config.h
+	cd st \
+		&& git co . \
+		&& for p in ../patches/st/*; do git apply $$p; done \
 		&& sudo make clean install
 
 scala:
@@ -205,4 +216,4 @@ x200: /etc/thinkfan.conf
 	cp dotfiles/bin/$* $@
 	chmod +x $@
 
-.PHONY: dwm slstatus slock dmenu
+.PHONY: dwm slstatus slock dmenu st

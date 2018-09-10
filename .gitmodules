@@ -10,3 +10,6 @@
 [submodule "dmenu"]
 	path = dmenu
 	url = https://git.suckless.org/dmenu
+[submodule "st"]
+	path = st
+	url = git://git.suckless.org/st
