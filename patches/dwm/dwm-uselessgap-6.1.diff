@@ -1,0 +1,60 @@
+diff --git i/dwm.c w/dwm.c
+index 4465af1..e0ca4b8 100644
+--- i/dwm.c
++++ w/dwm.c
+@@ -52,8 +52,8 @@
+ #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
+ #define LENGTH(X)               (sizeof X / sizeof X[0])
+ #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
+-#define WIDTH(X)                ((X)->w + 2 * (X)->bw)
+-#define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
++#define WIDTH(X)                ((X)->w + 2 * (X)->bw + gappx)
++#define HEIGHT(X)               ((X)->h + 2 * (X)->bw + gappx)
+ #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
+ #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
+ 
+@@ -1277,11 +1277,40 @@ resizeclient(Client *c, int x, int y, int w, int h)
+ {
+ 	XWindowChanges wc;
+ 
+-	c->oldx = c->x; c->x = wc.x = x;
+-	c->oldy = c->y; c->y = wc.y = y;
+-	c->oldw = c->w; c->w = wc.width = w;
+-	c->oldh = c->h; c->h = wc.height = h;
++	unsigned int n, gapoffset, gapincr;
++	Client *nbc;
++
+ 	wc.border_width = c->bw;
++
++	/* Get number of clients for the selected monitor */
++	for (n = 0, nbc = nexttiled(selmon->clients); nbc; nbc = nexttiled(nbc->next), n++);
++
++	/* Do nothing if layout is floating */
++	if (c->isfloating || selmon->lt[selmon->sellt]->arrange == NULL) {
++		gapincr = gapoffset = 0;
++	} else {
++		/* Remove border and gap if layout is monocle or only one client */
++		if (selmon->lt[selmon->sellt]->arrange == monocle || n == 1) {
++			gapoffset = 0;
++			gapincr = -2 * borderpx;
++			wc.border_width = 0;
++		} else {
++			gapoffset = gappx;
++			gapincr = gappx * 2;
++		}
++	}
++
++	c->oldx = c->x; c->x = wc.x = x + gapoffset;
++	c->oldy = c->y; c->y = wc.y = y + gapoffset;
++	c->oldw = c->w; c->w = wc.width = w - gapincr;
++	c->oldh = c->h; c->h = wc.height = h - gapincr;
++
++	/* Ensure gap between clients has half of the size while not stick with monitor border */
++	if (c->w + c->x + borderpx * 2 + gapoffset * 2 >= selmon->mw && n > 1) {
++	       c->oldw = c->w; c->w = wc.width = w - gapincr * 0.5;
++	       c->oldx = c->x; c->x = wc.x = x + gapoffset * 0.25;
++	}
++
+ 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
+ 	configure(c);
+ 	XSync(dpy, False);
