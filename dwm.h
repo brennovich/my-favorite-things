@@ -59,7 +59,7 @@ static const Layout layouts[] = { /* first entry is default */
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 #define DISPLAYCMD(primary, disabled) { .v = (const char*[]) { "xrandr", "--output", primary, "--auto", "--primary", "--output", disabled, "--off", NULL } }
-#define VOLUMECMD(action) { .v = (const char*[]) { "pulsemixer", "--change-colume", action, NULL} }
+#define VOLUMECMD(action) { .v = (const char*[]) { "pulsemixer", "--change-volume", action, NULL} }
 #define MPDCMD(action) { .v = (const char*[]) { "mpc", action, NULL} }
 
 /* commands */
