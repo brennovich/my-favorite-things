@@ -50,7 +50,7 @@ index 4465af1..e0ca4b8 100644
 +	c->oldh = c->h; c->h = wc.height = h - gapincr;
 +
 +	/* Ensure gap between clients has half of the size while not stick with monitor border */
-+	if (c->w + c->x + borderpx * 2 + gapoffset * 2 >= selmon->mw && n > 1) {
++	if (selmon->lt[selmon->sellt]->arrange != monocle && c->w + c->x + borderpx * 2 + gapoffset * 2 >= selmon->mw && n > 1) {
 +	       c->oldw = c->w; c->w = wc.width = w - gapincr * 0.5;
 +	       c->oldx = c->x; c->x = wc.x = x + gapoffset * 0.25;
 +	}
