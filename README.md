@@ -1,3 +1,7 @@
+**Moved to**: https://gitlab.com/brennovich/my-favorite-things
+
+---------------------------------------
+
 ## My Favorite Things
 
 This project that is named just like [John Coltrane's album](https://en.wikipedia.org/wiki/My_Favorite_Things_(album)) it's an attempt to automate every step of a fresh ArchLinux, Parabola or Debian installation. It assume a custom workflow used by me, and builds an environment with this workflow in mind.
