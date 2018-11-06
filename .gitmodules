@@ -13,3 +13,9 @@
 [submodule "st"]
 	path = st
 	url = git://git.suckless.org/st
+[submodule "surf"]
+	path = surf
+	url = https://git.suckless.org/surf
+[submodule "siji"]
+	path = siji
+	url = https://github.com/stark/siji

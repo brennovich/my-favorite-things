@@ -1,5 +1,5 @@
 diff --git i/components/battery.c w/components/battery.c
-index 1178f20..5b05941 100644
+index 1178f20..3da72ea 100644
 --- i/components/battery.c
 +++ w/components/battery.c
 @@ -50,8 +50,8 @@
@@ -8,8 +8,8 @@ index 1178f20..5b05941 100644
  		} map[] = {
 -			{ "Charging",    "+" },
 -			{ "Discharging", "-" },
-+			{ "Charging",    "charging" },
-+			{ "Discharging", "discharging" },
++			{ "Charging",    "" },
++			{ "Discharging", "" },
  		};
  		size_t i;
  		char path[PATH_MAX], state[12];

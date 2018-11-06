@@ -3,13 +3,15 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 4;  /* border pixel of windows */
+static const unsigned int borderpx  = 2;  /* border pixel of windows */
 static const unsigned int snap      = 16; /* snap pixel */
 static const int showbar            = 1;  /* 0 means no bar */
 static const int topbar             = 1;  /* 0 means bottom bar */
+static const int horizontal_padbar  = 4;  /* horizontal padding for statusbar */
+static const int vertical_padbar    = 4;  /* vertical padding for statusbar */
 static const unsigned int gappx     = 6;  /* gap pixel between windows */
-static const char *fonts[]          = { "scientifica:size=9" };
-static const char dmenufont[]       = "scientifica:size=9";
+static const char *fonts[]          = { "termsyn:size=7", "siji:size=10" };
+static const char dmenufont[]       = "termsyn:size=7";
 static const char col_gray1[]       = "#464646";
 static const char col_gray2[]       = "#686868";
 static const char col_gray3[]       = "#8e8e8e";

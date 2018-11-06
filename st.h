@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Curie:pixelsize=12uantialias=false:autohint=false";
+static char *font = "terminus:pixelsize=12uantialias=false:autohint=false";
 static int borderpx = 18;
 
 /* disable bold, italic and roman fonts globally */
