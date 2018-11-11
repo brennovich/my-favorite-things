@@ -24,11 +24,13 @@ slstatus:
 		&& sudo make clean install
 
 slock: /etc/systemd/system/locker.service
-	- sudo xbps-install -SAy xautolock libXrandr-devel
+	yay -S xautolock --needed
 	cp slock.h slock/config.h
 	cd slock \
 		&& git co . \
 		&& sudo make clean install
+	sudo systemctl enable locker.service
+	sudo systemctl start locker.service
 
 dmenu:
 	cp dmenu.h dmenu/config.h
@@ -41,6 +43,7 @@ st:
 		&& git checkout . \
 		&& for p in ../patches/st/*; do git apply $$p; done \
 		&& sudo make clean install
+	if ! [ -d ~/.config/base16-shell ]; then git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell; fi
 
 scala:
 	sudo pacman -S --noconfirm --needed \
@@ -66,10 +69,37 @@ rust: ~/.env-rust
 	rustup default stable
 	rustup run stable cargo install rustfmt
 
+launcher: ~/.bin/launcher
+	sudo pacman -S --noconfirm --needed \
+		dmenu
+
+newsboat: ~/.bin/url_handler.sh ~/.newsboat/config
+	sudo pacman -S --noconfirm --needed \
+		newsboat
+
+youtube: newsboat applications/mpv
+	sudo pacman -S --noconfirm --needed \
+		mps-youtube \
+		youtube-dl
+
+
+dunst: ~/.config/dunst/dunstrc
+	yay -S --noconfirm --needed \
+		dunst-git
+	systemctl --user enable dunst.service
+	systemctl --user start dunst.service
+
+nextcloud:
+	yay -S --noconfirm --needed \
+		gnome-keyring \
+		nextcloud-client
+
 config_path = ~/.vim
 vim: ~/.vimrc
-	- sudo xbps-install -S \
-		ctags
+	sudo pacman -S --noconfirm --needed \
+		ctags \
+		gvim \
+		vim-spell-en
 	rm -rf $(config_path)/pack
 	mkdir -p $(config_path)/backups $(config_path)/pack/plugins/start
 	cd $(config_path)/pack/plugins/start \
@@ -102,6 +132,71 @@ ranger: ~/.config/ranger/rc.conf ~/.bin/previewer ~/.bin/imgt
 		highlight \
 		ranger \
 		w3m
+
+zathura:
+	sudo pacman -S --noconfirm --needed \
+		zathura \
+		zathura-pdf-mupdf
+
+termite: ~/.bin/colorful-termite ~/.config/termite/config ~/.config/gtk-3.0/gtk.css
+	if ! [ -d ~/.config/base16-termite ]; then git clone https://github.com/khamer/base16-termite.git ~/.config/base16-termite; fi
+	sudo pacman -S --noconfirm --needed \
+		termite
+
+utils:
+	sudo pacman -S --noconfirm --needed \
+		bash-completion \
+		ctags \
+		git \
+		openssh  \
+		unzip \
+		xclip \
+		xsel
+
+xorg:
+	sudo mkdir -p /etc/X11/xorg.conf.d
+	$(MAKE) /etc/X11/xorg.conf.d/20-intel.conf /etc/X11/xorg.conf.d/00-keyboard.conf
+	- sudo pacman -S --noconfirm --needed \
+		libva-intel-driver \
+		xf86-input-libinput \
+		xf86-video-intel \
+		xorg-server \
+		xorg-xinit \
+		xorg-xrandr \
+		xorg-xrdb
+
+# System
+#
+
+power: /etc/modprobe.d/i915.conf
+	sudo pacman -S --noconfirm \
+		ethtool \
+		powertop \
+		rfkill \
+		tlp \
+		x86_energy_perf_policy
+	sudo systemctl enable tlp.service tlp-sleep.service
+	sudo systemctl start tlp.service tlp-sleep.service
+
+sound: /etc/modprobe.d/blacklist.conf /etc/modprobe.d/snd_hda_intel.conf
+	yay -S --noconfirm --needed \
+		pulsemixer \
+		pulseaudio \
+		pulseaudio-bluetooth
+	pulseaudio -D
+
+bluetooth:
+	sudo pacman -S --noconfirm --needed \
+		bluez \
+		bluez-utils
+	sudo systemctl enable bluetooth.service
+	sudo systemctl start bluetooth.service
+
+x200: /etc/thinkfan.conf
+	yay -S --noconfirm --needed \
+		acpi_call \
+		libva-intel-driver-g45-h264 \
+		tp_smapi
 
 ~/.%: dotfiles/*
 	mkdir -p $(@D)

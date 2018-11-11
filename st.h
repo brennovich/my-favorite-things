@@ -5,8 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "terminus:pixelsize=12uantialias=false:autohint=false";
-static int borderpx = 18;
+static char *font = "Hack:pixelsize=16";
+static int borderpx = 22;
 
 /* disable bold, italic and roman fonts globally */
 int disablebold = 1;

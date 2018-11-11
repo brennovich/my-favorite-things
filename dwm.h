@@ -3,15 +3,15 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 2;  /* border pixel of windows */
-static const unsigned int snap      = 16; /* snap pixel */
+static const unsigned int borderpx  = 4;  /* border pixel of windows */
+static const unsigned int snap      = 8; /* snap pixel */
 static const int showbar            = 1;  /* 0 means no bar */
 static const int topbar             = 1;  /* 0 means bottom bar */
-static const int horizontal_padbar  = 4;  /* horizontal padding for statusbar */
+static const int horizontal_padbar  = 2;  /* horizontal padding for statusbar */
 static const int vertical_padbar    = 4;  /* vertical padding for statusbar */
-static const unsigned int gappx     = 6;  /* gap pixel between windows */
-static const char *fonts[]          = { "termsyn:size=7", "siji:size=10" };
-static const char dmenufont[]       = "termsyn:size=7";
+static const unsigned int gappx     = 8;  /* gap pixel between windows */
+static const char *fonts[]          = { "Hack:size=8" };
+static const char dmenufont[]       = "Hack:size=8";
 static const char col_gray1[]       = "#464646";
 static const char col_gray2[]       = "#686868";
 static const char col_gray3[]       = "#8e8e8e";
@@ -33,13 +33,18 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       1 << 2,       1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 1,       0,           -1 },
+	/* class       instance    title       tags mask     isfloating   monitor */
+	{ "Firefox",   NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "surf",      NULL,       NULL,       1 << 1,       0,           -1 },
+
+	{ "Gimp",      NULL,       NULL,       1 << 2,       0,           -1 },
+	{ "mpv",       NULL,       NULL,       1 << 2,       1,           -1 },
+
+	{ "nextcloud", NULL,       NULL,       1 << 3,       1,           -1 },
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static const float mfact     = 0.60; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 
@@ -80,15 +85,18 @@ static Key keys[] = {
 	{ 0,                     XF86XK_AudioPrev, spawn,          MPDCMD("prev") },
 	{ 0,                     XF86XK_AudioNext, spawn,          MPDCMD("next") },
 	{ 0,                     XF86XK_AudioStop, spawn,          MPDCMD("stop") },
+	{ 0,                     XF86XK_AudioMute, spawn,          SHCMD("pulsemixer --toggle-mute") },
+	{ 0,                  XF86XK_AudioMicMute, spawn,          SHCMD("pulsemixer --id 1 --toggle-mute") },
 	{ 0,              XF86XK_AudioRaiseVolume, spawn,          VOLUMECMD("+5") },
 	{ 0,              XF86XK_AudioLowerVolume, spawn,          VOLUMECMD("-5") },
-	{ 0,                       XF86XK_Display, spawn,          DISPLAYCMD("LVDS1", "VGA1") },
-	{ MODKEY,                  XF86XK_Display, spawn,          DISPLAYCMD("VGA1", "LVDS1") },
+	{ 0,                       XF86XK_Display, spawn,          DISPLAYCMD("eDP1", "DP2") },
+	{ MODKEY,                  XF86XK_Display, spawn,          DISPLAYCMD("DP2", "eDP1") },
 
-	{ 0,                            XK_Print,  spawn,          SHCMD("maim ~/$(date +%Y-%m-%d-%H:%M:%S).png") },
-	{ ShiftMask,                    XK_Print,  spawn,          SHCMD("maim -s ~/$(date +%Y-%m-%d-%H:%M:%S).png") },
-	{ ControlMask,                  XK_Print,  spawn,          SHCMD("maim | xclip -selection clipboard -t image/png") },
-	{ ControlMask|ShiftMask,        XK_Print,  spawn,          SHCMD("maim -s | xclip -selection clipboard -t image/png") },
+	{ MODKEY,                       XK_Escape, spawn,          SHCMD("xautolock -locknow") },
+	{ 0,                             XK_Print, spawn,          SHCMD("maim ~/$(date +%Y-%m-%d-%H:%M:%S).png") },
+	{ ShiftMask,                     XK_Print, spawn,          SHCMD("maim -s ~/$(date +%Y-%m-%d-%H:%M:%S).png") },
+	{ ControlMask,                   XK_Print, spawn,          SHCMD("maim | xclip -selection clipboard -t image/png") },
+	{ ControlMask|ShiftMask,         XK_Print, spawn,          SHCMD("maim -s | xclip -selection clipboard -t image/png") },
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -101,8 +109,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
