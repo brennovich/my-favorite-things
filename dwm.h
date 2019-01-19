@@ -12,7 +12,7 @@ static const int vertical_padbar    = 9;  /* vertical padding for statusbar */
 static const unsigned int gappx     = 10;  /* gap pixel between windows */
 static const char *fonts[]          = {
 	"Cantarell:size=10:style=bold:hinting=true",
-	"Icons:size=13:style=regular:hinting=false",
+	"Icons:size=14:style=regular:hinting=false",
 	"Hack Nerd Font Mono:size=10:style=regular:hinting=false",
 };
 static const char col_gray1[]       = "#464646";
