@@ -8,8 +8,8 @@ index 1178f20..3da72ea 100644
  		} map[] = {
 -			{ "Charging",    "+" },
 -			{ "Discharging", "-" },
-+			{ "Charging",    "" },
-+			{ "Discharging", "" },
++			{ "Charging",    "ﮣ" },
++			{ "Discharging", "" },
  		};
  		size_t i;
  		char path[PATH_MAX], state[12];
@@ -18,7 +18,7 @@ index 1178f20..3da72ea 100644
  			}
  		}
 -		return (i == LEN(map)) ? "?" : map[i].symbol;
-+		return (i == LEN(map)) ? "stale" : map[i].symbol;
++		return (i == LEN(map)) ? "" : map[i].symbol;
  	}
  
  	const char *

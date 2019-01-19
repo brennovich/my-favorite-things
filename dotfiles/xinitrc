@@ -1,11 +1,10 @@
-xset +fp /home/brennovich/.fonts
-xset fp rehash
-
 slstatus &
-hsetroot -tile ~/.my-favorite-things/wallpaper.png &
+~/.bin/random-gradient-wallpaper &
 compton &
 dunst -c ~/.config/dunst/dunstrc &
 
 xautolock -time 10 -locker slock &
 
-exec dwm
+while :; do
+  ssh-agent dwm &>> .dwm.log
+done

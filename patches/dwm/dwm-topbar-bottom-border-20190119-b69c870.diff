@@ -1,0 +1,12 @@
+diff --git i/dwm.c w/dwm.c
+index 4465af1..d8194b1 100644
+--- i/dwm.c
++++ w/dwm.c
+@@ -739,6 +739,7 @@ drawbar(Monitor *m)
+ 			drw_rect(drw, x, 0, w, bh, 1, 1);
+ 		}
+ 	}
++	drw_rect(drw, 0, bh - 1, m->mw, 1, 1, 0); /* Draw 1px bottom border */
+ 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
+ }
+ 

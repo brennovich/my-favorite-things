@@ -3,26 +3,29 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 4;  /* border pixel of windows */
+static const unsigned int borderpx  = 0;  /* border pixel of windows */
 static const unsigned int snap      = 8; /* snap pixel */
 static const int showbar            = 1;  /* 0 means no bar */
 static const int topbar             = 1;  /* 0 means bottom bar */
-static const int horizontal_padbar  = 2;  /* horizontal padding for statusbar */
-static const int vertical_padbar    = 4;  /* vertical padding for statusbar */
-static const unsigned int gappx     = 8;  /* gap pixel between windows */
-static const char *fonts[]          = { "Hack:size=8" };
-static const char dmenufont[]       = "Hack:size=8";
+static const int horizontal_padbar  = 4;  /* horizontal padding for statusbar */
+static const int vertical_padbar    = 9;  /* vertical padding for statusbar */
+static const unsigned int gappx     = 10;  /* gap pixel between windows */
+static const char *fonts[]          = {
+	"Cantarell:size=10:style=bold:hinting=true",
+	"Icons:size=13:style=regular:hinting=false",
+	"Hack Nerd Font Mono:size=10:style=regular:hinting=false",
+};
 static const char col_gray1[]       = "#464646";
 static const char col_gray2[]       = "#686868";
 static const char col_gray3[]       = "#8e8e8e";
-static const char col_gray4[]       = "#eeeeee";
+static const char col_gray4[]       = "#dddddd";
 static const char col_gray5[]       = "#fefefe";
 static const char col_cyan[]        = "#252525";
 static const char col_dark[]        = "#000000";
 static const char *colors[][3]      = {
 	/*               fg         bg        border   */
-	[SchemeNorm] = { col_cyan, col_gray5, col_gray5 },
-	[SchemeSel]  = { col_dark, col_gray4, col_gray4 },
+	[SchemeNorm] = { col_cyan, col_gray5, col_gray3 },
+	[SchemeSel]  = { col_dark, col_gray4, col_gray5 },
 };
 
 /* tagging */
@@ -33,14 +36,15 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class       instance    title       tags mask     isfloating   monitor */
-	{ "Firefox",   NULL,       NULL,       1 << 1,       0,           -1 },
-	{ "surf",      NULL,       NULL,       1 << 1,       0,           -1 },
+	/* class       instance    title       tags mask     isfloating  monitor */
+	{ "Firefox",   NULL,       NULL,       1 << 1,       0,          -1 },
+	{ "surf",      NULL,       NULL,       1 << 1,       0,          -1 },
 
-	{ "Gimp",      NULL,       NULL,       1 << 2,       0,           -1 },
-	{ "mpv",       NULL,       NULL,       1 << 2,       1,           -1 },
+	{ "Gimp",      NULL,       NULL,       1 << 2,       0,          -1 },
+	{ "mpv",       NULL,       NULL,       1 << 2,       1,          -1 },
 
-	{ "nextcloud", NULL,       NULL,       1 << 3,       1,           -1 },
+	{ "nextcloud", NULL,       NULL,       1 << 3,       1,          -1 },
+	{ "st",        NULL,       NULL,       0,            0,          -1 },
 };
 
 /* layout(s) */
@@ -50,9 +54,9 @@ static const int resizehints = 0;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = { /* first entry is default */
 	/* symbol     arrange function */
-	{ "[]=",      tile },
-	{ "< >",      NULL },    /* no layout function means floating behavior */
-	{ "[ ]",      monocle },
+	{ "[t]",      tile },
+	{ "[f]",      NULL },    /* no layout function means floating behavior */
+	{ "[µ]",      monocle },
 };
 
 /* key definitions */
@@ -71,7 +75,7 @@ static const Layout layouts[] = { /* first entry is default */
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *brightnessupcmd[]  = { "light", "-A", "10", NULL };
 static const char *brightnessdowncmd[]  = { "light", "-U", "10", NULL };
@@ -89,8 +93,8 @@ static Key keys[] = {
 	{ 0,                  XF86XK_AudioMicMute, spawn,          SHCMD("pulsemixer --id 1 --toggle-mute") },
 	{ 0,              XF86XK_AudioRaiseVolume, spawn,          VOLUMECMD("+5") },
 	{ 0,              XF86XK_AudioLowerVolume, spawn,          VOLUMECMD("-5") },
-	{ 0,                       XF86XK_Display, spawn,          DISPLAYCMD("eDP1", "DP2") },
-	{ MODKEY,                  XF86XK_Display, spawn,          DISPLAYCMD("DP2", "eDP1") },
+	{ 0,                       XF86XK_Display, spawn,          DISPLAYCMD("eDP-1", "DP-2") },
+	{ MODKEY,                  XF86XK_Display, spawn,          DISPLAYCMD("DP-2", "eDP-1") },
 
 	{ MODKEY,                       XK_Escape, spawn,          SHCMD("xautolock -locknow") },
 	{ 0,                             XK_Print, spawn,          SHCMD("maim ~/$(date +%Y-%m-%d-%H:%M:%S).png") },
@@ -106,6 +110,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_o,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+	{ MODKEY|ShiftMask,             XK_h,      setcfact,       {.f = +0.25} },
+	{ MODKEY|ShiftMask,             XK_l,      setcfact,       {.f = -0.25} },
+	{ MODKEY|ShiftMask,             XK_o,      setcfact,       {.f =  0.00} },
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },

@@ -4,7 +4,7 @@
 const unsigned int interval = 1000;
 
 /* text to show if no value can be retrieved */
-static const char unknown_str[] = "n/a";
+static const char unknown_str[] = "";
 
 /* maximum output string length */
 #define MAXLEN 2048
@@ -60,10 +60,9 @@ static const char unknown_str[] = "n/a";
  * wifi_essid          WiFi ESSID                      interface name (wlan0)
  */
 static const struct arg args[] = {
-	{ wifi_essid,         " %s ",     "wlp59s0" },
-	{ load_avg,           "%s ",      NULL },
-	{ temp,               "%s° ",      "/sys/class/thermal/thermal_zone0/temp" },
-	{ battery_perc,       "%s%%",           "BAT0" },
-	{ battery_remaining,  "%s ",            "BAT0" },
-	{ datetime,           "%s ",          "%a %e %I:%M%P" },
+	{ run_command,        "%s ", "ip addr show wlp59s0 | grep -q UP && echo ' '" },
+	{ temp,               " %s° ",      "/sys/class/thermal/thermal_zone0/temp" },
+	{ battery_perc,       " %s%% ",           "BAT0" },
+	{ battery_state,      "%s ",              "BAT0" },
+	{ datetime,           " %s  ",          "%a %e %H:%M" },
 };

@@ -13,7 +13,7 @@ dwm:
 	cp dwm.h dwm/config.h
 	cd dwm \
 		&& git checkout . \
-		&& for p in ../patches/dwm/*; do git apply $$p; done \
+		&& for p in ../patches/dwm/*; do echo $$p && git apply $$p; done \
 		&& sudo make clean install
 
 slstatus:
@@ -35,6 +35,8 @@ slock: /etc/systemd/system/locker.service
 dmenu:
 	cp dmenu.h dmenu/config.h
 	cd dmenu \
+		&& git checkout . \
+		&& for p in ../patches/dmenu/*; do git apply $$p; done \
 		&& sudo make clean install
 
 st:
