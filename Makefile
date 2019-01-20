@@ -32,7 +32,7 @@ slock: /etc/systemd/system/locker.service
 	sudo systemctl enable locker.service
 	sudo systemctl start locker.service
 
-dmenu:
+dmenu: ~/.dmenu_exclude
 	cp dmenu.h dmenu/config.h
 	cd dmenu \
 		&& git checkout . \

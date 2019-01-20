@@ -1,0 +1,8 @@
+diff --git i/dmenu_run w/dmenu_run
+index 834ede5..f114b86 100755
+--- i/dmenu_run
++++ w/dmenu_run
+@@ -1,2 +1,2 @@
+ #!/bin/sh
+-dmenu_path | dmenu "$@" | ${SHELL:-"/bin/sh"} &
++dmenu_path | grep -v -w -f $HOME/.dmenu_exclude | dmenu "$@" | ${SHELL:-"/bin/sh"} &
