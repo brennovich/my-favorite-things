@@ -60,8 +60,8 @@ static const char unknown_str[] = "";
  * wifi_essid          WiFi ESSID                      interface name (wlan0)
  */
 static const struct arg args[] = {
-	{ run_command,        "%s ", "ip addr show wlp59s0 | grep -q UP && echo ' '" },
-	{ run_command,        "%s ", "[[ $(pulsemixer --get-mute) == '0' ]] && echo ' '$(pulsemixer --get-volume | cut -d ' ' -f 1)'  ' " },
+	{ run_command,        "%s ", "ip addr show wlp59s0 | grep -q UP && echo ''" },
+	{ run_command,        "%s", "if [ $(pulsemixer --get-mute) -eq '0' ]; then echo -n '  '$(pulsemixer --get-volume | cut -d ' ' -f 1)'  ';fi" },
 	{ temp,               "  %s° ",      "/sys/class/thermal/thermal_zone0/temp" },
 	{ battery_perc,       " %s%% ",           "BAT0" },
 	{ battery_state,      "%s ",              "BAT0" },
