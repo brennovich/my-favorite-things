@@ -17,9 +17,9 @@ make Makefile dwm slstatus vim
 
 Here are a few photos, I'm using a grayscale colorscheme with a deep focus intent:
 
-![1](2019-01-20-15:24:58.png)
-![2](2019-01-20-15:27:09.png)
-![3](2019-01-20-15:27:16.png)
+![1](./2019-01-20-15:24:58.png)
+![2](./2019-01-20-15:27:09.png)
+![3](./2019-01-20-15:27:16.png)
 
 - **Colorscheme**: Base 16 grayscale
 - **Term**: termite
