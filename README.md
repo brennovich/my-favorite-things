@@ -22,6 +22,6 @@ Here are a few photos, I'm using a grayscale colorscheme with a deep focus inten
 ![3](screenshots/2019-01-20-15:27:16.png)
 
 - **Colorscheme**: Base 16 grayscale
-- **Term**: termite
+- **Term**: st
 - **Player**: ncmpcpp
-- **Fonts**: tamzen & curie
+- **Fonts**: Cantarell, Iosevka, Nerd Font
