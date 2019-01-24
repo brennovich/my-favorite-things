@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* interval between updates (in ms) */
-const unsigned int interval = 1000;
+const unsigned int interval = 5000;
 
 /* text to show if no value can be retrieved */
 static const char unknown_str[] = "";
@@ -60,10 +60,9 @@ static const char unknown_str[] = "";
  * wifi_essid          WiFi ESSID                      interface name (wlan0)
  */
 static const struct arg args[] = {
-	{ run_command,        "%s ", "ip addr show wlp2s0 | grep -q UP && echo ''" },
-	{ run_command,        "%s", "if [ $(pulsemixer --get-mute) -eq '0' ]; then echo -n '  '$(pulsemixer --get-volume | cut -d ' ' -f 1)'  ';fi" },
-	{ temp,               "  %s° ",      "/sys/class/thermal/thermal_zone0/temp" },
-	{ battery_perc,       " %s%% ",           "BAT0" },
-	{ battery_state,      "%s ",              "BAT0" },
-	{ datetime,           " %s  ",          "%a %e %H:%M" },
+	{ wifi_perc,          " %s", "wlp2s0" },
+	{ temp,               "  %s° ", "/sys/class/thermal/thermal_zone0/temp" },
+	{ battery_perc,       " %s%% ", "BAT0" },
+	{ battery_state,      "%s ",    "BAT0" },
+	{ datetime,           " %s  ",  "%a %e %H:%M" },
 };
