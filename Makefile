@@ -98,14 +98,10 @@ nextcloud:
 
 config_path = ~/.vim
 vim: ~/.vimrc
-	sudo pacman -S --noconfirm --needed \
-		ctags \
-		gvim \
-		vim-spell-en
 	rm -rf $(config_path)/pack
 	mkdir -p $(config_path)/backups $(config_path)/pack/plugins/start
 	cd $(config_path)/pack/plugins/start \
-		&& git clone https://github.com/chriskempson/base16-vim.git \
+		&& git clone https://github.com/brennovich/base16-vim.git \
 		&& git clone https://github.com/derekwyatt/vim-scala.git \
 		&& git clone https://github.com/fatih/vim-go.git \
 		&& git clone https://github.com/tpope/vim-fugitive.git \
@@ -113,6 +109,7 @@ vim: ~/.vimrc
 		&& git clone https://github.com/rust-lang/rust.vim.git \
 		&& git clone https://github.com/tpope/vim-sensible.git \
 		&& git clone https://github.com/tpope/vim-sleuth.git \
+		&& git clone https://github.com/tpope/vim-surround \
 		&& git clone https://github.com/tpope/vim-vinegar.git
 
 mpd: ~/.config/mpd/mpd.conf ~/.config/systemd/user/mpd.service

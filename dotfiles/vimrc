@@ -16,8 +16,10 @@ set tags+=.git/tags-deps
 " ################
 " Editing settings
 " ################
+
 set list
 set hlsearch
+set cursorline
 
 " Disable swap files and things like that
 set noswapfile
@@ -63,10 +65,10 @@ colorscheme base16-grayscale-dark
 
 augroup color_tweaks
   au!
-  autocmd ColorScheme * hi Search ctermbg=15
-  autocmd ColorScheme * hi SpellBad cterm=underline
+  autocmd ColorScheme * hi Search ctermbg=214 cterm=bold
+  autocmd ColorScheme * hi SpellBad cterm=underline,italic ctermbg=124 ctermfg=white
   autocmd ColorScheme * hi VertSplit ctermbg=NONE
-  autocmd ColorScheme * hi Visual ctermbg=white
+  autocmd ColorScheme * hi Visual ctermbg=0 cterm=italic,reverse
 augroup END
 
 " Statusbar
@@ -76,9 +78,9 @@ set statusline+=%{fugitive#statusline()} " Git info
 set statusline+=%= " Separator
 
 set statusline+=%y " File type
-set statusline+=[%{strlen(&fenc)?&fenc:'none'}] " File encoding
-set statusline+=[%{&ff}] " File ending
-set statusline+=\ %P\ of\ %L\  " Perc. file
+set statusline+=[%{strlen(&fenc)?&fenc:'none'} " File encoding
+set statusline+=\ %{&ff}] " File ending
+set statusline+=\ %P\ of\ %L\  " % of file
 set statusline+=(%l\:%c)\ " Line info
 
 " Column ruler
