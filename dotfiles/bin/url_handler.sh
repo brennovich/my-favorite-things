@@ -1,4 +1,3 @@
-changecom(`"""')
 #! /bin/bash
 
 #   Copyright (c) 1998  Martin Schulze <joey@debian.org>
@@ -29,8 +28,8 @@ changecom(`"""')
 # VT: Launch in the same terminal
 
 # The lists of programs to be executed are
-https_prgs="/usr/bin/iceweasel:XW /usr/bin/lynx:XT"
-http_prgs="/usr/bin/lynx:XT /usr/X11R6/bin/netscape:XW"
+https_prgs="$(which firefox):XW /usr/bin/lynx:XT"
+http_prgs="/usr/bin/lynx:XT $(which firefox):XW"
 mailto_prgs="/usr/bin/neomutt:VT /usr/bin/elm:VT /usr/bin/pine:VT /usr/bin/mail:VT"
 gopher_prgs="/usr/bin/lynx:XT /usr/bin/gopher:XT"
 ftp_prgs="/usr/bin/lynx:XT /usr/bin/ncftp:XT"
@@ -124,4 +123,3 @@ if [ -n "$prg" ]; then
     $prg "$url"
    fi
 fi
-changecom(`#')

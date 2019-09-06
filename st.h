@@ -6,7 +6,7 @@
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
 static char *font = "Iosevka, Hack Nerd Font Mono:pixelsize=16";
-static int borderpx = 22;
+static int borderpx = 18;
 
 /* disable bold, italic and roman fonts globally */
 int disablebold = 0;
