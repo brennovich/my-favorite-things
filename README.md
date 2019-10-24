@@ -1,4 +1,4 @@
-**Moved to**: https://gitlab.com/brennovich/my-favorite-things
+**Moved to**: https://git.sr.ht/~brennovich/my-favorite-things
 
 ---------------------------------------
 
