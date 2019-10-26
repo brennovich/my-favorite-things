@@ -1,76 +1,80 @@
-source ~/.config/base16-shell/scripts/base16-grayscale-dark.sh
-
-if [ -s ~/.env-golang ]; then
-  source ~/.env-golang
-fi
-
-if [ -s ~/.env-rust ]; then
-  source ~/.env-rust
-fi
-
-if [ -s ~/.env-ruby ]; then
-  source ~/.env-ruby
-fi
-
-# enable bash completion in interactive shells
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-
-export EDITOR=vim
-export TERM=xterm-256color
-export HISTSIZE=-1
-export PATH=~/.bin:$PATH
-
 function lb() {
-  case "$1" in
-    "tag")
-      # Far from optimal but fair printing searh by tag
-      grep -nH -A 2 ":$2:" ~/logbook/* \
-        | grep -v "\-\-\-\-\|\:$2\:" \
-        | sed -rn "s/md-([[:digit:]]*)-/md:\1\\n\\t/p"
-      ;;
-    *)
-      tags="$(echo :$@: | sed 's/ /:/g')"
+	case "$1" in
+	"tag")
+		# Far from optimal but fair printing searh by tag
+		grep -nH -A 2 ":$2:" ~/logbook/* \
+			| grep -v "\-\-\-\-\|\:$2\:" \
+			| sed -rn "s/md-([[:digit:]]*)-/md:\1\\n\\t/p"
+		;;
+	*)
+		tags="$(echo :$@: | sed 's/ /:/g')"
 
-      vim \
-        -c 'set wrap' \
-        -c 'set spell' \
-        -c 'set filetype=markdown' \
-        -c "execute \"normal! i${tags}\<cr>$(seq -s '-' $(echo ${tags} | wc -c) | sed 's/[0-9]//g')\<cr>\"" \
-        ~/logbook/$(date '+%Y-%m-%d').md
-      ;;
-  esac
+		vim \
+			-c 'set wrap' \
+			-c 'set spell' \
+			-c 'set filetype=markdown' \
+			-c "execute \"normal! i${tags}\<cr>$(seq -s '-' $(echo ${tags} | wc -c) | sed 's/[0-9]//g')\<cr>\"" \
+			~/logbook/$(date '+%Y-%m-%d').md
+		;;
+	esac
 }
 
 function lk() {
-  case "$1" in
-    "tag")
-      # Far from optimal but fair printing searh by tag
-      grep -nH -A 2 ":$2:" ~/links/* \
-        | grep -v "\-\-\-\-\|\:$2\:" \
-        | sed -rn "s/md-([[:digit:]]*)-/md:\1\\n\\t/p"
-      ;;
-    *)
-      link="${1}" && shift
-      [[ $link == http* ]] || link="https://${link}"
+	case "$1" in
+	"tag")
+		# Far from optimal but fair printing searh by tag
+		grep -nH -A 2 ":$2:" ~/links/* \
+			| grep -v "\-\-\-\-\|\:$2\:" \
+			| sed -rn "s/md-([[:digit:]]*)-/md:\1\\n\\t/p"
+		;;
+	*)
+		link="${1}" && shift
+		[[ $link == http* ]] || link="https://${link}"
 
-      tags="$(echo :$@: | sed 's/ /:/g')"
-      title="${link} - $(curl -sSL ${link} | grep -oP '(?<=title>).*(?=<\/title>)')"
+		tags="$(echo :$@: | sed 's/ /:/g')"
+		title="${link} - $(curl -sSL ${link} | grep -oP '(?<=title>).*(?=<\/title>)')"
 
-      vim \
-        -c 'set wrap' \
-        -c 'set spell' \
-        -c 'set filetype=markdown' \
-        -c "execute \"normal! O${tags}\<cr>$(seq -s '-' $(echo ${tags} | wc -c) | sed 's/[0-9]//g')\<cr>${title}\<cr>\"" \
-        ~/links/$(date '+%Y-%m-%d').md
-      ;;
-  esac
+		vim \
+			-c 'set wrap' \
+			-c 'set spell' \
+			-c 'set filetype=markdown' \
+			-c "execute \"normal! O${tags}\<cr>$(seq -s '-' $(echo ${tags} | wc -c) | sed 's/[0-9]//g')\<cr>${title}\<cr>\"" \
+			~/links/$(date '+%Y-%m-%d').md
+	;;
+	esac
 }
 
-export PS1="\$ "
-export GPG_TTY=$(tty)
+if [[ $- != *i* ]] ; then
+	# Shell is non-interactive.  Be done now!
+	return
+fi
+
+if [[ -n $DISPLAY ]]; then
+	. ~/.my-favorite-things/colorscheme.sh
+fi
+
+for env in ~/.env-*; do
+		. ${env}
+done
+
+# Check for interactive bash and that we haven't already been sourced.
+if [ -n "${BASH_VERSION-}" -a -n "${PS1-}" ]; then
+	# Check for recent enough version of bash.
+	if [ ${BASH_VERSINFO[0]} -gt 4 ] || \
+		[ ${BASH_VERSINFO[0]} -eq 4 -a ${BASH_VERSINFO[1]} -ge 1 ]; then
+		[ -r "${XDG_CONFIG_HOME:-$HOME/.config}/bash-completion/bash_completion" ] && \
+		. "${XDG_CONFIG_HOME:-$HOME/.config}/bash-completion/bash_completion"
+		if shopt -q progcomp && [ -r /usr/share/bash-completion/bash_completion ]; then
+			# Source completion code.
+			. /usr/share/bash-completion/bash_completion
+		fi
+	fi
+fi
+
+export EDITOR=vim \
+	TERM=xterm-256color \
+	HISTSIZE=-1 \
+	PATH=~/.bin:$PATH \
+	GPG_TTY=$(tty) \
+	PS1="\$ " \
+	PROMPT_COMMAND='echo -ne "\033]0;${USER} at ${HOSTNAME} on ${PWD/#$HOME/"~"}\007"'

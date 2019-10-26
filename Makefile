@@ -7,6 +7,41 @@ dotfiles = \
 	~/.bashrc \
 	~/.bash_profile \
 
+scala:
+	sudo pacman -S --noconfirm --needed \
+		sbt
+
+golang: ~/.env-golang
+	sudo pacman -S --noconfirm --needed \
+		go \
+		go-tools
+	source ~/.env-golang
+	vim +GoInstallBinaries +qall
+	curl https://glide.sh/get | sh
+
+js:
+	sudo pacman -S --noconfirm --needed \
+		nodejs-lts-boron \
+		npm
+
+rust: ~/.env-rust
+	curl https://sh.rustup.rs -sSf \
+		| sh -s -- --no-modify-path
+	rustup install stable
+	rustup default stable
+	rustup run stable cargo install rustfmt
+
+ruby: ~/.env-ruby
+	sudo pacman --noconfirm --needed -S ruby
+	if ! [ -d ~/.rbenv ]; then git clone https://github.com/rbenv/rbenv.git ~/.rbenv; fi
+	if ! [ -d ~/.rbenv/plugins/ruby-build ]; then mkdir -p ~/.rbenv/plugins/ruby-build/ && git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build/; fi
+	cd ~/.rbenv \
+		&& git pull --rebase \
+		&& src/configure \
+		&& make -C src
+	cd ~/.rbenv/plugins/ruby-build/ \
+		&& git pull --rebase
+
 dwm:
 	mkdir -p ~/.my-favorite-things/ \
 		&& cp wallpapers/cats.png ~/.my-favorite-things/wallpaper.png
@@ -47,33 +82,11 @@ st:
 		&& sudo make clean install
 	if ! [ -d ~/.config/base16-shell ]; then git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell; fi
 
-scala:
+keybase: ~/.config/bash-completion/bash_completion
 	sudo pacman -S --noconfirm --needed \
-		sbt
-
-golang: ~/.env-golang
-	sudo pacman -S --noconfirm --needed \
-		go \
-		go-tools
-	source ~/.env-golang
-	vim +GoInstallBinaries +qall
-	curl https://glide.sh/get | sh
-
-js:
-	sudo pacman -S --noconfirm --needed \
-		nodejs-lts-boron \
-		npm
-
-rust: ~/.env-rust
-	curl https://sh.rustup.rs -sSf \
-		| sh -s -- --no-modify-path
-	rustup install stable
-	rustup default stable
-	rustup run stable cargo install rustfmt
-
-launcher: ~/.bin/launcher
-	sudo pacman -S --noconfirm --needed \
-		dmenu
+		keybase
+	mkdir -p ~/.config/bash-completion/completions
+	curl -o ~/.config/bash-completion/completions/keybase "https://raw.githubusercontent.com/tiersch/keybase-completion/master/keybase"
 
 newsboat: ~/.bin/url_handler.sh ~/.newsboat/config
 	sudo pacman -S --noconfirm --needed \
@@ -83,7 +96,6 @@ youtube: newsboat applications/mpv
 	sudo pacman -S --noconfirm --needed \
 		mps-youtube \
 		youtube-dl
-
 
 dunst: ~/.config/dunst/dunstrc
 	yay -S --noconfirm --needed \
@@ -137,10 +149,27 @@ zathura:
 		zathura \
 		zathura-pdf-mupdf
 
-termite: ~/.bin/colorful-termite ~/.config/termite/config ~/.config/gtk-3.0/gtk.css
-	if ! [ -d ~/.config/base16-termite ]; then git clone https://github.com/khamer/base16-termite.git ~/.config/base16-termite; fi
+fonts: ~/.config/fontconfig/conf.d/20-custom-overrides.conf
 	sudo pacman -S --noconfirm --needed \
-		termite
+		cantarell-fonts \
+		ttf-dejavu \
+		ttf-fira-code \
+		ttf-fira-mono \
+		ttf-fira-sans \
+		ttf-opensans \
+		noto-fonts \
+		noto-fonts-cjk \
+		noto-fonts-emoji
+	curl -SL -o "tmp/iosevka.zip" "https://github.com/be5invis/Iosevka/releases/download/v2.3.0/01-iosevka-2.3.0.zip" \
+		&& cd tmp \
+		&& unzip iosevka.zip \
+		&& mkdir -p ~/.fonts \
+		&& cp ttf/* ~/.fonts
+	curl -SL -o "tmp/material.zip" "https://github.com/Templarian/MaterialDesign-Webfont/archive/v4.5.95.zip" \
+		&& cd tmp \
+		&& unzip material.zip \
+		&& mkdir -p ~/.fonts \
+		&& cp MaterialDesign-Webfont-4.5.95/fonts/materialdesignicons-webfont.ttf ~/.fonts
 
 utils:
 	sudo pacman -S --noconfirm --needed \
@@ -163,9 +192,6 @@ xorg:
 		xorg-xinit \
 		xorg-xrandr \
 		xorg-xrdb
-
-# System
-#
 
 power: /etc/modprobe.d/i915.conf
 	sudo pacman -S --noconfirm \
@@ -190,6 +216,13 @@ bluetooth:
 		bluez-utils
 	sudo systemctl enable bluetooth.service
 	sudo systemctl start bluetooth.service
+
+security: /etc/resolv.conf
+	sudo pacman -S --noconfirm \
+		dnscrypt-proxy
+	sudo systemctl enable dnscrypt-proxy.service
+	sudo systemctl start dnscrypt-proxy.service
+	sudo chattr +i /etc/resolv.conf
 
 x200: /etc/thinkfan.conf
 	yay -S --noconfirm --needed \

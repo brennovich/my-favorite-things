@@ -1,0 +1,56 @@
+#!/bin/bash
+# Based on http://openweathermap.org/current
+
+API_KEY="$(pass gnomo/openweathermap-api-key)"
+
+# Check on http://openweathermap.org/find
+CITY_ID="$(pass gnomo/weather-city)"
+
+URGENT_LOWER=0
+URGENT_HIGHER=35
+
+ICON_SUNNY=""
+ICON_MOON=""
+ICON_CLOUDY=""
+ICON_RAINY=""
+ICON_STORM=""
+ICON_SNOW=""
+ICON_FOG=""
+
+SYMBOL_CELSIUS=""
+
+WEATHER_URL="api.openweathermap.org/data/2.5/weather?id=${CITY_ID}&appid=${API_KEY}&units=metric"
+
+WEATHER_INFO=$(curl -sSL "${WEATHER_URL}")
+WEATHER_MAIN=$(echo "${WEATHER_INFO}" | jq -r ".weather[0].main")
+WEATHER_ICON=$(echo "${WEATHER_INFO}" | jq -r ".weather[0].icon")
+WEATHER_TEMP=$(echo "${WEATHER_INFO}" | jq ".main.temp" | xargs printf '%.*f' 0)
+
+icon="${WEATHER_MAIN}"
+if [[ "${WEATHER_MAIN}" == *Snow* ]]; then
+    icon=${ICON_SNOW}
+elif [[ "${WEATHER_MAIN}" == *Rain* ]] || [[ "${WEATHER_MAIN}" == *Drizzle* ]]; then
+    icon="${ICON_RAINY}"
+elif [[ "${WEATHER_MAIN}" == *Thunderstorm* ]]; then
+    icon="${ICON_STORM}"
+elif [[ "${WEATHER_MAIN}" == *Cloud* ]]; then
+    icon="${ICON_CLOUDY}"
+elif [[ "${WEATHER_MAIN}" == *Clear* ]]; then
+    if [[ "${WEATHER_ICON}" == 01n ]]; then
+        icon="${ICON_MOON}"
+    elif [[ "${WEATHER_ICON}" == 01d ]]; then
+        icon="${ICON_SUNNY}"
+    fi
+elif [[ "${WEATHER_MAIN}" == *Fog* ]] || [[ "${WEATHER_MAIN}" == *Mist* ]]; then
+    icon="${ICON_FOG}"
+fi
+
+echo "<span font='12' font_weight='ultrabold'>${icon}</span> ${WEATHER_TEMP}${SYMBOL_CELSIUS}"
+echo "${icon} ${WEATHER_TEMP}${SYMBOL_CELSIUS}"
+
+if [[ "${WEATHER_TEMP}" -lt "${URGENT_LOWER}" ]] || [[ "${WEATHER_TEMP}" -gt "${URGENT_HIGHER}" ]]; then
+    echo "critical"
+    exit 0
+fi
+
+echo ""
