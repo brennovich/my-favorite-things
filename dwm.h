@@ -8,7 +8,7 @@ static const unsigned int snap      = 8; /* snap pixel */
 static const int showbar            = 1;  /* 0 means no bar */
 static const int topbar             = 1;  /* 0 means bottom bar */
 static const int horizontal_padbar  = 4;  /* horizontal padding for statusbar */
-static const int vertical_padbar    = 9;  /* vertical padding for statusbar */
+static const int vertical_padbar    = 7;  /* vertical padding for statusbar */
 static const unsigned int gappx     = 6;  /* gap pixel between windows */
 static const char *fonts[]          = {
 	"Cantarell:size=9:style=bold:hinting=true",
