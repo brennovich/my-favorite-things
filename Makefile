@@ -5,7 +5,8 @@ dotfiles = \
 	~/.compton.conf \
 	~/.ctags \
 	~/.bashrc \
-	~/.bash_profile \
+	~/.config/fontconfig/conf.d/20-custom-overrides.conf \
+	~/.inputrc
 
 scala:
 	sudo pacman -S --noconfirm --needed \
@@ -42,6 +43,19 @@ ruby: ~/.env-ruby
 	cd ~/.rbenv/plugins/ruby-build/ \
 		&& git pull --rebase
 
+mft: xorg \
+	dotfiles \
+	dwm \
+	slstatus \
+	slock \
+	dmenu \
+	st \
+	~/.xinitrc
+	sudo pacman --noconfirm --needed -S \
+		hsetroot \
+		compton \
+		maim
+
 dwm:
 	mkdir -p ~/.my-favorite-things/ \
 		&& cp wallpapers/cats.png ~/.my-favorite-things/wallpaper.png
@@ -59,7 +73,7 @@ slstatus:
 		&& sudo make clean install
 
 slock: /etc/systemd/system/locker.service
-	yay -S xautolock --needed
+	sudo pacman -S xautolock --needed
 	cp slock.h slock/config.h
 	cd slock \
 		&& git co . \
