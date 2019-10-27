@@ -257,4 +257,9 @@ x200: /etc/thinkfan.conf
 	cp dotfiles/bin/$* $@
 	chmod +x $@
 
+clean:
+	rm -rf tmp/*
+	git submodule foreach git checkout .
+	git submodule foreach git clean -f
+
 .PHONY: dwm slstatus slock dmenu st
