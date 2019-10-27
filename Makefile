@@ -52,6 +52,7 @@ mft: xorg \
 	st \
 	~/.xinitrc
 	sudo pacman --noconfirm --needed -S \
+		gnome-keyring \
 		hsetroot \
 		compton \
 		maim

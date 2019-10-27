@@ -1,3 +1,7 @@
+dbus-update-activation-environment --systemd DISPLAY
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+export SSH_AUTH_SOCK
+
 slstatus &
 ~/.bin/random-gradient-wallpaper &
 compton &
@@ -6,5 +10,5 @@ dunst -c ~/.config/dunst/dunstrc &
 xautolock -time 10 -locker slock &
 
 while :; do
-  ssh-agent dwm &>> .dwm.log
+  ssh-agent dbus-run-session -- dwm &>> .dwm.log
 done

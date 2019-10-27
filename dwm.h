@@ -11,8 +11,8 @@ static const int horizontal_padbar  = 4;  /* horizontal padding for statusbar */
 static const int vertical_padbar    = 7;  /* vertical padding for statusbar */
 static const unsigned int gappx     = 6;  /* gap pixel between windows */
 static const char *fonts[]          = {
-	"Cantarell:size=9:style=bold:hinting=true",
-	"Material Design Icons:size=10:style=regular:hinting=false",
+	"Cantarell:size=10:style=bold:hinting=true",
+	"Material Design Icons:size=11:style=regular:hinting=false",
 };
 static const char col_gray1[]       = "#464646";
 static const char col_gray2[]       = "#686868";

@@ -8,7 +8,7 @@ index 1178f20..3da72ea 100644
  		} map[] = {
 -			{ "Charging",    "+" },
 -			{ "Discharging", "-" },
-+			{ "Charging",    "ﮣ" },
++			{ "Charging",    "" },
 +			{ "Discharging", "" },
  		};
  		size_t i;
