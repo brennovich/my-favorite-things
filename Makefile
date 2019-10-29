@@ -42,6 +42,8 @@ ruby: ~/.env-ruby
 		&& make -C src
 	cd ~/.rbenv/plugins/ruby-build/ \
 		&& git pull --rebase
+	mkdir -p ~/.rbenv/plugins
+	git clone git://github.com/tpope/rbenv-ctags.git ~/.rbenv/plugins/rbenv-ctags
 
 mft: xorg \
 	dotfiles \
@@ -51,6 +53,7 @@ mft: xorg \
 	dmenu \
 	st \
 	~/.xinitrc
+	~/.bin/random-gradient-wallpaper
 	sudo pacman --noconfirm --needed -S \
 		gnome-keyring \
 		hsetroot \
@@ -80,7 +83,6 @@ slock: /etc/systemd/system/locker.service
 		&& git co . \
 		&& sudo make clean install
 	sudo systemctl enable locker.service
-	sudo systemctl start locker.service
 
 dmenu: ~/.dmenu_exclude
 	cp dmenu.h dmenu/config.h

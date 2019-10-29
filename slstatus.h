@@ -60,7 +60,7 @@ static const char unknown_str[] = "";
  * wifi_essid          WiFi ESSID                      interface name (wlan0)
  */
 static const struct arg args[] = {
-	{ wifi_perc,          " ", "wlp2s0" },
+	{ wifi_perc,          " ", "wlp1s0" },
 	{ temp,               "   %s° ", "/sys/class/thermal/thermal_zone0/temp" },
 	{ battery_perc,       "  %s%% ", "BAT0" },
 	{ battery_state,      "%s  ",    "BAT0" },
