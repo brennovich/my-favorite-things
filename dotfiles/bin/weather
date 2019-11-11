@@ -1,6 +1,17 @@
 #!/bin/bash
 # Based on http://openweathermap.org/current
 
+cache=/tmp/weather
+ttl=/tmp/weather-ttl
+
+if [ -f ${ttl} ] && [ -f $cache ]; then
+    if [ "$(cat ${ttl})" -ge "$(date '+%s')" ]; then
+        cat ${cache}
+
+        exit 0
+    fi
+fi
+
 API_KEY="$(pass gnomo/openweathermap-api-key)"
 
 # Check on http://openweathermap.org/find
@@ -45,12 +56,5 @@ elif [[ "${WEATHER_MAIN}" == *Fog* ]] || [[ "${WEATHER_MAIN}" == *Mist* ]]; then
     icon="${ICON_FOG}"
 fi
 
-echo "<span font='12' font_weight='ultrabold'>${icon}</span> ${WEATHER_TEMP}${SYMBOL_CELSIUS}"
-echo "${icon} ${WEATHER_TEMP}${SYMBOL_CELSIUS}"
-
-if [[ "${WEATHER_TEMP}" -lt "${URGENT_LOWER}" ]] || [[ "${WEATHER_TEMP}" -gt "${URGENT_HIGHER}" ]]; then
-    echo "critical"
-    exit 0
-fi
-
-echo ""
+echo -n $(date -d '+3 minute' '+%s') > ${ttl}
+echo -n "${icon} ${WEATHER_TEMP}${SYMBOL_CELSIUS}" > ${cache}

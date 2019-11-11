@@ -120,11 +120,6 @@ dunst: ~/.config/dunst/dunstrc
 	systemctl --user enable dunst.service
 	systemctl --user start dunst.service
 
-nextcloud:
-	yay -S --noconfirm --needed \
-		gnome-keyring \
-		nextcloud-client
-
 config_path = ~/.vim
 vim: ~/.vimrc
 	rm -rf $(config_path)/pack
@@ -187,6 +182,22 @@ fonts: ~/.config/fontconfig/conf.d/20-custom-overrides.conf
 		&& unzip material.zip \
 		&& mkdir -p ~/.fonts \
 		&& cp MaterialDesign-Webfont-4.5.95/fonts/materialdesignicons-webfont.ttf ~/.fonts
+
+redshift: ~/.config/redshift.conf
+	sudo pacman -S redshift
+
+nextcloud:
+	curl -o tmp/nextcloud "https://download.nextcloud.com/desktop/releases/Linux/Nextcloud-2.6.1-x86_64.AppImage" \
+		&& cd tmp \
+		&& chmod +x nextcloud \
+		&& mv nextcloud ~/.bin/nextcloud
+
+modern-utils:
+	sudo pacman -S --noconfirm --needed \
+		ripgrep \
+		bat \
+		hyperfine \
+		exa
 
 utils:
 	sudo pacman -S --noconfirm --needed \

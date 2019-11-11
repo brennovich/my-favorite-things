@@ -64,5 +64,6 @@ static const struct arg args[] = {
 	{ temp,               "   %s° ", "/sys/class/thermal/thermal_zone0/temp" },
 	{ battery_perc,       "  %s%% ", "BAT0" },
 	{ battery_state,      "%s  ",    "BAT0" },
-	{ datetime,           "  %s  ",  "%a %e %H:%M" },
+	{ run_command,        "  %s ",    "~/.bin/weather" },
+	{ datetime,           "  %s  ",  "%a %e  %H:%M" },
 };
