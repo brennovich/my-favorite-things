@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Iosevka, Material Design Icons:pixelsize=14";
+static char *font = "Iosevka, Material Design Icons:pixelsize=18";
 static int borderpx = 16;
 
 /* disable bold, italic and roman fonts globally */
