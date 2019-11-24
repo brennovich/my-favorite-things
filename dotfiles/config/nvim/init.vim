@@ -87,23 +87,13 @@ set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 " Column ruler
 set colorcolumn=80
 
-" Statusbar
-let g:airline_theme='minimalist'
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_powerline_fonts = 0
-let g:airline_symbols_ascii = 1
-let g:airline_symbols.linenr = ''
-let g:airline_symbols.maxlinenr = ''
-
 " Enable mouse
 set mouse=a
 
 " Terminal mode
 tnoremap <Esc><Esc> <C-\><C-n><CR>
 
-" Language Specifics
+" Language & Plugins
 let g:ruby_host_prog = '~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
 
 let g:rustfmt_autosave = 1
@@ -121,3 +111,20 @@ autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
 let g:echodoc_enable_at_startup = 1
 let g:echodoc#type = 'virtual'
+
+let g:ale_sign_error = '!'
+let g:ale_sign_warning = '.'
+let g:ale_sign_column_always = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_enter = 1
+
+let g:airline_theme='minimalist'
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_powerline_fonts = 0
+let g:airline_symbols_ascii = 1
+let g:airline_symbols.linenr = ''
+let g:airline_symbols.maxlinenr = ''
+let g:airline#extensions#ale#enabled = 0
