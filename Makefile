@@ -52,11 +52,13 @@ mft: xorg \
 	slock \
 	dmenu \
 	st \
-	~/.xinitrc
+	~/.xinitrc \
 	~/.bin/random-gradient-wallpaper
 	sudo pacman --noconfirm --needed -S \
 		gnome-keyring \
 		hsetroot \
+		light \
+		xsel \
 		compton \
 		maim
 
@@ -192,7 +194,7 @@ nextcloud:
 		&& chmod +x nextcloud \
 		&& mv nextcloud ~/.bin/nextcloud
 
-modern-utils:
+modern-utils: ~/.config/bat/config
 	sudo pacman -S --noconfirm --needed \
 		ripgrep \
 		bat \
