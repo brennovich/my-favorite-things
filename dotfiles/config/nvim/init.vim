@@ -5,8 +5,6 @@ Plug 'Shougo/echodoc.vim'
 Plug 'dense-analysis/ale'
 Plug 'derekwyatt/vim-scala'
 Plug 'fatih/vim-go'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'machakann/vim-highlightedyank'
 Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
@@ -22,6 +20,13 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-vinegar'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
 call plug#end()
 
@@ -109,6 +114,7 @@ let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'ruby', 'scala',
 
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
+set cmdheight=2
 let g:echodoc_enable_at_startup = 1
 let g:echodoc#type = 'virtual'
 
@@ -118,6 +124,9 @@ let g:ale_sign_column_always = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_enter = 1
+let g:ale_linters = {
+      \   'ruby': ['rubocop'],
+      \}
 
 let g:airline_theme='minimalist'
 if !exists('g:airline_symbols')
@@ -128,3 +137,25 @@ let g:airline_symbols_ascii = 1
 let g:airline_symbols.linenr = ''
 let g:airline_symbols.maxlinenr = ''
 let g:airline#extensions#ale#enabled = 0
+
+set hidden
+let g:LanguageClient_serverCommands = {
+    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+    \ 'c': ['clangd'],
+    \ }
+function SetLSPShortcuts()
+  nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
+  nnoremap <leader>lr :call LanguageClient#textDocument_rename()<CR>
+  nnoremap <leader>lf :call LanguageClient#textDocument_formatting()<CR>
+  nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
+  nnoremap <leader>lx :call LanguageClient#textDocument_references()<CR>
+  nnoremap <leader>la :call LanguageClient_workspace_applyEdit()<CR>
+  nnoremap <leader>lc :call LanguageClient#textDocument_completion()<CR>
+  nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
+  nnoremap <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+  nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
+endfunction()
+augroup LSP
+  autocmd!
+  autocmd FileType c,ruby call SetLSPShortcuts()
+augroup END
