@@ -86,6 +86,7 @@ set linebreak
 set background=dark
 set termguicolors
 colorscheme monotone
+hi! Normal ctermbg=NONE guibg=NONE
 
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 
@@ -99,8 +100,6 @@ set mouse=a
 tnoremap <Esc><Esc> <C-\><C-n><CR>
 
 " Language & Plugins
-let g:ruby_host_prog = '~/.rbenv/versions/2.6.5/bin/neovim-ruby-host'
-
 let g:rustfmt_autosave = 1
 
 let g:go_fmt_command = "goimports"
@@ -116,17 +115,7 @@ autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
 set cmdheight=2
 let g:echodoc_enable_at_startup = 1
-let g:echodoc#type = 'virtual'
-
-let g:ale_sign_error = '!'
-let g:ale_sign_warning = '.'
-let g:ale_sign_column_always = 1
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
-let g:ale_lint_on_enter = 1
-let g:ale_linters = {
-      \   'ruby': ['rubocop'],
-      \}
+let g:echodoc#type = 'signature'
 
 let g:airline_theme='minimalist'
 if !exists('g:airline_symbols')
@@ -136,11 +125,23 @@ let g:airline_powerline_fonts = 0
 let g:airline_symbols_ascii = 1
 let g:airline_symbols.linenr = ''
 let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.whitespace = ''
+let g:airline#extensions#fugitive#enabled = 1
 let g:airline#extensions#ale#enabled = 0
 
+let g:ale_sign_error = '!'
+let g:ale_sign_warning = '.'
+let g:ale_sign_column_always = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_enter = 1
+
 set hidden
+let g:LanguageClient_autoStop = 0
 let g:LanguageClient_serverCommands = {
-    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+    \ 'sh': ['bash-language-server', 'start'],
+    \ 'ruby': ['tcp://localhost:7658'],
     \ 'c': ['clangd'],
     \ }
 function SetLSPShortcuts()
@@ -153,9 +154,10 @@ function SetLSPShortcuts()
   nnoremap <leader>lc :call LanguageClient#textDocument_completion()<CR>
   nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
   nnoremap <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
-  nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
+  nnoremap <leader><leader> :call LanguageClient_contextMenu()<CR>
 endfunction()
 augroup LSP
   autocmd!
-  autocmd FileType c,ruby call SetLSPShortcuts()
+  autocmd FileType c,ruby,sh call SetLSPShortcuts()
 augroup END
+autocmd FileType ruby setlocal omnifunc=LanguageClient#complete

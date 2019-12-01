@@ -57,15 +57,15 @@ for env in ~/.env-*; do
 		. ${env}
 done
 
-. ~/.config/bash-completion/bash_completion
+. "${XDG_CONFIG_HOME:-$HOME/.config}/bash-completion/bash_completion"
 
-if type nvim > /dev/null 2>&1; then   alias vim='nvim'; fi
+if type nvim > /dev/null 2>&1; then alias vim='nvim'; fi
 alias dcp='docker-compose'
 
 export EDITOR=vim \
 	TERM=xterm-256color \
 	HISTSIZE=-1 \
-	PATH=~/.bin:$PATH \
+	PATH=${HOME}/.bin:${HOME}/.local/bin:${PATH} \
 	GPG_TTY=$(tty) \
 	PS1="\$ " \
 	PROMPT_COMMAND='echo -ne "\033]0;${USER} at ${HOSTNAME} on ${PWD/#$HOME/"~"}\007"'

@@ -22,7 +22,7 @@ golang: ~/.env-golang
 
 js:
 	sudo pacman -S --noconfirm --needed \
-		nodejs-lts-boron \
+		nodejs \
 		npm
 
 rust: ~/.env-rust
@@ -121,6 +121,15 @@ dunst: ~/.config/dunst/dunstrc
 		dunst-git
 	systemctl --user enable dunst.service
 	systemctl --user start dunst.service
+
+neomvim: ~/.config/nvim/init.vim
+	sudo pacman -S --noconfirm --needed \
+		neovim
+	curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	nvim +PlugInstall +UpdateRemotePlugins +qa
+	sudo npm i -g bash-language-server
+	gem install solargraph
 
 config_path = ~/.vim
 vim: ~/.vimrc
