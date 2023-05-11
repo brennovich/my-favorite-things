@@ -1,0 +1,23 @@
+export HISTFILESIZE=99999999 \
+	HISTSIZE=99999999 \
+	HISTFILE=~/.zsh_history \
+	PATH="/opt/homebrew/bin:$HOME/.rbenv/bin:/usr/local/sbin:$HOME/.bin:$PATH" \
+	GPG_TTY=$(tty) \
+	PS1="\$ " \
+	PROMPT_COMMAND='echo -ne "\033]0;${USER} at ${HOSTNAME} on ${PWD/#$HOME/"~"}\007"' \
+	EDITOR=nvim
+
+colorscheme
+
+bindkey -e
+
+autoload -Uz compinit && compinit
+
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+
+if type nvim > /dev/null 2>&1; then alias vim='nvim'; fi
+
+for env in ~/.env-*; do
+	. ${env}
+done

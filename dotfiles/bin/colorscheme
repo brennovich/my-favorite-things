@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if defaults read -g AppleInterfaceStyle &> /dev/null; then
+	mode=dark
+else
+	mode=light
+fi
+
+source ~/.config/base16-shell/scripts/base16-grayscale-${mode}.sh
+pkill -SIGUSR1 vim

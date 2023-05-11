@@ -1,0 +1,34 @@
+#!/bin/bash
+
+namespace='logbook'
+
+case "$1" in
+	"-link")
+		shift
+		namespace='links'
+		link="${1}" && shift
+		[[ $link == http* ]] || link="https://${link}"
+
+		title="\n## $(curl -sSL "${link}" | perl -nE 'print /(?<=title>)(.*)(?=<\/title>)/')\n${link}"
+		;;
+	"-namespace")
+		shift
+		namespace="logbook/${1}" && shift
+		;;
+esac
+
+if [ "$#" -eq "0" ]; then
+	vi_tags_entry=""
+else
+	tags=$(echo :"$*": | sed 's/ /:/g')
+	vi_tags_entry="execute \"normal! O${tags}\<cr>$(seq -s '-' ${#tags} | sed 's/[0-9]//g')\<cr>${title}\<cr>\""
+fi
+
+vi \
+	-c 'set wrap' \
+	-c 'set spell' \
+	-c 'set colorcolumn=0' \
+	-c 'set filetype=markdown' \
+	-c "${vi_tags_entry}" \
+	-c 'syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell' \
+	~/"${namespace}"/"$(date '+%Y-%m-%d')".md

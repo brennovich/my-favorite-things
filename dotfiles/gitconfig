@@ -10,22 +10,14 @@
   old = red bold
   new = green bold
 [alias]
-  a = add                           # add
   b = branch -v                     # branch (verbose)
-  amend = commit --amend            # ammend your last commit
-  ammend = commit --amend           # ammend your last commit
+  amend = commit --amend            # ammend your last commit ammend = commit --amend           # ammend your last commit
   co = checkout                     # checkout
   cp = cherry-pick -x               # grab a change from a branch
   d = diff                          # diff unstaged changes
   dc = diff --cached                # diff staged changes
   l = log --graph --date=short
-  changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
-  short = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\"
-  changelog = log --pretty=format:\" * %s\"
-  shortnocolor = log --pretty=format:\"%h %cr %cn %s\"
   s = status --short
-  lastday = log --author=__user_name__ --pretty=oneline --all --since=1.day
-  lastfriday = log --author=__user_name__ --pretty=oneline --all --since='last Friday'
 [format]
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [merge]
@@ -59,3 +51,4 @@
   user = brennovich
 [commit]
   gpgsign = true
+  template = ~/.gitmessage
