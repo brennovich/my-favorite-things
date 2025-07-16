@@ -1,16 +1,12 @@
 set showmode
-
 set fileencoding=utf-8
-
-syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell
 
 set tags+=.tags
 set tags+=.git/tags
 set tags+=.git/tags-deps
 
-set list
+set nolist
 set hlsearch
-set cursorline
 
 set noswapfile
 set nobackup
@@ -20,7 +16,7 @@ silent !mkdir ~/.vim/backups > /dev/null 2>&1
 set undodir=~/.vim/backups
 set undofile
 
-set wildmenu
+set wildmenu wildoptions=pum
 set wildmode=list:longest
 set wildignore=*.o,*.obj,*~
 set wildignore+=*vim/backups*
@@ -40,16 +36,8 @@ set winwidth=84
 set nowrap
 set linebreak
 
-set statusline=\ %f\  " Filename
-set statusline+=%{fugitive#statusline()} " Git info
-set statusline+=%= " Separator
-set statusline+=%y " File type
-set statusline+=[%{strlen(&fenc)?&fenc:'none'} " File encoding
-set statusline+=\ %{&ff}] " File ending
-set statusline+=\ %P\ of\ %L\  " % of file
-set statusline+=(%l\:%c)\ " Line info
-
-set colorcolumn=120
+set laststatus=0
+set colorcolumn=0
 
 let g:rustfmt_autosave = 1
 
@@ -64,28 +52,8 @@ let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'ruby', 'scala',
 
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
-function! ChangeBackground()
-	let base16colorspace=256
-	set t_Co=256
+syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell
+syn match AcronymNoSpell '\<\(\u\|\d\)\{3,}s\?\>' contains=@NoSpell
 
-	if system("defaults read -g AppleInterfaceStyle") =~ '^Dark'
-		set background=dark
-		let g:theme="base16-grayscale-dark"
-	else
-		set background=light
-		let g:theme="base16-grayscale-light"
-	endif
-
-	exec 'colorscheme ' . g:theme
-
-	augroup color_tweaks
-		au!
-		autocmd ColorScheme * hi Search ctermbg=214 cterm=bold,italic
-		autocmd ColorScheme * hi SpellBad cterm=underline,italic ctermbg=124 ctermfg=white
-		autocmd ColorScheme * hi VertSplit ctermbg=NONE
-		autocmd ColorScheme * hi Visual ctermbg=0 cterm=italic,reverse
-		autocmd ColorScheme * hi CursorLine cterm=reverse ctermbg=NONE
-	augroup END
-endfunction
-call ChangeBackground()
-autocmd SigUSR1 * call ChangeBackground()
+set t_Co=256
+colorscheme marques-de-itu

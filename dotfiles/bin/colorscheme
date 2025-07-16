@@ -1,10 +1,23 @@
 #!/bin/sh
 
+echo "$(pgrep 'vi$')" > /dev/null || exit 0
+
 if defaults read -g AppleInterfaceStyle &> /dev/null; then
-	mode=dark
+	NEXT_COLORSCHEME=base16-grayscale-dark
 else
-	mode=light
+	NEXT_COLORSCHEME=base16-grayscale-light
 fi
 
-source ~/.config/base16-shell/scripts/base16-grayscale-${mode}.sh
-pkill -SIGUSR1 vim
+if [ ! -z "$COLORSCHEME" ]; then
+	if [ "$COLORSCHEME" != "$NEXT_COLORSCHEME" ]; then
+		echo "Switching colorscheme from $COLORSCHEME to $NEXT_COLORSCHEME"
+		command reset
+	fi
+fi
+
+unset COLORSCHEME BASE16_SHELL
+export COLORSCHEME=$NEXT_COLORSCHEME
+
+source ~/.config/base16-shell/scripts/${COLORSCHEME}.sh
+
+pkill -SIGUSR1 "vi$" > /dev/null
