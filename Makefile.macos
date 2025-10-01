@@ -4,6 +4,8 @@ dotfiles = \
 	~/.gitignore \
 	~/.ctags
 
+dotfiles: $(dotfiles)
+
 golang: ~/.env-golang
 	brew install golang
 	source ~/.env-golang
@@ -46,6 +48,9 @@ colors: ~/.bin/colorscheme ~/.env-theme
 defaults:
 	defaults write com.apple.dock autohide-time-modifier -float 0
 	defaults write -g NSWindowShouldDragOnGesture -bool true
+
+github:
+	brew install gh
 
 mpv: ~/.config/mpv
 	brew install --cask mpv

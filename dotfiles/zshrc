@@ -5,39 +5,24 @@ bindkey ^S history-incremental-search-forward
 bindkey ^P up-line-or-search
 bindkey ^N down-line-or-search
 
-export HISTFILESIZE=99999999 \
-	HISTSIZE=99999999 \
-	HISTFILE=~/.zsh_history \
-	PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/sbin:$HOME/.bin:$PATH" \
-	GPG_TTY=$(tty) \
-	PS1="\$ " \
-	EDITOR=vi
-
 for env in ~/.env-*; do
 	. ${env}
 done
+
+export HISTFILESIZE=99999999 \
+	HISTSIZE=99999999 \
+	HISTFILE=~/.zsh_history \
+	GPG_TTY=$(tty) \
+	EDITOR=vi
 
 alias l='ls -lha --color'
 
 autoload -U +X bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
 
-source <(kubectl completion zsh)
+if type kubectl > /dev/null 2>&1; then source <(kubectl completion zsh); fi
 
 setopt HIST_FIND_NO_DUPS
 setopt HIST_IGNORE_ALL_DUPS
 
 if type nvim > /dev/null 2>&1; then alias vim='nvim'; fi
-
-# pnpm
-export PNPM_HOME="/Users/brenno.costa/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
-## [Completion]
-## Completion scripts setup. Remove the following line to uninstall
-[[ -f /Users/brenno.costa/.dart-cli-completion/zsh-config.zsh ]] && . /Users/brenno.costa/.dart-cli-completion/zsh-config.zsh || true
-## [/Completion]
