@@ -2,6 +2,8 @@ dotfiles = \
 	~/.zshrc \
 	~/.gitconfig \
 	~/.gitignore \
+	~/.env-brew \
+	~/.env-ports \
 	~/.ctags
 
 dotfiles: $(dotfiles)
