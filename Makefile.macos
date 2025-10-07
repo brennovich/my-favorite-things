@@ -6,7 +6,7 @@ dotfiles = \
 	~/.env-ports \
 	~/.ctags
 
-dotfiles: $(dotfiles)
+dotfiles: $(dotfiles) colors
 
 golang: ~/.env-golang
 	brew install golang
@@ -21,10 +21,12 @@ rust: ~/.env-rust
 	rustup run stable cargo install rustfmt
 
 ruby: ~/.env-ruby ~/.gemrc
-	brew install rbenv ruby-build
+	sudo port install ruby34
+	sudo port select --set ruby ruby34
 
 config_path = ~/.vim
 vim: ~/.vimrc
+	sudo port install vim +huge
 	rm -rf $(config_path)/pack
 	mkdir -p $(config_path)/backups $(config_path)/pack/plugins/start
 	cd $(config_path)/pack/plugins/start \
@@ -50,9 +52,29 @@ colors: ~/.bin/colorscheme ~/.env-theme
 defaults:
 	defaults write com.apple.dock autohide-time-modifier -float 0
 	defaults write -g NSWindowShouldDragOnGesture -bool true
+	defaults write -g ApplePressAndHoldEnabled -bool false
+	defaults write com.apple.dock "mru-spaces" -bool "false"
+	defaults write com.apple.Music "userWantsPlaybackNotifications" -bool "false" && killall Music
+	defaults write com.apple.dock "autohide" -bool "true"
+	defaults write com.apple.dock "show-recents" -bool "false"
+	defaults write com.apple.dock launchanim -bool false
+	defaults write com.apple.dock mru-spaces -bool false
+	defaults write com.apple.Safari UniversalSearchEnabled -bool false
+	defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+	defaults write com.apple.Safari IncludeDevelopMenu -bool true
+	defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+	defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+	defaults write com.apple.Safari WebKitMediaPlaybackAllowsInline -bool false
+	defaults write com.apple.SafariTechnologyPreview WebKitMediaPlaybackAllowsInline -bool false
+	defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
+	defaults write com.apple.SafariTechnologyPreview com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
+	killall Dock
 
 github:
 	brew install gh
+
+media: mpv
+	brew install --cask qlvideo
 
 mpv: ~/.config/mpv
 	brew install --cask mpv
