@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# Script to convert YouTube channel URL to RSS feed URL
+# Usage: ./youtube-to-rss.sh "https://www.youtube.com/@TemperoDrag"
+
+URL="$1"
+
+if [ -z "$URL" ]; then
+	echo "Usage: $0 <youtube-channel-url>" >&2
+	echo "Example: $0 'https://www.youtube.com/@TemperoDrag'" >&2
+	exit 1
+fi
+
+if echo "$URL" | grep -q "/channel/"; then
+    CHANNEL_ID=$(echo "$URL" | sed -n 's|.*/channel/\([^/?]*\).*|\1|p')
+else
+    CHANNEL_ID=$(curl -sL "$URL" | sed -n 's/.*"channelId":"\(UC[^"]*\)".*/\1/p' | head -n 1)
+
+    if [ -z "$CHANNEL_ID" ]; then
+        CHANNEL_ID=$(curl -sL "$URL" | sed -n 's/.*<link rel="canonical" href="https:\/\/www\.youtube\.com\/channel\/\([^"]*\)".*/\1/p' | head -n 1)
+    fi
+fi
+
+if [ -z "$CHANNEL_ID" ]; then
+    echo "Error: Could not extract channel ID from URL" >&2
+    exit 1
+fi
+
+RSS_URL="https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}"
+echo "$RSS_URL"

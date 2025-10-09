@@ -1,13 +1,27 @@
-color background	white	black
-color listnormal	white	black
-color listfocus	black	blue
-color listnormal_unread	magenta	black
-color listfocus_unread	black	blue
-color info	black	green
-color article	white	black
+color background          color250 color232
+color listnormal          color250 color232
+color listfocus           color232 color250
+color listnormal_unread   color250 color232 bold
+color listfocus_unread    color232 color250 bold
+color title               color250 color235 bold
+color info                color250 color235
+color hint-key            color250 color235 bold
+color hint-keys-delimiter color244 color235
+color hint-separator      color250 color235 bold
+color hint-description    color250 color235
+color article             color250 color232
+color end-of-text-marker  color239 color232
 
-auto-reload yes
-external-url-viewer "urlview"
+highlight article "^(Feed|Title|Author|Link|Date|Links):" color245 default bold
+highlight article "https?://[^ ]+" color246 default underline
+
+max-items 15
+browser links
+
+bind S article,articlelist,urlview set browser "open -a Safari" ; open-in-browser ; set browser links -- "Open in Safari"
+bind V article,articlelist,urlview set browser "ytvlc %u" ; open-in-browser ; set browser links -- "Open video on mpv"
+
+bind c article,articlelist,urlview set browser "echo %u | pbcopy" ; open-in-browser ; set browser links -- "Copy URL to clipboard"
 
 bind-key j down
 bind-key k up

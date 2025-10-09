@@ -24,6 +24,9 @@ ruby: ~/.env-ruby ~/.gemrc
 	sudo port install ruby34
 	sudo port select --set ruby ruby34
 
+node: ~/.env-node
+	sudo port install nvm
+
 config_path = ~/.vim
 vim: ~/.vimrc
 	sudo port install vim +huge
@@ -73,11 +76,17 @@ defaults:
 github:
 	brew install gh
 
-media: mpv
-	brew install --cask qlvideo
+media: vlc ~/.bin/ytvlc
+	which yt-dls &> /dev/null || curl -SsL -o ~/.bin/yt-dlp 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos'; chmod a+rx ~/.bin/yt-dlp
+	brew install --cask qlvideo vlc
 
-mpv: ~/.config/mpv
-	brew install --cask mpv
+feeds: ~/.newsboat/config ~/.newsboat/urls
+	which newsboat &> /dev/null || sudo port install newsboat
+
+~/.bin/%: dotfiles/bin/*
+	mkdir -p $(@D)
+	cp dotfiles/bin/$* $@
+	chmod +x $@
 
 ~/.%: dotfiles/*
 	mkdir -p $(@D)
@@ -86,11 +95,6 @@ mpv: ~/.config/mpv
 /etc/%: etc/*
 	sudo mkdir -p $(@D)
 	sudo cp etc/$* $@
-
-~/.bin/%: dotfiles/bin/*
-	mkdir -p $(@D)
-	cp dotfiles/bin/$* $@
-	chmod +x $@
 
 clean:
 	rm -rf tmp/*

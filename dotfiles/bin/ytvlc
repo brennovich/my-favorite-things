@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+url="$1"
+
+yt-dlp -f best -o - "$1" \
+	| vlc --no-osd -f --no-video-title-show --no-interact -
