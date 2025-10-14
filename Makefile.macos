@@ -83,6 +83,9 @@ media: vlc ~/.bin/ytvlc
 feeds: ~/.newsboat/config ~/.newsboat/urls
 	which newsboat &> /dev/null || sudo port install newsboat
 
+hammerspoon: ~/.hammerspoon/init.lua
+	which hs &> /dev/null || brew install --cask hammerspoon
+
 ~/.bin/%: dotfiles/bin/*
 	mkdir -p $(@D)
 	cp dotfiles/bin/$* $@
