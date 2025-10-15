@@ -85,6 +85,13 @@ feeds: ~/.newsboat/config ~/.newsboat/urls
 
 hammerspoon: ~/.hammerspoon/init.lua
 	which hs &> /dev/null || brew install --cask hammerspoon
+	mkdir -p ~/.hammerspoon/Spoons
+	cd ~/.hammerspoon/Spoons \
+		&& curl --skip-existing -LO https://github.com/Hammerspoon/Spoons/raw/master/Spoons/ReloadConfiguration.spoon.zip \
+		&& curl --skip-existing -LO https://github.com/Hammerspoon/Spoons/raw/master/Spoons/AClock.spoon.zip \
+		&& unzip -o \*.zip \
+		&& rm *.zip
+
 
 ~/.bin/%: dotfiles/bin/*
 	mkdir -p $(@D)
