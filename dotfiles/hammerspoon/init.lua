@@ -71,6 +71,11 @@ hs.hotkey.bind({"alt", "shift"}, "L", placeWindow(shiftX(gap), shiftY(0), keepWi
 hs.hotkey.bind({"alt", "shift"}, "K", placeWindow(shiftX(0), shiftY(-gap), keepWidth, keepHeight))
 hs.hotkey.bind({"alt", "shift"}, "J", placeWindow(shiftX(0), shiftY(gap), keepWidth, keepHeight))
 
+hs.hotkey.bind({"alt"}, "H", function() hs.window.focusedWindow():focusWindowWest() end)
+hs.hotkey.bind({"alt"}, "L", function() hs.window.focusedWindow():focusWindowEast() end)
+hs.hotkey.bind({"alt"}, "K", function() hs.window.focusedWindow():focusWindowNorth() end)
+hs.hotkey.bind({"alt"}, "J", function() hs.window.focusedWindow():focusWindowSouth() end)
+
 hs.hotkey.bind({"alt", "ctrl"}, "H", placeWindow(leftHalfX, topHalfY, leftHalfW, fullHeightH))
 hs.hotkey.bind({"alt", "ctrl"}, "L", placeWindow(rightHalfX, topHalfY, rightHalfW, fullHeightH))
 hs.hotkey.bind({"alt", "ctrl"}, "J", placeWindow(fullWidthX, bottomHalfY, fullWidthW, bottomHalfH))
