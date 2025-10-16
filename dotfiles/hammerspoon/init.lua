@@ -13,35 +13,28 @@ alertStyle = {
 
 gap = 10
 
-function leftHalfX(ws, f) return gap * 1.5 end
-function rightHalfX(ws, f) return ws.w / 2 + gap * 0.5 end
-function topHalfY(ws, f) return gap end
-function bottomHalfY(ws, f) return ws.h / 2 + gap * 0.5 end
-function fullWidthX(ws, f) return gap end
-function fullWidthW(ws, f) return ws.w - gap * 2 end
-function leftHalfW(ws, f) return ws.w / 2 - gap * 0.5 end
-function rightHalfW(ws, f) return ws.w / 2 - gap * 2 end
-function topHalfH(ws, f) return ws.h / 2 - gap end
-function bottomHalfH(ws, f) return ws.h / 2 - gap * 2 end
-function fullHeightH(ws, f) return ws.h - gap * 2 end
-function centerX(ws, f) return (ws.w - f.w) / 2 end
-function centerY(ws, f) return (ws.h - f.h) / 2 end
-function keepWidth(ws, f) return f.w end
-function keepHeight(ws, f) return f.h end
-function shiftX(dx) return function(ws, f) return f.x - ws.x + dx end end
-function shiftY(dy) return function(ws, f) return f.y - ws.y + dy end end
+hs.grid.ui.showExtraKeys = false
 
-function placeWindow(xFn, yFn, wFn, hFn)
+hs.grid.setGrid('2x2')
+hs.grid.setMargins({gap, gap})
+
+function centerWindow()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+	local f = win:frame()
+	local ws = win:screen():frame()
+	f.x = ws.x + (ws.w - f.w) / 2
+	f.y = ws.y + (ws.h - f.h) / 2
+	win:setFrame(f)
+end
+
+function moveWindow(dx, dy)
 	return function()
 		local win = hs.window.focusedWindow()
 		if not win then return end
 		local f = win:frame()
-		local ws = win:screen():frame()
-
-		f.x = ws.x + xFn(ws, f)
-		f.y = ws.y + yFn(ws, f)
-		f.w = wFn(ws, f)
-		f.h = hFn(ws, f)
+		f.x = f.x + dx
+		f.y = f.y + dy
 		win:setFrame(f)
 	end
 end
@@ -66,23 +59,26 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "C", function()
   spoon.AClock:toggleShow()
 end)
 
-hs.hotkey.bind({"alt", "shift"}, "H", placeWindow(shiftX(-gap), shiftY(0), keepWidth, keepHeight))
-hs.hotkey.bind({"alt", "shift"}, "L", placeWindow(shiftX(gap), shiftY(0), keepWidth, keepHeight))
-hs.hotkey.bind({"alt", "shift"}, "K", placeWindow(shiftX(0), shiftY(-gap), keepWidth, keepHeight))
-hs.hotkey.bind({"alt", "shift"}, "J", placeWindow(shiftX(0), shiftY(gap), keepWidth, keepHeight))
+hs.hotkey.bind({"alt", "shift"}, "H", moveWindow(-gap, 0))
+hs.hotkey.bind({"alt", "shift"}, "L", moveWindow(gap, 0))
+hs.hotkey.bind({"alt", "shift"}, "K", moveWindow(0, -gap))
+hs.hotkey.bind({"alt", "shift"}, "J", moveWindow(0, gap))
 
 hs.hotkey.bind({"alt"}, "H", function() hs.window.focusedWindow():focusWindowWest() end)
 hs.hotkey.bind({"alt"}, "L", function() hs.window.focusedWindow():focusWindowEast() end)
 hs.hotkey.bind({"alt"}, "K", function() hs.window.focusedWindow():focusWindowNorth() end)
 hs.hotkey.bind({"alt"}, "J", function() hs.window.focusedWindow():focusWindowSouth() end)
 
-hs.hotkey.bind({"alt", "ctrl"}, "H", placeWindow(leftHalfX, topHalfY, leftHalfW, fullHeightH))
-hs.hotkey.bind({"alt", "ctrl"}, "L", placeWindow(rightHalfX, topHalfY, rightHalfW, fullHeightH))
-hs.hotkey.bind({"alt", "ctrl"}, "J", placeWindow(fullWidthX, bottomHalfY, fullWidthW, bottomHalfH))
-hs.hotkey.bind({"alt", "ctrl"}, "K", placeWindow(fullWidthX, topHalfY, fullWidthW, topHalfH))
+hs.hotkey.bind({"alt", "ctrl"}, "H", function() hs.grid.set(hs.window.focusedWindow(), {0, 0, 1, 2}) end)
+hs.hotkey.bind({"alt", "ctrl"}, "L", function() hs.grid.set(hs.window.focusedWindow(), {1, 0, 1, 2}) end)
+hs.hotkey.bind({"alt", "ctrl"}, "J", function() hs.grid.set(hs.window.focusedWindow(), {0, 1, 2, 1}) end)
+hs.hotkey.bind({"alt", "ctrl"}, "K", function() hs.grid.set(hs.window.focusedWindow(), {0, 0, 2, 1}) end)
 
-hs.hotkey.bind({"alt", "ctrl"}, "Space", placeWindow(centerX, centerY, keepWidth, keepHeight))
+hs.hotkey.bind({"alt", "ctrl"}, "Space", centerWindow)
 
+hs.hotkey.bind({"alt", "ctrl"}, "G", function()
+    hs.grid.toggleShow()
+end)
 
 spoon.ReloadConfiguration:start()
 
