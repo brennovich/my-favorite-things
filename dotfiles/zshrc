@@ -13,12 +13,12 @@ export HISTFILESIZE=99999999 \
 	HISTSIZE=99999999 \
 	HISTFILE=~/.zsh_history \
 	GPG_TTY=$(tty) \
+	PATH=$HOME/.bin:$PATH \
 	EDITOR=vi
 
 
 autoload -U +X bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
-
 
 setopt HIST_FIND_NO_DUPS
 setopt HIST_IGNORE_ALL_DUPS
@@ -26,5 +26,3 @@ setopt HIST_IGNORE_ALL_DUPS
 alias l='ls -lha --color'
 if type nvim > /dev/null 2>&1; then alias vim='nvim'; fi
 if type newsboat > /dev/null 2>&1; then alias newsboat='newsboat; source ~/.bin/colorscheme'; fi
-
-if type kubectl > /dev/null 2>&1; then source <(kubectl completion zsh); fi

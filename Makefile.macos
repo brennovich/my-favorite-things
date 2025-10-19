@@ -27,6 +27,8 @@ ruby: ~/.env-ruby ~/.gemrc
 node: ~/.env-node
 	sudo port install nvm
 
+k8s: ~/.env-k8s
+
 config_path = ~/.vim
 vim: ~/.vimrc
 	sudo port install vim +huge
@@ -83,12 +85,13 @@ media: vlc ~/.bin/ytvlc
 feeds: ~/.newsboat/config ~/.newsboat/urls
 	which newsboat &> /dev/null || sudo port install newsboat
 
-hammerspoon: ~/.hammerspoon/init.lua ~/.hammerspoon/Spoons/WMUtils.spoon ~/.hammerspoon/Spoons/ToggleMenubar.spoon
+hammerspoon: ~/.hammerspoon/init.lua
 	which hs &> /dev/null || brew install --cask hammerspoon
 	mkdir -p ~/.hammerspoon/Spoons
+	cp -R dotfiles/hammerspoon/Spoons/* ~/.hammerspoon/Spoons/
 	cd ~/.hammerspoon/Spoons \
 		&& curl --skip-existing -LO https://github.com/Hammerspoon/Spoons/raw/master/Spoons/ReloadConfiguration.spoon.zip \
-		&& curl --skip-existing -LO https://github.com/Hammerspoon/Spoons/raw/master/Spoons/AClock.spoon.zip \
+		&& curl --skip-existing -LO https://github.com/Hammerspoon/Spoons/raw/master/Spoons/RoundedCorners.spoon.zip \
 		&& unzip -o \*.zip \
 		&& rm *.zip
 

@@ -7,9 +7,19 @@ obj.author = "brnnc"
 obj.license = "MIT"
 
 obj.windowFrameCache = {}
+obj.gap = 15
 
 function obj:init()
 	return self
+end
+
+function obj:moveWindow(dx, dy)
+	local win = hs.window.focusedWindow()
+	if not win then return end
+	local f = win:frame()
+	f.x = f.x + dx
+	f.y = f.y + dy
+	win:setFrame(f)
 end
 
 function obj:centerWindow()

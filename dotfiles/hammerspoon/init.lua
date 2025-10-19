@@ -1,7 +1,8 @@
 hs.loadSpoon("ReloadConfiguration")
-hs.loadSpoon("AClock")
 hs.loadSpoon("WMUtils")
 hs.loadSpoon("ToggleMenubar")
+hs.loadSpoon("RoundedCorners")
+hs.loadSpoon("VirtualSpaces")
 
 alertStyle = {
 	radius = 10,
@@ -16,43 +17,74 @@ alertStyle = {
 gap = 15
 
 spoon.ToggleMenubar.gap = gap
+spoon.WMUtils.gap = gap
+spoon.VirtualSpaces.setNumberOfWorkspaces(3)
 
 hs.grid.ui.showExtraKeys = false
 
 hs.grid.setGrid('2x2')
 hs.grid.setMargins({gap, gap})
 
-function moveWindow(dx, dy)
-	return function()
-		local win = hs.window.focusedWindow()
-		if not win then return end
-		local f = win:frame()
-		f.x = f.x + dx
-		f.y = f.y + dy
-		win:setFrame(f)
-	end
-end
-
 hs.window.animationDuration = 0
 
+spoon.RoundedCorners:start()
+spoon.WMUtils:init()
+spoon.VirtualSpaces:init()
 spoon.ReloadConfiguration:start()
 
 hs.hotkey.bind({"ctrl", "leftalt", "cmd"}, "D", function()
     spoon.ToggleMenubar:toggle()
 end)
 
-hs.hotkey.bind({"cmd", "leftalt", "ctrl"}, "C", function()
-    spoon.AClock:toggleShow()
-end)
-
 hs.hotkey.bind({"leftalt"}, "4", function()
     hs.application.open("Safari")
 end)
 
-hs.hotkey.bind({"leftalt", "shift"}, "H", moveWindow(-gap*2, 0))
-hs.hotkey.bind({"leftalt", "shift"}, "L", moveWindow(gap*2, 0))
-hs.hotkey.bind({"leftalt", "shift"}, "K", moveWindow(0, -gap*2))
-hs.hotkey.bind({"leftalt", "shift"}, "J", moveWindow(0, gap*2))
+hs.hotkey.bind({"leftalt"}, "1", function()
+    spoon.VirtualSpaces:switchToWorkspace(1)
+end)
+
+hs.hotkey.bind({"leftalt"}, "2", function()
+    spoon.VirtualSpaces:switchToWorkspace(2)
+end)
+
+hs.hotkey.bind({"leftalt"}, "3", function()
+    spoon.VirtualSpaces:switchToWorkspace(3)
+end)
+
+hs.hotkey.bind({"leftalt", "shift"}, "1", function()
+    local win = hs.window.focusedWindow()
+    if win then
+        spoon.VirtualSpaces:moveWindowToWorkspace(win, 1)
+    end
+end)
+
+hs.hotkey.bind({"leftalt", "shift"}, "2", function()
+    local win = hs.window.focusedWindow()
+    if win then
+        spoon.VirtualSpaces:moveWindowToWorkspace(win, 2)
+    end
+end)
+
+hs.hotkey.bind({"leftalt", "shift"}, "3", function()
+    local win = hs.window.focusedWindow()
+    if win then
+        spoon.VirtualSpaces:moveWindowToWorkspace(win, 3)
+    end
+end)
+
+hs.hotkey.bind({"leftalt", "shift"}, "H", function()
+    spoon.WMUtils:moveWindow(-spoon.WMUtils.gap*2, 0)
+end)
+hs.hotkey.bind({"leftalt", "shift"}, "L", function()
+    spoon.WMUtils:moveWindow(spoon.WMUtils.gap*2, 0)
+end)
+hs.hotkey.bind({"leftalt", "shift"}, "K", function()
+    spoon.WMUtils:moveWindow(0, -spoon.WMUtils.gap*2)
+end)
+hs.hotkey.bind({"leftalt", "shift"}, "J", function()
+    spoon.WMUtils:moveWindow(0, spoon.WMUtils.gap*2)
+end)
 
 hs.hotkey.bind({"leftalt"}, "H", function()
     hs.window.focusedWindow():focusWindowWest()
