@@ -18,6 +18,7 @@ gap = 15
 
 spoon.ToggleMenubar.gap = gap
 spoon.WMUtils.gap = gap
+spoon.RoundedCorners.radius = 8
 
 hs.grid.ui.showExtraKeys = false
 

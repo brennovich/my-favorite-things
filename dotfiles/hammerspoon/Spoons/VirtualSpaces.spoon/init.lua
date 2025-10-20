@@ -33,37 +33,75 @@ function obj:init()
 		self:_removeWindow(window)
 	end)
 
+	self.appWatcher = hs.application.watcher.new(function(appName, eventType, app)
+		if eventType == hs.application.watcher.activated then
+			if not app then return end
+
+			local currentSpace = hs.spaces.activeSpaceOnScreen()
+
+			if currentSpace == self._storageSpace then
+				hs.timer.doAfter(0.1, function()
+					for _, win in ipairs(app:allWindows()) do
+						if self:_isManageableWindow(win) then
+							local targetWorkspace = self._windowWorkspaceMap[win:id()]
+
+							if targetWorkspace then
+								self:switchToWorkspace(targetWorkspace)
+								return
+							end
+						end
+					end
+				end)
+			end
+		end
+	end)
+	self.appWatcher:start()
+
 	self:_scanExistingWindows()
 
 	return self
 end
 
-function obj:switchToWorkspace(workspaceNum)
-	if workspaceNum < 1 then return end
+function obj:_isManageableWindow(win)
+	return win:isStandard() and not win:isFullScreen()
+end
 
-	local currentSpace = hs.spaces.activeSpaceOnScreen()
-
-	if workspaceNum == self._currentWorkspace and currentSpace == self._activeSpace then
-		return
-	end
-
+function obj:_saveFocusedWindow()
 	local focusedWin = hs.window.focusedWindow()
 	if focusedWin then
 		self._workspaceFocusedWindow[self._currentWorkspace] = focusedWin:id()
 	end
+end
 
+function obj:_restoreFocusedWindow(workspaceNum)
+	if self._workspaceFocusedWindow[workspaceNum] then
+		local win = hs.window.get(self._workspaceFocusedWindow[workspaceNum])
+		if win then
+			win:focus()
+		end
+	end
+end
+
+function obj:_categorizeWindowsForSwitch(targetWorkspace, isSwapping)
 	local toStorage = {}
 	local toActive = {}
+
 	for winId, wsNum in pairs(self._windowWorkspaceMap) do
-		if wsNum == self._currentWorkspace then
-			toStorage[winId] = true
-		elseif wsNum == workspaceNum then
+		if wsNum == targetWorkspace then
 			toActive[winId] = true
+		elseif wsNum == self._currentWorkspace then
+			toStorage[winId] = true
+		elseif isSwapping then
+			toStorage[winId] = true
 		end
 	end
 
+	return toStorage, toActive
+end
+
+function obj:_moveWindowsByCategory(toStorage, toActive)
 	for _, win in ipairs(self.windowFilter:getWindows()) do
-		if win:isStandard() and not win:isFullScreen() then
+		if self:_isManageableWindow(win) then
 			local winId = win:id()
 			if toStorage[winId] then
 				hs.spaces.moveWindowToSpace(win, self._storageSpace)
@@ -72,39 +110,51 @@ function obj:switchToWorkspace(workspaceNum)
 			end
 		end
 	end
+end
+
+function obj:switchToWorkspace(workspaceNum)
+	if not workspaceNum or workspaceNum < 1 then
+		return
+	end
+
+	local currentSpace = hs.spaces.activeSpaceOnScreen()
+
+	if workspaceNum == self._currentWorkspace and currentSpace == self._activeSpace then
+		return
+	end
+
+	self:_saveFocusedWindow()
+
+	local isSwapping = currentSpace == self._storageSpace
+	if isSwapping then
+		self._activeSpace, self._storageSpace = self._storageSpace, self._activeSpace
+	end
+
+	local toStorage, toActive = self:_categorizeWindowsForSwitch(workspaceNum, isSwapping)
+	self:_moveWindowsByCategory(toStorage, toActive)
 
 	if hs.spaces.activeSpaceOnScreen() ~= self._activeSpace then
 		hs.spaces.gotoSpace(self._activeSpace)
 		hs.eventtap.keyStroke({}, "escape")
 	end
 
-	if self._workspaceFocusedWindow[workspaceNum] then
-		local win = hs.window.get(self._workspaceFocusedWindow[workspaceNum])
-		if win then
-			win:focus()
-		end
-	end
-
 	self._currentWorkspace = workspaceNum
+	self:_restoreFocusedWindow(workspaceNum)
 end
 
 function obj:moveWindowToWorkspace(window, workspaceNum)
-	if not window or workspaceNum < 1 then return end
+	if not window or not workspaceNum or workspaceNum < 1 then return end
 
 	local winId = window:id()
 	self._windowWorkspaceMap[winId] = workspaceNum
 
-	if workspaceNum == self._currentWorkspace then
-		hs.spaces.moveWindowToSpace(window, self._activeSpace)
-	else
-		hs.spaces.moveWindowToSpace(window, self._storageSpace)
-	end
+	local targetSpace = (workspaceNum == self._currentWorkspace) and self._activeSpace or self._storageSpace
+	hs.spaces.moveWindowToSpace(window, targetSpace)
 end
 
 function obj:_scanExistingWindows()
-	local allWindows = hs.window.allWindows()
-	for _, win in ipairs(allWindows) do
-		if win:isStandard() and not win:isFullScreen() then
+	for _, win in ipairs(hs.window.allWindows()) do
+		if self:_isManageableWindow(win) then
 			hs.spaces.moveWindowToSpace(win, self._activeSpace)
 			self:assignWindowToWorkspace(win, 1)
 		end
@@ -112,7 +162,7 @@ function obj:_scanExistingWindows()
 end
 
 function obj:assignWindowToWorkspace(window, workspaceNum)
-	if not window or not window:isStandard() or window:isFullScreen() then return end
+	if not window or not self:_isManageableWindow(window) then return end
 
 	local winId = window:id()
 	self._windowWorkspaceMap[winId] = workspaceNum

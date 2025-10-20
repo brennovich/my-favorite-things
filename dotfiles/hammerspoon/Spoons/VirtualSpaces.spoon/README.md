@@ -4,11 +4,10 @@ Virtual workspace/desktop management system for macOS.
 
 ## Overview
 
-VirtualSpaces implements a virtual workspace system similar to i3wm or traditional Linux window managers. It creates multiple logical workspaces on a single macOS desktop by managing window visibility across two macOS spaces: one active and one for storage.
+VirtualSpaces implements a virtual workspace system similar to traditional Linux window managers. It creates multiple logical workspaces on a single macOS desktop by managing window visibility across two macOS spaces: one active and one for storage. Its goal is to provide a instant switching experience between workspaces without the overhead of managing multiple physical desktops and superfulous macOS transition effects.
 
 ## Architecture
 
-The spoon maintains:
 - **Active Space:** Where visible workspace windows are displayed
 - **Storage Space:** Where hidden workspace windows are kept
 - **Virtual Workspaces:** Logical groupings that map to physical spaces
@@ -66,17 +65,6 @@ The spoon automatically:
 - Cleans up destroyed windows
 - Scans and assigns existing windows on initialization
 
-## Configuration
-
-### Number of Workspaces
-Set the total number of virtual workspaces (default: 3).
-
-```lua
-virtualSpaces.numWorkspaces = 3
-```
-
-Must be set before calling `:init()`.
-
 ## Internal Components
 
 ### Window Identification
@@ -128,9 +116,8 @@ virtualSpaces.workspaceFocusedWindow = {
 ## Typical Usage
 
 ```lua
-local virtualSpaces = hs.loadSpoon("VirtualSpaces")
-virtualSpaces.numWorkspaces = 3
-virtualSpaces:init()
+hs.loadSpoon("VirtualSpaces")
+spoon.VirtualSpaces:init()
 
 -- Switch to workspaces
 hs.hotkey.bind({"alt"}, "1", function()
@@ -151,12 +138,4 @@ end)
 ## Limitations
 
 - Only works with standard windows (fullscreen windows are excluded)
-- Requires at least two macOS spaces to function
-- Window tracking uses app name + title, so identical windows may conflict
-- Verbose debug logging to console
-
-## Metadata
-
-- **Version:** 1.0
-- **Author:** brnnc
-- **License:** MIT
+- Requires at least two macOS spaces to function (automatically created if missing)
