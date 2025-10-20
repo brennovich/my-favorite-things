@@ -52,13 +52,22 @@ function obj:switchToWorkspace(workspaceNum)
 		self._workspaceFocusedWindow[self._currentWorkspace] = focusedWin:id()
 	end
 
+	local toStorage = {}
+	local toActive = {}
+	for winId, wsNum in pairs(self._windowWorkspaceMap) do
+		if wsNum == self._currentWorkspace then
+			toStorage[winId] = true
+		elseif wsNum == workspaceNum then
+			toActive[winId] = true
+		end
+	end
+
 	for _, win in ipairs(self.windowFilter:getWindows()) do
 		if win:isStandard() and not win:isFullScreen() then
 			local winId = win:id()
-			local wsNum = self._windowWorkspaceMap[winId]
-			if wsNum == self._currentWorkspace then
+			if toStorage[winId] then
 				hs.spaces.moveWindowToSpace(win, self._storageSpace)
-			elseif wsNum == workspaceNum then
+			elseif toActive[winId] then
 				hs.spaces.moveWindowToSpace(win, self._activeSpace)
 			end
 		end
