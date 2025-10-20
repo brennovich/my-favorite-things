@@ -18,7 +18,6 @@ gap = 15
 
 spoon.ToggleMenubar.gap = gap
 spoon.WMUtils.gap = gap
-spoon.VirtualSpaces.setNumberOfWorkspaces(3)
 
 hs.grid.ui.showExtraKeys = false
 
@@ -36,21 +35,10 @@ hs.hotkey.bind({"ctrl", "leftalt", "cmd"}, "D", function()
     spoon.ToggleMenubar:toggle()
 end)
 
-hs.hotkey.bind({"leftalt"}, "4", function()
-    hs.application.open("Safari")
-end)
-
-hs.hotkey.bind({"leftalt"}, "1", function()
-    spoon.VirtualSpaces:switchToWorkspace(1)
-end)
-
-hs.hotkey.bind({"leftalt"}, "2", function()
-    spoon.VirtualSpaces:switchToWorkspace(2)
-end)
-
-hs.hotkey.bind({"leftalt"}, "3", function()
-    spoon.VirtualSpaces:switchToWorkspace(3)
-end)
+hs.hotkey.bind({"leftalt"}, "1", function() spoon.VirtualSpaces:switchToWorkspace(1) end)
+hs.hotkey.bind({"leftalt"}, "2", function() spoon.VirtualSpaces:switchToWorkspace(2) end)
+hs.hotkey.bind({"leftalt"}, "3", function() spoon.VirtualSpaces:switchToWorkspace(3) end)
+hs.hotkey.bind({"leftalt"}, "4", function() spoon.VirtualSpaces:switchToWorkspace(4) end)
 
 hs.hotkey.bind({"leftalt", "shift"}, "1", function()
     local win = hs.window.focusedWindow()
