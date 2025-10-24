@@ -29,7 +29,7 @@ function obj:init()
 		self._storageSpace
 	)
 
-	self._windowFocus = WindowFocus.new()
+	self.windowFocusMemory = WindowFocus.new()
 
 	self.windowFilter = hs.window.filter.new()
 
@@ -68,7 +68,7 @@ function obj:switchToWorkspace(workspaceNum)
 
 	local focusedWin = hs.window.focusedWindow()
 	if focusedWin then
-		self._windowFocus:saveFocusedWindowInVirtualSpace(self._currentWorkspace, focusedWin:id())
+		self.windowFocusMemory:saveFocusedWindowInVirtualSpace(self._currentWorkspace, focusedWin:id())
 	end
 
 	self._activeSpace, self._storageSpace = self._windowSorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(
@@ -84,23 +84,45 @@ function obj:switchToWorkspace(workspaceNum)
 	end
 
 	self._currentWorkspace = workspaceNum
-	local windowId = self._windowFocus:getFocusedWindowForVirtualSpace(workspaceNum)
+	obj:_restoreWindowsFocusForVirtualSpace(self._currentWorkspace)
+end
+
+function obj:_restoreWindowsFocusForVirtualSpace(virtualSpaceId)
+	local windowId = self.windowFocusMemory:getFocusedWindowForVirtualSpace(virtualSpaceId)
 	if windowId then
 		local win = hs.window.get(windowId)
 		if win then
 			win:focus()
 		end
+		return
+	end
+
+	-- Fallback: focus the first available window in the workspace
+	local remainingWindows = {}
+	for wId, wsNum in pairs(self._windowWorkspaceMap) do
+		if wsNum == self._currentWorkspace then
+			table.insert(remainingWindows, wId)
+		end
+	end
+	if #remainingWindows > 0 then
+		local firstWinId = remainingWindows[1]
+		local win = hs.window.get(firstWinId)
+		if win then
+			win:focus()
+		end
+		self.windowFocusMemory:saveFocusedWindowInVirtualSpace(virtualSpaceId, firstWinId)
 	end
 end
 
 function obj:moveWindowToWorkspace(window, workspaceNum)
 	if not window or not workspaceNum or workspaceNum < 1 then return end
 
-	local winId = window:id()
-	self._windowWorkspaceMap[winId] = workspaceNum
+	self:assignWindowToWorkspace(window, workspaceNum)
 
-	local targetSpace = (workspaceNum == self._currentWorkspace) and self._activeSpace or self._storageSpace
-	hs.spaces.moveWindowToSpace(window, targetSpace)
+	local targetNativeSpace = (workspaceNum == self._currentWorkspace) and self._activeSpace or self._storageSpace
+	hs.spaces.moveWindowToSpace(window, targetNativeSpace)
+
+	obj:_restoreWindowsFocusForVirtualSpace(self._currentWorkspace)
 end
 
 function obj:_scanExistingWindows()
@@ -117,6 +139,7 @@ function obj:assignWindowToWorkspace(window, workspaceNum)
 
 	local winId = window:id()
 	self._windowWorkspaceMap[winId] = workspaceNum
+	self.windowFocusMemory:saveFocusedWindowInVirtualSpace(workspaceNum, winId)
 end
 
 function obj:_removeWindow(winId)
