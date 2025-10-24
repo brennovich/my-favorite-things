@@ -2,6 +2,7 @@ local spoonPath = hs.spoons.scriptPath()
 package.path = package.path .. ";" .. spoonPath .. "?.lua"
 
 local WindowsSort = require("WindowsSort")
+local WindowFocus = require("WindowFocus")
 
 local obj = {}
 obj.__index = obj
@@ -13,7 +14,6 @@ obj.license = "MIT"
 
 obj._currentWorkspace = 1
 obj._windowWorkspaceMap = {}
-obj._workspaceFocusedWindow = {}
 obj._activeSpace = nil
 obj._storageSpace = nil
 
@@ -28,6 +28,8 @@ function obj:init()
 		self._activeSpace,
 		self._storageSpace
 	)
+
+	self._windowFocus = WindowFocus.new()
 
 	self.windowFilter = hs.window.filter.new()
 
@@ -53,22 +55,6 @@ function obj:_isManageableWindow(win)
 	return win:isStandard() and not win:isFullScreen()
 end
 
-function obj:_saveFocusedWindow()
-	local focusedWin = hs.window.focusedWindow()
-	if focusedWin then
-		self._workspaceFocusedWindow[self._currentWorkspace] = focusedWin:id()
-	end
-end
-
-function obj:_restoreFocusedWindow(workspaceNum)
-	if self._workspaceFocusedWindow[workspaceNum] then
-		local win = hs.window.get(self._workspaceFocusedWindow[workspaceNum])
-		if win then
-			win:focus()
-		end
-	end
-end
-
 function obj:switchToWorkspace(workspaceNum)
 	if not workspaceNum or workspaceNum < 1 then
 		return
@@ -80,7 +66,10 @@ function obj:switchToWorkspace(workspaceNum)
 		return
 	end
 
-	self:_saveFocusedWindow()
+	local focusedWin = hs.window.focusedWindow()
+	if focusedWin then
+		self._windowFocus:saveFocusedWindowInVirtualSpace(self._currentWorkspace, focusedWin:id())
+	end
 
 	self._activeSpace, self._storageSpace = self._windowSorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(
 		self._windowWorkspaceMap,
@@ -95,7 +84,13 @@ function obj:switchToWorkspace(workspaceNum)
 	end
 
 	self._currentWorkspace = workspaceNum
-	self:_restoreFocusedWindow(workspaceNum)
+	local windowId = self._windowFocus:getFocusedWindowForVirtualSpace(workspaceNum)
+	if windowId then
+		local win = hs.window.get(windowId)
+		if win then
+			win:focus()
+		end
+	end
 end
 
 function obj:moveWindowToWorkspace(window, workspaceNum)
