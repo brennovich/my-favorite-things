@@ -1,5 +1,5 @@
 local lu = require('luaunit')
 
-TestCategorizeWindows = require('tests/test_categorize_windows')
+TestWindowsSort = require('tests/test_windows_sort')
 
 os.exit(lu.LuaUnit.run())

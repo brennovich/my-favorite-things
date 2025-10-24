@@ -1,3 +1,8 @@
+local spoonPath = hs.spoons.scriptPath()
+package.path = package.path .. ";" .. spoonPath .. "?.lua"
+
+local WindowsSort = require("WindowsSort")
+
 local obj = {}
 obj.__index = obj
 
@@ -18,6 +23,12 @@ function obj:init()
 	self._activeSpace = screenSpaces[1]
 	self._storageSpace = screenSpaces[2]
 
+	self._windowSorter = WindowsSort.new(
+		hs.spaces.moveWindowToSpace,
+		self._activeSpace,
+		self._storageSpace
+	)
+
 	self.windowFilter = hs.window.filter.new()
 
 	-- This filter is unused but it seems to help address this bug:
@@ -30,32 +41,8 @@ function obj:init()
 	end)
 
 	self.windowFilter:subscribe(hs.window.filter.windowDestroyed, function(window)
-		self:_removeWindow(window)
+		self:_removeWindow(window:id())
 	end)
-
-	self.appWatcher = hs.application.watcher.new(function(appName, eventType, app)
-		if eventType == hs.application.watcher.activated then
-			if not app then return end
-
-			local currentSpace = hs.spaces.activeSpaceOnScreen()
-
-			if currentSpace == self._storageSpace then
-				hs.timer.doAfter(0.1, function()
-					for _, win in ipairs(app:allWindows()) do
-						if self:_isManageableWindow(win) then
-							local targetWorkspace = self._windowWorkspaceMap[win:id()]
-
-							if targetWorkspace then
-								self:switchToWorkspace(targetWorkspace)
-								return
-							end
-						end
-					end
-				end)
-			end
-		end
-	end)
-	self.appWatcher:start()
 
 	self:_scanExistingWindows()
 
@@ -82,18 +69,6 @@ function obj:_restoreFocusedWindow(workspaceNum)
 	end
 end
 
-function obj:_moveWindowsByCategory(targetWorkspace, isSwapping)
-	for winId, wsNum in pairs(self._windowWorkspaceMap) do
-		if wsNum == targetWorkspace then
-			hs.spaces.moveWindowToSpace(winId, self._activeSpace)
-		elseif wsNum == self._currentWorkspace then
-			hs.spaces.moveWindowToSpace(winId, self._storageSpace)
-		elseif isSwapping then
-			hs.spaces.moveWindowToSpace(winId, self._storageSpace)
-		end
-	end
-end
-
 function obj:switchToWorkspace(workspaceNum)
 	if not workspaceNum or workspaceNum < 1 then
 		return
@@ -107,12 +82,12 @@ function obj:switchToWorkspace(workspaceNum)
 
 	self:_saveFocusedWindow()
 
-	local isSwapping = currentSpace == self._storageSpace
-	if isSwapping then
-		self._activeSpace, self._storageSpace = self._storageSpace, self._activeSpace
-	end
-
-	self:_moveWindowsByCategory(workspaceNum, isSwapping)
+	self._activeSpace, self._storageSpace = self._windowSorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(
+		self._windowWorkspaceMap,
+		workspaceNum,
+		self._currentWorkspace,
+		currentSpace
+	)
 
 	if hs.spaces.activeSpaceOnScreen() ~= self._activeSpace then
 		hs.spaces.gotoSpace(self._activeSpace)
@@ -149,8 +124,7 @@ function obj:assignWindowToWorkspace(window, workspaceNum)
 	self._windowWorkspaceMap[winId] = workspaceNum
 end
 
-function obj:_removeWindow(window)
-	local winId = window:id()
+function obj:_removeWindow(winId)
 	self._windowWorkspaceMap[winId] = nil
 end
 
