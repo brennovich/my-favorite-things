@@ -82,32 +82,14 @@ function obj:_restoreFocusedWindow(workspaceNum)
 	end
 end
 
-function obj:_categorizeWindowsForSwitch(targetWorkspace, isSwapping)
-	local toStorage = {}
-	local toActive = {}
-
+function obj:_moveWindowsByCategory(targetWorkspace, isSwapping)
 	for winId, wsNum in pairs(self._windowWorkspaceMap) do
 		if wsNum == targetWorkspace then
-			toActive[winId] = true
+			hs.spaces.moveWindowToSpace(winId, self._activeSpace)
 		elseif wsNum == self._currentWorkspace then
-			toStorage[winId] = true
+			hs.spaces.moveWindowToSpace(winId, self._storageSpace)
 		elseif isSwapping then
-			toStorage[winId] = true
-		end
-	end
-
-	return toStorage, toActive
-end
-
-function obj:_moveWindowsByCategory(toStorage, toActive)
-	for _, win in ipairs(self.windowFilter:getWindows()) do
-		if self:_isManageableWindow(win) then
-			local winId = win:id()
-			if toStorage[winId] then
-				hs.spaces.moveWindowToSpace(win, self._storageSpace)
-			elseif toActive[winId] then
-				hs.spaces.moveWindowToSpace(win, self._activeSpace)
-			end
+			hs.spaces.moveWindowToSpace(winId, self._storageSpace)
 		end
 	end
 end
@@ -130,8 +112,7 @@ function obj:switchToWorkspace(workspaceNum)
 		self._activeSpace, self._storageSpace = self._storageSpace, self._activeSpace
 	end
 
-	local toStorage, toActive = self:_categorizeWindowsForSwitch(workspaceNum, isSwapping)
-	self:_moveWindowsByCategory(toStorage, toActive)
+	self:_moveWindowsByCategory(workspaceNum, isSwapping)
 
 	if hs.spaces.activeSpaceOnScreen() ~= self._activeSpace then
 		hs.spaces.gotoSpace(self._activeSpace)
