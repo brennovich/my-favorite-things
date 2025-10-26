@@ -2,7 +2,7 @@ local spoonPath = hs.spoons.scriptPath()
 package.path = package.path .. ";" .. spoonPath .. "?.lua"
 
 local WindowsSort = require("WindowsSort")
-local WindowFocus = require("WindowFocus")
+local SpacesModel = require("SpacesModel")
 
 local obj = {}
 obj.__index = obj
@@ -28,9 +28,7 @@ function obj:init()
 		self._activeSpace,
 		self._storageSpace
 	)
-
-	self.windowFocusMemory = WindowFocus.new()
-
+	self.windowFocusMemory = SpacesModel.new()
 	self.windowFilter = hs.window.filter.new()
 
 	-- This filter is unused but it seems to help address this bug:
@@ -41,9 +39,8 @@ function obj:init()
 	self.windowFilter:subscribe(hs.window.filter.windowCreated, function(window)
 		self:assignWindowToWorkspace(window, self._currentWorkspace)
 	end)
-
 	self.windowFilter:subscribe(hs.window.filter.windowDestroyed, function(window)
-		self:_removeWindow(window:id())
+		self._windowWorkspaceMap[winId] = nil
 	end)
 
 	for _, win in ipairs(hs.window.allWindows()) do
@@ -51,10 +48,6 @@ function obj:init()
 	end
 
 	return self
-end
-
-function obj:_isManageableWindow(win)
-	return win:isStandard() and not win:isFullScreen()
 end
 
 function obj:switchToWorkspace(workspaceNum)
@@ -79,11 +72,6 @@ function obj:switchToWorkspace(workspaceNum)
 		self._currentWorkspace,
 		currentSpace
 	)
-
-	if hs.spaces.activeSpaceOnScreen() ~= self._activeSpace then
-		hs.spaces.gotoSpace(self._activeSpace)
-		hs.eventtap.keyStroke({}, "escape")
-	end
 
 	self._currentWorkspace = workspaceNum
 	obj:_restoreWindowsFocusForVirtualSpace(self._currentWorkspace)
@@ -128,15 +116,11 @@ function obj:moveWindowToWorkspace(window, workspaceNum)
 end
 
 function obj:assignWindowToWorkspace(window, workspaceNum)
-	if not window or not self:_isManageableWindow(window) then return end
+	if not window or not (window:isStandard() and not window:isFullScreen()) then return end
 
 	local winId = window:id()
 	self._windowWorkspaceMap[winId] = workspaceNum
 	self.windowFocusMemory:saveFocusedWindowInVirtualSpace(workspaceNum, winId)
-end
-
-function obj:_removeWindow(winId)
-	self._windowWorkspaceMap[winId] = nil
 end
 
 -- _setupMissionControl prepares the Native Spaces for our Virtual Spaces.

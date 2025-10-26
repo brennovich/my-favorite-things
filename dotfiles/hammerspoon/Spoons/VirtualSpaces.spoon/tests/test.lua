@@ -1,6 +1,6 @@
 local lu = require('luaunit')
 
 TestWindowsSort = require('tests/test_windows_sort')
-TestWindowFocus = require('tests/test_window_focus')
+TestSpacesModel = require('tests/test_spaces_model')
 
 os.exit(lu.LuaUnit.run())
