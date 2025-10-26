@@ -146,33 +146,48 @@ function obj:_removeWindow(winId)
 	self._windowWorkspaceMap[winId] = nil
 end
 
+-- _setupMissionControl prepares the Native Spaces for our Virtual Spaces.
+--
+-- Setups Mission Control with two spaces: one active and one storage.
+-- Info: It doesn't support multiple monitors yet
 function obj:_setupMissionControl()
-	local mainScreen = hs.screen.mainScreen():getUUID()
+	-- By default Hammerspoon has this delay set to 0.3
+	-- https://www.hammerspoon.org/docs/hs.spaces.html#MCwaitTime
+	hs.spaces.setDefaultMCwaitTime(0.5)
 
+	-- Get current spaces setup for main screen
+	local mainScreen = hs.screen.mainScreen():getUUID()
 	local allSpaces = hs.spaces.allSpaces()
 	local screenSpaces = allSpaces[mainScreen]
 
-
+	-- Ensure we are in the first space in case we had loaded
+	-- Hammerspoon in a different space other than the first one.
+	-- This avoids issues when removing spaces as we can't remove
+	-- the space we are in.
 	if hs.spaces.activeSpaceOnScreen() ~= screenSpaces[1] then
 		hs.spaces.gotoSpace(screenSpaces[1])
+		-- Dismiss Mission Control if it was opened during space
+		-- manipulations. Hammerspoon spaces manipulation uses
+		-- accessibility controls that depends on activating Mission
+		-- Control UI
 		hs.eventtap.keyStroke({}, "escape")
-		hs.timer.usleep(100000)
 	end
+
+	-- Let's clear all spaces, this ensures all windows are moved to the
+	-- first native space.
 	if #screenSpaces > 1 then
 		for i = 2, #screenSpaces do
+			hs.timer.usleep(100000)
 			hs.spaces.removeSpace(screenSpaces[i], false)
 		end
 	end
 
-	allSpaces = hs.spaces.allSpaces()
-	screenSpaces = allSpaces[mainScreen]
-	if #screenSpaces < 2 then
-		hs.spaces.addSpaceToScreen(mainScreen, true)
-		allSpaces = hs.spaces.allSpaces()
-		screenSpaces = allSpaces[mainScreen]
-	end
+	-- Now we create the native space that will serve as storage.
+	hs.timer.usleep(10000)
+	hs.spaces.addSpaceToScreen(mainScreen, true)
 
-	return screenSpaces
+	-- Return refreshed spaces info.
+	return hs.spaces.allSpaces()[mainScreen]
 end
 
 return obj

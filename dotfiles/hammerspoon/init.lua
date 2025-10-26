@@ -1,4 +1,3 @@
-hs.loadSpoon("ReloadConfiguration")
 hs.loadSpoon("WMUtils")
 hs.loadSpoon("ToggleMenubar")
 hs.loadSpoon("RoundedCorners")
@@ -28,9 +27,6 @@ hs.grid.setMargins({gap, gap})
 hs.window.animationDuration = 0
 
 spoon.RoundedCorners:start()
-spoon.WMUtils:init()
-spoon.VirtualSpaces:init()
-spoon.ReloadConfiguration:start()
 
 hs.hotkey.bind({"ctrl", "leftalt", "cmd"}, "D", function()
     spoon.ToggleMenubar:toggle()
@@ -110,5 +106,3 @@ end)
 hs.hotkey.bind({"leftalt", "ctrl"}, "M", function()
     spoon.WMUtils:monocle()
 end)
-
-hs.alert.show("Config loaded", alertStyle)
