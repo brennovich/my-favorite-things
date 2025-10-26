@@ -46,7 +46,9 @@ function obj:init()
 		self:_removeWindow(window:id())
 	end)
 
-	self:_scanExistingWindows()
+	for _, win in ipairs(hs.window.allWindows()) do
+		self:assignWindowToWorkspace(win, 1)
+	end
 
 	return self
 end
@@ -89,7 +91,7 @@ end
 
 function obj:_restoreWindowsFocusForVirtualSpace(virtualSpaceId)
 	local windowId = self.windowFocusMemory:getFocusedWindowForVirtualSpace(virtualSpaceId)
-	if windowId then
+	if windowId and self._windowWorkspaceMap[windowId] == virtualSpaceId then
 		local win = hs.window.get(windowId)
 		if win then
 			win:focus()
@@ -123,15 +125,6 @@ function obj:moveWindowToWorkspace(window, workspaceNum)
 	hs.spaces.moveWindowToSpace(window, targetNativeSpace)
 
 	obj:_restoreWindowsFocusForVirtualSpace(self._currentWorkspace)
-end
-
-function obj:_scanExistingWindows()
-	for _, win in ipairs(hs.window.allWindows()) do
-		if self:_isManageableWindow(win) then
-			hs.spaces.moveWindowToSpace(win, self._activeSpace)
-			self:assignWindowToWorkspace(win, 1)
-		end
-	end
 end
 
 function obj:assignWindowToWorkspace(window, workspaceNum)
