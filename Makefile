@@ -90,7 +90,6 @@ hammerspoon: ~/.hammerspoon/init.lua
 	mkdir -p ~/.hammerspoon/Spoons
 	cp -R dotfiles/hammerspoon/Spoons/* ~/.hammerspoon/Spoons/
 	cd ~/.hammerspoon/Spoons \
-		&& curl -LO https://github.com/Hammerspoon/Spoons/raw/master/Spoons/ReloadConfiguration.spoon.zip \
 		&& curl -LO https://github.com/Hammerspoon/Spoons/raw/master/Spoons/RoundedCorners.spoon.zip \
 		&& unzip -o \*.zip \
 		&& rm *.zip
