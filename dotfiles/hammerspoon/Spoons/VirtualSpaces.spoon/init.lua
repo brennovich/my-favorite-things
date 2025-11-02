@@ -80,22 +80,17 @@ end
 function obj:_restoreWindowsFocusForVirtualSpace(virtualSpace)
 	local windowId = self.model:getFocusedWindowForVirtualSpace(virtualSpace)
 	if windowId and self.model:getVirtualSpaceForWindow(windowId) == virtualSpace then
-		local win = hs.window.get(windowId)
-		if win then
-			win:focus()
+		if self:_focusWindowById(windowId) then
+			return
 		end
-		return
 	end
 
 	-- Fallback: focus the first available window in the workspace
 	local remainingWindows = self.model:getWindowsInVirtualSpace(self._currentVirtualSpace)
 	if #remainingWindows > 0 then
-		local firstWinId = remainingWindows[1]
-		local win = hs.window.get(firstWinId)
-		if win then
-			win:focus()
+		if self:_focusWindowById(remainingWindows[1]) then
+			self.model:saveFocusedWindowInVirtualSpace(virtualSpace, remainingWindows[1])
 		end
-		self.model:saveFocusedWindowInVirtualSpace(virtualSpace, firstWinId)
 	end
 end
 
@@ -111,11 +106,24 @@ function obj:moveWindowToVirtualSpace(window, virtualSpace)
 end
 
 function obj:assignWindowToVirtualSpace(window, virtualSpace)
-	if not window or not (window:isStandard() and not window:isFullScreen()) then return end
+	if not self:_isValidWindowForVirtualSpace(window) then return end
 
 	local winId = window:id()
 	self.model:assignWindowToVirtualSpace(winId, virtualSpace)
 	self.model:saveFocusedWindowInVirtualSpace(virtualSpace, winId)
+end
+
+function obj:_isValidWindowForVirtualSpace(window)
+	return window and window:isStandard() and not window:isFullScreen()
+end
+
+function obj:_focusWindowById(windowId)
+	local win = hs.window.get(windowId)
+	if win then
+		win:focus()
+		return true
+	end
+	return false
 end
 
 -- _setupMissionControl prepares the Native Spaces for our Virtual Spaces.
