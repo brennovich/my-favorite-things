@@ -13,7 +13,6 @@ obj.author = "brnnc"
 obj.license = "MIT"
 
 obj._currentWorkspace = 1
-obj._windowWorkspaceMap = {}
 obj._activeSpace = nil
 obj._storageSpace = nil
 
@@ -40,7 +39,7 @@ function obj:init()
 		self:assignWindowToWorkspace(window, self._currentWorkspace)
 	end)
 	self.windowFilter:subscribe(hs.window.filter.windowDestroyed, function(window)
-		self._windowWorkspaceMap[winId] = nil
+		self.windowFocusMemory:removeWindow(window:id())
 	end)
 
 	for _, win in ipairs(hs.window.allWindows()) do
@@ -67,7 +66,7 @@ function obj:switchToWorkspace(workspaceNum)
 	end
 
 	self._activeSpace, self._storageSpace = self._windowSorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(
-		self._windowWorkspaceMap,
+		self.windowFocusMemory:getAllWindowMappings(),
 		workspaceNum,
 		self._currentWorkspace,
 		currentSpace
@@ -79,7 +78,7 @@ end
 
 function obj:_restoreWindowsFocusForVirtualSpace(virtualSpaceId)
 	local windowId = self.windowFocusMemory:getFocusedWindowForVirtualSpace(virtualSpaceId)
-	if windowId and self._windowWorkspaceMap[windowId] == virtualSpaceId then
+	if windowId and self.windowFocusMemory:getVirtualSpaceForWindow(windowId) == virtualSpaceId then
 		local win = hs.window.get(windowId)
 		if win then
 			win:focus()
@@ -88,12 +87,7 @@ function obj:_restoreWindowsFocusForVirtualSpace(virtualSpaceId)
 	end
 
 	-- Fallback: focus the first available window in the workspace
-	local remainingWindows = {}
-	for wId, wsNum in pairs(self._windowWorkspaceMap) do
-		if wsNum == self._currentWorkspace then
-			table.insert(remainingWindows, wId)
-		end
-	end
+	local remainingWindows = self.windowFocusMemory:getWindowsInVirtualSpace(self._currentWorkspace)
 	if #remainingWindows > 0 then
 		local firstWinId = remainingWindows[1]
 		local win = hs.window.get(firstWinId)
@@ -119,7 +113,7 @@ function obj:assignWindowToWorkspace(window, workspaceNum)
 	if not window or not (window:isStandard() and not window:isFullScreen()) then return end
 
 	local winId = window:id()
-	self._windowWorkspaceMap[winId] = workspaceNum
+	self.windowFocusMemory:assignWindowToVirtualSpace(winId, workspaceNum)
 	self.windowFocusMemory:saveFocusedWindowInVirtualSpace(workspaceNum, winId)
 end
 

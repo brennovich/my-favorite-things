@@ -65,4 +65,109 @@ function TestSpacesModel:testSaveNilWindowId()
 	lu.assertNil(model:getFocusedWindowForVirtualSpace(1))
 end
 
+function TestSpacesModel:testAssignWindowToVirtualSpace()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+
+	lu.assertEquals(model:getVirtualSpaceForWindow(100), 1)
+end
+
+function TestSpacesModel:testAssignMultipleWindowsToSameVirtualSpace()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(200, 1)
+	model:assignWindowToVirtualSpace(300, 2)
+
+	lu.assertEquals(model:getVirtualSpaceForWindow(100), 1)
+	lu.assertEquals(model:getVirtualSpaceForWindow(200), 1)
+	lu.assertEquals(model:getVirtualSpaceForWindow(300), 2)
+end
+
+function TestSpacesModel:testReassignWindowToDifferentVirtualSpace()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(100, 2)
+
+	lu.assertEquals(model:getVirtualSpaceForWindow(100), 2)
+end
+
+function TestSpacesModel:testRemoveWindow()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:removeWindow(100)
+
+	lu.assertNil(model:getVirtualSpaceForWindow(100))
+end
+
+function TestSpacesModel:testRemoveNonExistentWindow()
+	local model = SpacesModel.new()
+
+	model:removeWindow(999)
+
+	lu.assertNil(model:getVirtualSpaceForWindow(999))
+end
+
+function TestSpacesModel:testGetVirtualSpaceForNonExistentWindow()
+	local model = SpacesModel.new()
+
+	lu.assertNil(model:getVirtualSpaceForWindow(999))
+end
+
+function TestSpacesModel:testGetWindowsInVirtualSpace()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(200, 1)
+	model:assignWindowToVirtualSpace(300, 2)
+
+	local windows = model:getWindowsInVirtualSpace(1)
+
+	lu.assertEquals(#windows, 2)
+	lu.assertTrue(table.contains(windows, 100))
+	lu.assertTrue(table.contains(windows, 200))
+end
+
+function TestSpacesModel:testGetWindowsInEmptyVirtualSpace()
+	local model = SpacesModel.new()
+
+	local windows = model:getWindowsInVirtualSpace(1)
+
+	lu.assertEquals(#windows, 0)
+end
+
+function TestSpacesModel:testGetAllWindowMappings()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(200, 2)
+	model:assignWindowToVirtualSpace(300, 1)
+
+	local mappings = model:getAllWindowMappings()
+
+	lu.assertEquals(mappings[100], 1)
+	lu.assertEquals(mappings[200], 2)
+	lu.assertEquals(mappings[300], 1)
+end
+
+function TestSpacesModel:testGetAllWindowMappingsWhenEmpty()
+	local model = SpacesModel.new()
+
+	local mappings = model:getAllWindowMappings()
+
+	lu.assertEquals(next(mappings), nil)
+end
+
+function table.contains(table, element)
+	for _, value in pairs(table) do
+		if value == element then
+			return true
+		end
+	end
+	return false
+end
+
 return TestSpacesModel
