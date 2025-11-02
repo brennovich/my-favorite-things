@@ -74,7 +74,7 @@ function obj:switchToVirtualSpace(virtualSpace)
 	)
 
 	self._currentVirtualSpace = virtualSpace
-	obj:_restoreWindowsFocusForVirtualSpace(self._currentVirtualSpace)
+	self:_restoreWindowsFocusForVirtualSpace(self._currentVirtualSpace)
 end
 
 function obj:_restoreWindowsFocusForVirtualSpace(virtualSpace)
@@ -107,7 +107,7 @@ function obj:moveWindowToVirtualSpace(window, virtualSpace)
 	local targetNativeSpace = (virtualSpace == self._currentVirtualSpace) and self._activeSpace or self._storageSpace
 	hs.spaces.moveWindowToSpace(window, targetNativeSpace)
 
-	obj:_restoreWindowsFocusForVirtualSpace(self._currentVirtualSpace)
+	self:_restoreWindowsFocusForVirtualSpace(self._currentVirtualSpace)
 end
 
 function obj:assignWindowToVirtualSpace(window, virtualSpace)
