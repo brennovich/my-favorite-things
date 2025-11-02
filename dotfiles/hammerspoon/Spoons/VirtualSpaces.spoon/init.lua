@@ -17,17 +17,17 @@ obj._activeSpace = nil
 obj._storageSpace = nil
 
 function obj:init()
-	local screenSpaces = self._setupMissionControl()
+	local mainScreenNativeSpaces = self._setupMissionControl()
 
-	self._activeSpace = screenSpaces[1]
-	self._storageSpace = screenSpaces[2]
+	self._activeSpace = mainScreenNativeSpaces[1]
+	self._storageSpace = mainScreenNativeSpaces[2]
 
 	self._windowSorter = WindowsSort.new(
 		hs.spaces.moveWindowToSpace,
 		self._activeSpace,
 		self._storageSpace
 	)
-	self.windowFocusMemory = SpacesModel.new()
+	self.model = SpacesModel.new()
 	self.windowFilter = hs.window.filter.new()
 
 	-- This filter is unused but it seems to help address this bug:
@@ -39,7 +39,7 @@ function obj:init()
 		self:assignWindowToWorkspace(window, self._currentWorkspace)
 	end)
 	self.windowFilter:subscribe(hs.window.filter.windowDestroyed, function(window)
-		self.windowFocusMemory:removeWindow(window:id())
+		self.model:removeWindow(window:id())
 	end)
 
 	for _, win in ipairs(hs.window.allWindows()) do
@@ -49,36 +49,36 @@ function obj:init()
 	return self
 end
 
-function obj:switchToWorkspace(workspaceNum)
-	if not workspaceNum or workspaceNum < 1 then
+function obj:switchToWorkspace(virtualSpace)
+	if not virtualSpace or workspaceNum < 1 then
 		return
 	end
 
 	local currentSpace = hs.spaces.activeSpaceOnScreen()
 
-	if workspaceNum == self._currentWorkspace and currentSpace == self._activeSpace then
+	if virtualSpace == self._currentWorkspace and currentSpace == self._activeSpace then
 		return
 	end
 
 	local focusedWin = hs.window.focusedWindow()
 	if focusedWin then
-		self.windowFocusMemory:saveFocusedWindowInVirtualSpace(self._currentWorkspace, focusedWin:id())
+		self.model:saveFocusedWindowInVirtualSpace(self._currentWorkspace, focusedWin:id())
 	end
 
 	self._activeSpace, self._storageSpace = self._windowSorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(
-		self.windowFocusMemory:getAllWindowMappings(),
-		workspaceNum,
+		self.model:getAllWindowMappings(),
+		virtualSpace,
 		self._currentWorkspace,
 		currentSpace
 	)
 
-	self._currentWorkspace = workspaceNum
+	self._currentWorkspace = virtualSpace
 	obj:_restoreWindowsFocusForVirtualSpace(self._currentWorkspace)
 end
 
 function obj:_restoreWindowsFocusForVirtualSpace(virtualSpaceId)
-	local windowId = self.windowFocusMemory:getFocusedWindowForVirtualSpace(virtualSpaceId)
-	if windowId and self.windowFocusMemory:getVirtualSpaceForWindow(windowId) == virtualSpaceId then
+	local windowId = self.model:getFocusedWindowForVirtualSpace(virtualSpaceId)
+	if windowId and self.model:getVirtualSpaceForWindow(windowId) == virtualSpaceId then
 		local win = hs.window.get(windowId)
 		if win then
 			win:focus()
@@ -87,14 +87,14 @@ function obj:_restoreWindowsFocusForVirtualSpace(virtualSpaceId)
 	end
 
 	-- Fallback: focus the first available window in the workspace
-	local remainingWindows = self.windowFocusMemory:getWindowsInVirtualSpace(self._currentWorkspace)
+	local remainingWindows = self.model:getWindowsInVirtualSpace(self._currentWorkspace)
 	if #remainingWindows > 0 then
 		local firstWinId = remainingWindows[1]
 		local win = hs.window.get(firstWinId)
 		if win then
 			win:focus()
 		end
-		self.windowFocusMemory:saveFocusedWindowInVirtualSpace(virtualSpaceId, firstWinId)
+		self.model:saveFocusedWindowInVirtualSpace(virtualSpaceId, firstWinId)
 	end
 end
 
@@ -113,8 +113,8 @@ function obj:assignWindowToWorkspace(window, workspaceNum)
 	if not window or not (window:isStandard() and not window:isFullScreen()) then return end
 
 	local winId = window:id()
-	self.windowFocusMemory:assignWindowToVirtualSpace(winId, workspaceNum)
-	self.windowFocusMemory:saveFocusedWindowInVirtualSpace(workspaceNum, winId)
+	self.model:assignWindowToVirtualSpace(winId, workspaceNum)
+	self.model:saveFocusedWindowInVirtualSpace(workspaceNum, winId)
 end
 
 -- _setupMissionControl prepares the Native Spaces for our Virtual Spaces.

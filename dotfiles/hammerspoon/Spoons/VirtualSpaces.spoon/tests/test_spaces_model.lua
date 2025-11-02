@@ -161,6 +161,51 @@ function TestSpacesModel:testGetAllWindowMappingsWhenEmpty()
 	lu.assertEquals(next(mappings), nil)
 end
 
+function TestSpacesModel:testReassignWindowRemovesFromOldSpace()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(200, 1)
+	model:assignWindowToVirtualSpace(100, 2)
+
+	local space1Windows = model:getWindowsInVirtualSpace(1)
+	local space2Windows = model:getWindowsInVirtualSpace(2)
+
+	lu.assertEquals(#space1Windows, 1)
+	lu.assertTrue(table.contains(space1Windows, 200))
+	lu.assertFalse(table.contains(space1Windows, 100))
+
+	lu.assertEquals(#space2Windows, 1)
+	lu.assertTrue(table.contains(space2Windows, 100))
+end
+
+function TestSpacesModel:testRemoveWindowFromSpaceWithMultipleWindows()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(200, 1)
+	model:assignWindowToVirtualSpace(300, 1)
+	model:removeWindow(200)
+
+	local windows = model:getWindowsInVirtualSpace(1)
+
+	lu.assertEquals(#windows, 2)
+	lu.assertTrue(table.contains(windows, 100))
+	lu.assertTrue(table.contains(windows, 300))
+	lu.assertFalse(table.contains(windows, 200))
+end
+
+function TestSpacesModel:testRemoveLastWindowLeavesSpaceEmpty()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:removeWindow(100)
+
+	local windows = model:getWindowsInVirtualSpace(1)
+
+	lu.assertEquals(#windows, 0)
+end
+
 function table.contains(table, element)
 	for _, value in pairs(table) do
 		if value == element then
