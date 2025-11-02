@@ -1,3 +1,6 @@
+local spoonPath = hs.spoons.scriptPath()
+package.path = package.path .. ";" .. spoonPath .. "?.lua"
+
 local WindowsSort = require("WindowsSort")
 local SpacesModel = require("SpacesModel")
 local NativeSpaceManager = require("NativeSpaceManager")

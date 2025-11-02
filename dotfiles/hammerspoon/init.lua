@@ -32,31 +32,18 @@ hs.hotkey.bind({"ctrl", "leftalt", "cmd"}, "D", function()
     spoon.ToggleMenubar:toggle()
 end)
 
-hs.hotkey.bind({"leftalt"}, "1", function() spoon.VirtualSpaces:switchToVirtualSpace(1) end)
-hs.hotkey.bind({"leftalt"}, "2", function() spoon.VirtualSpaces:switchToVirtualSpace(2) end)
-hs.hotkey.bind({"leftalt"}, "3", function() spoon.VirtualSpaces:switchToVirtualSpace(3) end)
-hs.hotkey.bind({"leftalt"}, "4", function() spoon.VirtualSpaces:switchToVirtualSpace(4) end)
+for i = 1, 4 do
+    hs.hotkey.bind({"leftalt"}, tostring(i), function()
+	spoon.VirtualSpaces:switchToVirtualSpace(i)
+    end)
 
-hs.hotkey.bind({"leftalt", "shift"}, "1", function()
-    local win = hs.window.focusedWindow()
-    if win then
-        spoon.VirtualSpaces:moveWindowToVirtualSpace(win, 1)
-    end
-end)
-
-hs.hotkey.bind({"leftalt", "shift"}, "2", function()
-    local win = hs.window.focusedWindow()
-    if win then
-        spoon.VirtualSpaces:moveWindowToVirtualSpace(win, 2)
-    end
-end)
-
-hs.hotkey.bind({"leftalt", "shift"}, "3", function()
-    local win = hs.window.focusedWindow()
-    if win then
-        spoon.VirtualSpaces:moveWindowToVirtualSpace(win, 3)
-    end
-end)
+    hs.hotkey.bind({"leftalt", "shift"}, tostring(i), function()
+	local win = hs.window.focusedWindow()
+	if win then
+	    spoon.VirtualSpaces:moveWindowToVirtualSpace(win, i)
+	end
+    end)
+end
 
 hs.hotkey.bind({"leftalt", "shift"}, "H", function()
     spoon.WMUtils:moveWindow(-spoon.WMUtils.gap*2, 0)
