@@ -139,28 +139,6 @@ function TestSpacesModel:testGetWindowsInEmptyVirtualSpace()
 	lu.assertEquals(#windows, 0)
 end
 
-function TestSpacesModel:testGetAllWindowMappings()
-	local model = SpacesModel.new()
-
-	model:assignWindowToVirtualSpace(100, 1)
-	model:assignWindowToVirtualSpace(200, 2)
-	model:assignWindowToVirtualSpace(300, 1)
-
-	local mappings = model:getAllWindowMappings()
-
-	lu.assertEquals(mappings[100], 1)
-	lu.assertEquals(mappings[200], 2)
-	lu.assertEquals(mappings[300], 1)
-end
-
-function TestSpacesModel:testGetAllWindowMappingsWhenEmpty()
-	local model = SpacesModel.new()
-
-	local mappings = model:getAllWindowMappings()
-
-	lu.assertEquals(next(mappings), nil)
-end
-
 function TestSpacesModel:testReassignWindowRemovesFromOldSpace()
 	local model = SpacesModel.new()
 
@@ -204,6 +182,114 @@ function TestSpacesModel:testRemoveLastWindowLeavesSpaceEmpty()
 	local windows = model:getWindowsInVirtualSpace(1)
 
 	lu.assertEquals(#windows, 0)
+end
+
+function TestSpacesModel:testCategorizeWindowsWithNoWindows()
+	local model = SpacesModel.new()
+
+	local result = model:categorizeWindowsForTransition(2, 1)
+
+	lu.assertEquals(#result.toActive, 0)
+	lu.assertEquals(#result.toStorage, 0)
+	lu.assertEquals(#result.others, 0)
+end
+
+function TestSpacesModel:testCategorizeWindowsWithOnlyTargetSpaceWindows()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 2)
+	model:assignWindowToVirtualSpace(200, 2)
+
+	local result = model:categorizeWindowsForTransition(2, 1)
+
+	lu.assertEquals(#result.toActive, 2)
+	lu.assertTrue(table.contains(result.toActive, 100))
+	lu.assertTrue(table.contains(result.toActive, 200))
+	lu.assertEquals(#result.toStorage, 0)
+	lu.assertEquals(#result.others, 0)
+end
+
+function TestSpacesModel:testCategorizeWindowsWithOnlyCurrentSpaceWindows()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(200, 1)
+
+	local result = model:categorizeWindowsForTransition(2, 1)
+
+	lu.assertEquals(#result.toActive, 0)
+	lu.assertEquals(#result.toStorage, 2)
+	lu.assertTrue(table.contains(result.toStorage, 100))
+	lu.assertTrue(table.contains(result.toStorage, 200))
+	lu.assertEquals(#result.others, 0)
+end
+
+function TestSpacesModel:testCategorizeWindowsWithBothSpaces()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(200, 2)
+	model:assignWindowToVirtualSpace(300, 1)
+
+	local result = model:categorizeWindowsForTransition(2, 1)
+
+	lu.assertEquals(#result.toActive, 1)
+	lu.assertTrue(table.contains(result.toActive, 200))
+	lu.assertEquals(#result.toStorage, 2)
+	lu.assertTrue(table.contains(result.toStorage, 100))
+	lu.assertTrue(table.contains(result.toStorage, 300))
+	lu.assertEquals(#result.others, 0)
+end
+
+function TestSpacesModel:testCategorizeWindowsWithOtherSpaces()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 3)
+	model:assignWindowToVirtualSpace(200, 4)
+
+	local result = model:categorizeWindowsForTransition(2, 1)
+
+	lu.assertEquals(#result.toActive, 0)
+	lu.assertEquals(#result.toStorage, 0)
+	lu.assertEquals(#result.others, 2)
+	lu.assertTrue(table.contains(result.others, 100))
+	lu.assertTrue(table.contains(result.others, 200))
+end
+
+function TestSpacesModel:testCategorizeWindowsWithAllThreeCategories()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(200, 2)
+	model:assignWindowToVirtualSpace(300, 3)
+	model:assignWindowToVirtualSpace(400, 1)
+
+	local result = model:categorizeWindowsForTransition(2, 1)
+
+	lu.assertEquals(#result.toActive, 1)
+	lu.assertTrue(table.contains(result.toActive, 200))
+	lu.assertEquals(#result.toStorage, 2)
+	lu.assertTrue(table.contains(result.toStorage, 100))
+	lu.assertTrue(table.contains(result.toStorage, 400))
+	lu.assertEquals(#result.others, 1)
+	lu.assertTrue(table.contains(result.others, 300))
+end
+
+function TestSpacesModel:testCategorizeWindowsWhenTargetEqualsCurrentSpace()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(200, 1)
+	model:assignWindowToVirtualSpace(300, 2)
+
+	local result = model:categorizeWindowsForTransition(1, 1)
+
+	lu.assertEquals(#result.toActive, 2)
+	lu.assertTrue(table.contains(result.toActive, 100))
+	lu.assertTrue(table.contains(result.toActive, 200))
+	lu.assertEquals(#result.toStorage, 0)
+	lu.assertEquals(#result.others, 1)
+	lu.assertTrue(table.contains(result.others, 300))
 end
 
 function table.contains(table, element)

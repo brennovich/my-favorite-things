@@ -20,13 +20,13 @@ function TestWindowsSort:testMovesTargetVirtualSpaceWindowsToActiveSpace()
 
 	local sorter = WindowsSort.new(mockMover, "active-123", "storage-456")
 
-	local windowMap = {
-		win1 = 1,
-		win2 = 2,
-		win3 = 2,
+	local categorizedWindows = {
+		toActive = {"win2", "win3"},
+		toStorage = {"win1"},
+		others = {}
 	}
 
-	sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(windowMap, 2, 1, "active-123")
+	sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(categorizedWindows, "active-123")
 
 	local targetMoves = {}
 	for _, move in ipairs(moves) do
@@ -48,12 +48,13 @@ function TestWindowsSort:testMovesCurrentVirtualSpaceWindowsToStorageSpace()
 
 	local sorter = WindowsSort.new(mockMover, "active-123", "storage-456")
 
-	local windowMap = {
-		win1 = 1,
-		win2 = 2,
+	local categorizedWindows = {
+		toActive = {"win2"},
+		toStorage = {"win1"},
+		others = {}
 	}
 
-	sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(windowMap, 2, 1, "active-123")
+	sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(categorizedWindows, "active-123")
 
 	local currentMove = nil
 	for _, move in ipairs(moves) do
@@ -71,13 +72,14 @@ function TestWindowsSort:testSwapsSpacesWhenCurrentNativeSpaceIsStorage()
 
 	local sorter = WindowsSort.new(mockMover, "active-123", "storage-456")
 
-	local windowMap = {
-		win1 = 1,
-		win2 = 2,
+	local categorizedWindows = {
+		toActive = {"win2"},
+		toStorage = {"win1"},
+		others = {}
 	}
 
 	local newActive, newStorage = sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(
-		windowMap, 2, 1, "storage-456"
+		categorizedWindows, "storage-456"
 	)
 
 	lu.assertEquals(newActive, "storage-456")
@@ -92,13 +94,13 @@ function TestWindowsSort:testMovesOtherWindowsToStorageWhenSwapping()
 
 	local sorter = WindowsSort.new(mockMover, "active-123", "storage-456")
 
-	local windowMap = {
-		win1 = 1,
-		win2 = 2,
-		win3 = 3,
+	local categorizedWindows = {
+		toActive = {"win2"},
+		toStorage = {"win1"},
+		others = {"win3"}
 	}
 
-	sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(windowMap, 2, 1, "storage-456")
+	sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(categorizedWindows, "storage-456")
 
 	local win3Move = nil
 	for _, move in ipairs(moves) do
@@ -116,8 +118,14 @@ function TestWindowsSort:testDoesNotSwapWhenCurrentNativeSpaceIsActive()
 
 	local sorter = WindowsSort.new(mockMover, "active-123", "storage-456")
 
+	local categorizedWindows = {
+		toActive = {},
+		toStorage = {},
+		others = {}
+	}
+
 	local newActive, newStorage = sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(
-		{}, 2, 1, "active-123"
+		categorizedWindows, "active-123"
 	)
 
 	lu.assertEquals(newActive, "active-123")
@@ -132,7 +140,13 @@ function TestWindowsSort:testHandlesEmptyWindowMap()
 
 	local sorter = WindowsSort.new(mockMover, "active-123", "storage-456")
 
-	sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace({}, 2, 1, "active-123")
+	local categorizedWindows = {
+		toActive = {},
+		toStorage = {},
+		others = {}
+	}
+
+	sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(categorizedWindows, "active-123")
 
 	lu.assertEquals(moveCount, 0)
 end
@@ -142,7 +156,13 @@ function TestWindowsSort:testPersistsSwappedSpacesInInstance()
 
 	local sorter = WindowsSort.new(mockMover, "active-123", "storage-456")
 
-	sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace({}, 2, 1, "storage-456")
+	local categorizedWindows = {
+		toActive = {},
+		toStorage = {},
+		others = {}
+	}
+
+	sorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(categorizedWindows, "storage-456")
 
 	lu.assertEquals(sorter._activeNativeSpaceId, "storage-456")
 	lu.assertEquals(sorter._storageNativeSpaceId, "active-123")

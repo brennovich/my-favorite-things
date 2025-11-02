@@ -66,10 +66,9 @@ function obj:switchToVirtualSpace(virtualSpace)
 		self.model:saveFocusedWindowInVirtualSpace(self._currentVirtualSpace, focusedWin:id())
 	end
 
+	local categorizedWindows = self.model:categorizeWindowsForTransition(virtualSpace, self._currentVirtualSpace)
 	self._activeSpace, self._storageSpace = self._windowSorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(
-		self.model:getAllWindowMappings(),
-		virtualSpace,
-		self._currentVirtualSpace,
+		categorizedWindows,
 		currentSpace
 	)
 

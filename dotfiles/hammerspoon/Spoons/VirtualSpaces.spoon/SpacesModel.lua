@@ -50,8 +50,26 @@ function SpacesModel:getWindowsInVirtualSpace(virtualSpace)
 	return self._virtualSpaceWindowsMap[virtualSpace] or {}
 end
 
-function SpacesModel:getAllWindowMappings()
-	return self._windowVirtualSpaceMap
+function SpacesModel:categorizeWindowsForTransition(targetVirtualSpace, currentVirtualSpace)
+	local toActive = {}
+	local toStorage = {}
+	local others = {}
+
+	for windowId, virtualSpace in pairs(self._windowVirtualSpaceMap) do
+		if virtualSpace == targetVirtualSpace then
+			table.insert(toActive, windowId)
+		elseif virtualSpace == currentVirtualSpace then
+			table.insert(toStorage, windowId)
+		else
+			table.insert(others, windowId)
+		end
+	end
+
+	return {
+		toActive = toActive,
+		toStorage = toStorage,
+		others = others
+	}
 end
 
 function SpacesModel:_removeWindowFromList(virtualSpace, windowId)

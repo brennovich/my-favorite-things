@@ -9,7 +9,7 @@ function WindowsSort.new(windowMoverFn, activeNativeSpaceId, storageNativeSpaceI
 	return self
 end
 
-function WindowsSort:mapWindowsToNativeSpacesFromCurrentNativeSpace(windowMap, targetVirtualSpace, currentVirtualSpace, currentNativeSpace)
+function WindowsSort:mapWindowsToNativeSpacesFromCurrentNativeSpace(categorizedWindows, currentNativeSpace)
 	local isSwapping = currentNativeSpace == self._storageNativeSpaceId
 	local activeSpace = self._activeNativeSpaceId
 	local storageSpace = self._storageNativeSpaceId
@@ -18,17 +18,19 @@ function WindowsSort:mapWindowsToNativeSpacesFromCurrentNativeSpace(windowMap, t
 		activeSpace, storageSpace = storageSpace, activeSpace
 	end
 
-	for winId, virtualSpace in pairs(windowMap) do
-		if virtualSpace == targetVirtualSpace then
-			self._windowMoverFn(winId, activeSpace)
-		elseif virtualSpace == currentVirtualSpace then
-			self._windowMoverFn(winId, storageSpace)
-		elseif isSwapping then
-			self._windowMoverFn(winId, storageSpace)
-		end
+	for _, winId in ipairs(categorizedWindows.toActive) do
+		self._windowMoverFn(winId, activeSpace)
+	end
+
+	for _, winId in ipairs(categorizedWindows.toStorage) do
+		self._windowMoverFn(winId, storageSpace)
 	end
 
 	if isSwapping then
+		for _, winId in ipairs(categorizedWindows.others) do
+			self._windowMoverFn(winId, storageSpace)
+		end
+
 		self._activeNativeSpaceId = activeSpace
 		self._storageNativeSpaceId = storageSpace
 	end
