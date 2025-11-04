@@ -10,7 +10,7 @@ obj.__index = obj
 
 obj.name = "VirtualSpaces"
 obj.version = "1.0"
-obj.author = "brnnc"
+obj.author = "brennovich"
 obj.license = "MIT"
 
 obj._currentVirtualSpace = 1
@@ -44,6 +44,24 @@ function obj:init()
 		self:assignWindowToVirtualSpace(win, 1)
 	end
 
+	self.spaceWatcher = hs.spaces.watcher.new(function(spaceId)
+		local actualSpace = hs.spaces.activeSpaceOnScreen()
+
+		if actualSpace == self.nativeSpaceManager:getStorageSpace() then
+			local focusedWindow = hs.window.focusedWindow()
+			if not focusedWindow then
+				return
+			end
+
+			local windowVirtualSpace = self.model:getVirtualSpaceForWindow(focusedWindow:id())
+
+			if windowVirtualSpace and windowVirtualSpace ~= self._currentVirtualSpace then
+				self:switchToVirtualSpace(windowVirtualSpace)
+			end
+		end
+	end)
+	self.spaceWatcher:start()
+
 	return self
 end
 
@@ -69,8 +87,8 @@ function obj:switchToVirtualSpace(virtualSpace)
 		currentSpace
 	)
 	self.nativeSpaceManager:updateSpaces(activeSpace, storageSpace)
-
 	self._currentVirtualSpace = virtualSpace
+
 	self:_restoreWindowsFocusForVirtualSpace(self._currentVirtualSpace)
 end
 
