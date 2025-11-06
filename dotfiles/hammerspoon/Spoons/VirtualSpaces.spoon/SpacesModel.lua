@@ -6,6 +6,7 @@ function SpacesModel.new()
 	self._focusedWindows = {}
 	self._windowVirtualSpaceMap = {}
 	self._virtualSpaceWindowsMap = {}
+	self._currentVirtualSpace = 1
 	return self
 end
 
@@ -82,6 +83,14 @@ function SpacesModel:_removeWindowFromList(virtualSpace, windowId)
 			return
 		end
 	end
+end
+
+function SpacesModel:getCurrentVirtualSpace()
+	return self._currentVirtualSpace
+end
+
+function SpacesModel:setCurrentVirtualSpace(virtualSpace)
+	self._currentVirtualSpace = virtualSpace
 end
 
 return SpacesModel

@@ -11,6 +11,39 @@ function TestSpacesModel:testNew()
 	lu.assertNotNil(model._focusedWindows)
 end
 
+function TestSpacesModel:testGetCurrentVirtualSpaceInitialValue()
+	local model = SpacesModel.new()
+
+	lu.assertEquals(model:getCurrentVirtualSpace(), 1)
+end
+
+function TestSpacesModel:testSetCurrentVirtualSpace()
+	local model = SpacesModel.new()
+
+	model:setCurrentVirtualSpace(2)
+
+	lu.assertEquals(model:getCurrentVirtualSpace(), 2)
+end
+
+function TestSpacesModel:testGetCurrentVirtualSpace()
+	local model = SpacesModel.new()
+
+	model:setCurrentVirtualSpace(3)
+	local current = model:getCurrentVirtualSpace()
+
+	lu.assertEquals(current, 3)
+end
+
+function TestSpacesModel:testSetCurrentVirtualSpaceMultipleTimes()
+	local model = SpacesModel.new()
+
+	model:setCurrentVirtualSpace(2)
+	model:setCurrentVirtualSpace(5)
+	model:setCurrentVirtualSpace(3)
+
+	lu.assertEquals(model:getCurrentVirtualSpace(), 3)
+end
+
 function TestSpacesModel:testSaveFocusedWindowInVirtualSpace()
 	local model = SpacesModel.new()
 

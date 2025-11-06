@@ -13,8 +13,6 @@ obj.version = "1.0"
 obj.author = "brennovich"
 obj.license = "MIT"
 
-obj._currentVirtualSpace = 1
-
 function obj:init()
 	self.nativeSpaceManager = NativeSpaceManager.new()
 	local activeSpace, storageSpace = self.nativeSpaceManager:setupForMainScreen()
@@ -34,7 +32,7 @@ function obj:init()
 	self.windowFilterOther:setCurrentSpace(true)
 
 	self.windowFilter:subscribe(hs.window.filter.windowCreated, function(window)
-		self:assignWindowToVirtualSpace(window, self._currentVirtualSpace)
+		self:assignWindowToVirtualSpace(window, self.model:getCurrentVirtualSpace())
 	end)
 	self.windowFilter:subscribe(hs.window.filter.windowDestroyed, function(window)
 		self.model:removeWindow(window:id())
@@ -55,7 +53,7 @@ function obj:init()
 
 			local windowVirtualSpace = self.model:getVirtualSpaceForWindow(focusedWindow:id())
 
-			if windowVirtualSpace and windowVirtualSpace ~= self._currentVirtualSpace then
+			if windowVirtualSpace and windowVirtualSpace ~= self.model:getCurrentVirtualSpace() then
 				self:switchToVirtualSpace(windowVirtualSpace)
 			end
 		end
@@ -72,24 +70,24 @@ function obj:switchToVirtualSpace(virtualSpace)
 
 	local currentSpace = hs.spaces.activeSpaceOnScreen()
 
-	if virtualSpace == self._currentVirtualSpace and currentSpace == self.nativeSpaceManager:getActiveSpace() then
+	if virtualSpace == self.model:getCurrentVirtualSpace() and currentSpace == self.nativeSpaceManager:getActiveSpace() then
 		return
 	end
 
 	local focusedWin = hs.window.focusedWindow()
 	if focusedWin then
-		self.model:saveFocusedWindowInVirtualSpace(self._currentVirtualSpace, focusedWin:id())
+		self.model:saveFocusedWindowInVirtualSpace(self.model:getCurrentVirtualSpace(), focusedWin:id())
 	end
 
-	local categorizedWindows = self.model:categorizeWindowsForTransition(virtualSpace, self._currentVirtualSpace)
+	local categorizedWindows = self.model:categorizeWindowsForTransition(virtualSpace, self.model:getCurrentVirtualSpace())
 	local activeSpace, storageSpace = self._windowSorter:mapWindowsToNativeSpacesFromCurrentNativeSpace(
 		categorizedWindows,
 		currentSpace
 	)
 	self.nativeSpaceManager:updateSpaces(activeSpace, storageSpace)
-	self._currentVirtualSpace = virtualSpace
+	self.model:setCurrentVirtualSpace(virtualSpace)
 
-	self:_restoreWindowsFocusForVirtualSpace(self._currentVirtualSpace)
+	self:_restoreWindowsFocusForVirtualSpace(self.model:getCurrentVirtualSpace())
 end
 
 function obj:moveWindowToVirtualSpace(window, virtualSpace)
@@ -97,12 +95,12 @@ function obj:moveWindowToVirtualSpace(window, virtualSpace)
 
 	self:assignWindowToVirtualSpace(window, virtualSpace)
 
-	local targetNativeSpace = (virtualSpace == self._currentVirtualSpace)
+	local targetNativeSpace = (virtualSpace == self.model:getCurrentVirtualSpace())
 		and self.nativeSpaceManager:getActiveSpace()
 		or self.nativeSpaceManager:getStorageSpace()
 	hs.spaces.moveWindowToSpace(window, targetNativeSpace)
 
-	self:_restoreWindowsFocusForVirtualSpace(self._currentVirtualSpace)
+	self:_restoreWindowsFocusForVirtualSpace(self.model:getCurrentVirtualSpace())
 end
 
 function obj:assignWindowToVirtualSpace(window, virtualSpace)
@@ -122,7 +120,7 @@ function obj:_restoreWindowsFocusForVirtualSpace(virtualSpace)
 	end
 
 	-- Fallback: focus the first available window in the workspace
-	local remainingWindows = self.model:getWindowsInVirtualSpace(self._currentVirtualSpace)
+	local remainingWindows = self.model:getWindowsInVirtualSpace(self.model:getCurrentVirtualSpace())
 	if #remainingWindows > 0 then
 		if self:_focusWindowById(remainingWindows[1]) then
 			self.model:saveFocusedWindowInVirtualSpace(virtualSpace, remainingWindows[1])
