@@ -15,71 +15,6 @@ alertStyle = {
 
 gap = 15
 
-resizeBorder = nil
-resizeWatcher = nil
-
-local function createResizeBorder(win)
-	if resizeBorder then
-		resizeBorder:hide()
-		resizeBorder:delete()
-		resizeBorder = nil
-	end
-
-	if win then
-		local screen = win:screen()
-		local sf = screen:fullFrame()
-		local wf = win:frame()
-
-		resizeBorder = hs.canvas.new(sf)
-		resizeBorder:appendElements({
-			type = "rectangle",
-			action = "stroke",
-			strokeWidth = 4.0,
-			strokeColor = { red = 0.384, green = 0.388, blue = 0.631, alpha = 1 },
-			roundedRectRadii = { xRadius = 9, yRadius = 9 },
-			frame = {
-				x = wf.x - sf.x - 1,
-				y = wf.y - sf.y - 1,
-				h = wf.h + 2,
-				w = wf.w + 2
-			}
-		}, { type = "rectangle",
-			action = "stroke",
-			strokeWidth = 1.0,
-			strokeColor = { red = 0.53, green = 0.53, blue = 0.78, alpha = 0.6 },
-			roundedRectRadii = { xRadius = 8, yRadius = 8 },
-			frame = {
-				x = wf.x - sf.x + 1,
-				y = wf.y - sf.y + 1,
-				h = wf.h - 2,
-				w = wf.w - 2
-			}
-		})
-		resizeBorder:level("tornOffMenu")
-		resizeBorder:show()
-	end
-end
-
-local function updateResizeBorder(win)
-	if resizeBorder and win then
-		local screen = win:screen()
-		local sf = screen:fullFrame()
-		local wf = win:frame()
-		resizeBorder[1].frame = {
-			x = wf.x - sf.x - 1,
-			y = wf.y - sf.y - 1,
-			h = wf.h + 2,
-			w = wf.w + 2
-		}
-		resizeBorder[2].frame = {
-			x = wf.x - sf.x + 1,
-			y = wf.y - sf.y + 1,
-			h = wf.h - 2,
-			w = wf.w - 2
-		}
-	end
-end
-
 spoon.ToggleMenubar.gap = gap
 spoon.WMUtils.gap = gap
 spoon.RoundedCorners.radius = 9
@@ -153,91 +88,18 @@ hs.hotkey.bind({"leftalt", "ctrl"}, "K", function()
     hs.grid.set(hs.window.focusedWindow(), {0, 0, 2, 1})
 end)
 
-hs.hotkey.bind({"leftalt", "ctrl"}, "Space", function()
-    spoon.WMUtils:centerWindow()
-end)
-hs.hotkey.bind({"leftalt", "ctrl"}, "G", function()
-    hs.grid.toggleShow()
-end)
-hs.hotkey.bind({"leftalt", "ctrl"}, "M", function()
-    spoon.WMUtils:monocle()
-end)
+hs.hotkey.bind({"leftalt", "ctrl"}, "Space", function() spoon.WMUtils:centerWindow() end)
+hs.hotkey.bind({"leftalt", "ctrl"}, "M", function() spoon.WMUtils:monocle() end)
 
-resizeModal = hs.hotkey.modal.new()
+hs.hotkey.bind({"leftalt", "ctrl"}, "G", function() hs.grid.toggleShow() end)
 
-function resizeModal:entered()
-	local win = hs.window.focusedWindow()
-	if win then
-		createResizeBorder(win)
+resizeModal = spoon.WMUtils:setupResizeModal()
 
-		resizeWatcher = hs.window.filter.new(nil)
-		resizeWatcher:subscribe(hs.window.filter.windowMoved, function(window, appName, event)
-			if window == hs.window.focusedWindow() then
-				updateResizeBorder(window)
-			end
-		end)
-		resizeWatcher:subscribe(hs.window.filter.windowFocused, function(window, appName, event)
-			createResizeBorder(window)
-		end)
-	end
-end
+hs.hotkey.bind({"leftalt", "ctrl"}, "R", function() resizeModal:enter() end)
 
-function resizeModal:exited()
-	if resizeWatcher then
-		resizeWatcher:unsubscribeAll()
-		resizeWatcher = nil
-	end
-	if resizeBorder then
-		resizeBorder:hide()
-		resizeBorder:delete()
-		resizeBorder = nil
-	end
-end
+resizeModal:bind({}, "h", function() spoon.WMUtils:resizeSlimmer() end)
+resizeModal:bind({}, "l", function() spoon.WMUtils:resizeWider() end)
+resizeModal:bind({}, "k", function() spoon.WMUtils:resizeShorter() end)
+resizeModal:bind({}, "j", function() spoon.WMUtils:resizeTaller() end)
 
-resizeModal:bind({}, "escape", function()
-	resizeModal:exit()
-end)
-
-resizeModal:bind({}, "h", function()
-	local win = hs.window.focusedWindow()
-	if win then
-		local frame = win:frame()
-		frame.w = frame.w - gap * 2
-		win:setFrame(frame)
-		updateResizeBorder(win)
-	end
-end)
-
-resizeModal:bind({}, "l", function()
-	local win = hs.window.focusedWindow()
-	if win then
-		local frame = win:frame()
-		frame.w = frame.w + gap * 2
-		win:setFrame(frame)
-		updateResizeBorder(win)
-	end
-end)
-
-resizeModal:bind({}, "k", function()
-	local win = hs.window.focusedWindow()
-	if win then
-		local frame = win:frame()
-		frame.h = frame.h - gap * 2
-		win:setFrame(frame)
-		updateResizeBorder(win)
-	end
-end)
-
-resizeModal:bind({}, "j", function()
-	local win = hs.window.focusedWindow()
-	if win then
-		local frame = win:frame()
-		frame.h = frame.h + gap * 2
-		win:setFrame(frame)
-		updateResizeBorder(win)
-	end
-end)
-
-hs.hotkey.bind({"leftalt", "ctrl"}, "R", function()
-	resizeModal:enter()
-end)
+resizeModal:bind({}, "escape", function() resizeModal:exit() end)
