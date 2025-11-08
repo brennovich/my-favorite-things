@@ -83,6 +83,16 @@ local function updateResizeBorder(self, win)
 	end
 end
 
+local function moveWindow(self, dx, dy)
+	local win = hs.window.focusedWindow()
+	if not win then return end
+	local f = win:frame()
+	f.x = f.x + dx
+	f.y = f.y + dy
+	win:setFrame(f)
+	updateResizeBorder(self, win)
+end
+
 local function resize(self, dw, dh)
 	local win = hs.window.focusedWindow()
 	if not win then return end
@@ -97,13 +107,20 @@ function obj:init()
 	return self
 end
 
-function obj:moveWindow(dx, dy)
-	local win = hs.window.focusedWindow()
-	if not win then return end
-	local f = win:frame()
-	f.x = f.x + dx
-	f.y = f.y + dy
-	win:setFrame(f)
+function obj:moveLeft()
+	moveWindow(self, -self.gap * 2, 0)
+end
+
+function obj:moveRight()
+	moveWindow(self, self.gap * 2, 0)
+end
+
+function obj:moveUp()
+	moveWindow(self, 0, -self.gap * 2)
+end
+
+function obj:moveDown()
+	moveWindow(self, 0, self.gap * 2)
 end
 
 function obj:centerWindow()
