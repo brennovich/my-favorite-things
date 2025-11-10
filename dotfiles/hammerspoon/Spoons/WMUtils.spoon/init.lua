@@ -7,7 +7,7 @@ obj.author = "brnnc"
 obj.license = "MIT"
 
 obj.windowFrameCache = {}
-obj.fullscreenFrameCache = {}
+obj.monocleMaximizedFrameCache = {}
 obj.gap = 15
 
 obj.resizeStrokeColor = { red = 0.384, green = 0.388, blue = 0.631, alpha = 1 }
@@ -127,11 +127,7 @@ end
 function obj:centerWindow()
 	local win = hs.window.focusedWindow()
 	if not win then return end
-	local f = win:frame()
-	local ws = win:screen():frame()
-	f.x = ws.x + (ws.w - f.w) / 2
-	f.y = ws.y + (ws.h - f.h) / 2
-	win:setFrame(f)
+	win:centerOnScreen()
 end
 
 function obj:monocle()
@@ -157,27 +153,34 @@ function obj:monocle()
 	hs.grid.maximizeWindow(win)
 end
 
-function obj:fullscreen()
+function obj:monocleMaximized()
 	local win = hs.window.focusedWindow()
 	if not win then return end
 
 	local winId = win:id()
-	local currentFrame = win:frame()
-	local screenFullFrame = win:screen():fullFrame()
 
-	local isFullscreen = (currentFrame.x == screenFullFrame.x and
-	                      currentFrame.y == screenFullFrame.y and
-	                      currentFrame.w == screenFullFrame.w and
-	                      currentFrame.h == screenFullFrame.h)
-
-	if isFullscreen and self.fullscreenFrameCache[winId] then
-		win:setFrame(self.fullscreenFrameCache[winId])
-		self.fullscreenFrameCache[winId] = nil
+	if win:isFullScreen() then
+		self.monocleMaximizedFrameCache[winId] = nil
 		return
 	end
 
-	self.fullscreenFrameCache[winId] = currentFrame
-	win:setFrame(screenFullFrame)
+	local currentFrame = win:frame()
+	local screenFullFrame = win:screen():fullFrame()
+
+	local heightTolerance = 30
+	local isMaximized = (currentFrame.x == screenFullFrame.x and
+	                     currentFrame.y == screenFullFrame.y and
+	                     currentFrame.w >= screenFullFrame.w and
+	                     currentFrame.h >= screenFullFrame.h - heightTolerance)
+
+	if isMaximized and self.monocleMaximizedFrameCache[winId] then
+		win:setFrame(self.monocleMaximizedFrameCache[winId])
+		self.monocleMaximizedFrameCache[winId] = nil
+		return
+	end
+
+	self.monocleMaximizedFrameCache[winId] = currentFrame
+	win:maximize()
 end
 
 function obj:resizeWider()

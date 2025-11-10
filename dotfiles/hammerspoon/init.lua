@@ -56,7 +56,7 @@ hs.hotkey.bind({"leftalt", "shift"}, "J", function() spoon.WMUtils:moveDown() en
 
 hs.hotkey.bind({"leftalt", "ctrl"}, "Space", function() spoon.WMUtils:centerWindow() end)
 hs.hotkey.bind({"leftalt", "ctrl"}, "M", function() spoon.WMUtils:monocle() end)
-hs.hotkey.bind({"leftalt", "ctrl"}, "F", function() spoon.WMUtils:fullscreen() end)
+hs.hotkey.bind({"leftalt", "ctrl"}, "F", function() spoon.WMUtils:monocleMaximized() end)
 
 resizeModal = spoon.WMUtils:setupResizeModal()
 

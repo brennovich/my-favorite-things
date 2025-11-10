@@ -109,12 +109,15 @@ Lua-based macOS automation with i3-like window management capabilities. Uses a S
 
 - **WMUtils.spoon** (custom) - Window management utilities
   - Move windows with pixel precision (gap*2 increments = 30px)
-  - Center windows on screen
+  - Center windows on screen using hs.window:centerOnScreen()
   - Monocle mode (toggle maximize with frame restoration, respects gaps)
-  - Fullscreen mode (toggle true fullscreen ignoring gaps and menubar)
+  - Monocle Maximized mode (toggle full maximize using hs.window:maximize())
+    - Works with all windows including constrained ones (Terminal.app)
+    - Respects macOS fullscreen when already in fullscreen mode
+    - Automatically restores original frame on toggle
   - Resize mode with visual border feedback
   - Configurable gap between windows (15px default)
-  - Test coverage for fullscreen feature
+  - Test coverage for centerWindow, monocle, and monocleMaximized
 
 - **ToggleMenubar.spoon** (external, v0.4.2) - System UI control
   - Toggle macOS menubar visibility
@@ -144,7 +147,9 @@ Lua-based macOS automation with i3-like window management capabilities. Uses a S
 - Alt+Ctrl+J - Bottom half
 - Alt+Ctrl+Space - Center window
 - Alt+Ctrl+M - Monocle mode (maximize/restore, respects 15px gaps)
-- Alt+Ctrl+F - Fullscreen mode (true fullscreen, ignores gaps and covers menubar)
+- Alt+Ctrl+F - Monocle Maximized mode (full maximize using hs.window:maximize())
+  - Works with all windows including constrained ones (Terminal.app)
+  - Toggle to restore original frame
 
 **Resize Mode:**
 - Alt+Ctrl+R - Enter resize mode (shows visual border around focused window)
