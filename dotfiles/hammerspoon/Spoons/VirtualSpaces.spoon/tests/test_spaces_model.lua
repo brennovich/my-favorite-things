@@ -217,6 +217,33 @@ function TestSpacesModel:testRemoveLastWindowLeavesSpaceEmpty()
 	lu.assertEquals(#windows, 0)
 end
 
+function TestSpacesModel:testRemoveWindowCleansUpFocusedWindowReference()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:saveFocusedWindowInVirtualSpace(1, 100)
+
+	lu.assertEquals(model:getFocusedWindowForVirtualSpace(1), 100)
+
+	model:removeWindow(100)
+
+	lu.assertNil(model:getFocusedWindowForVirtualSpace(1))
+end
+
+function TestSpacesModel:testRemoveWindowDoesNotAffectFocusedWindowInOtherSpaces()
+	local model = SpacesModel.new()
+
+	model:assignWindowToVirtualSpace(100, 1)
+	model:assignWindowToVirtualSpace(200, 2)
+	model:saveFocusedWindowInVirtualSpace(1, 100)
+	model:saveFocusedWindowInVirtualSpace(2, 200)
+
+	model:removeWindow(100)
+
+	lu.assertNil(model:getFocusedWindowForVirtualSpace(1))
+	lu.assertEquals(model:getFocusedWindowForVirtualSpace(2), 200)
+end
+
 function TestSpacesModel:testCategorizeWindowsWithNoWindows()
 	local model = SpacesModel.new()
 

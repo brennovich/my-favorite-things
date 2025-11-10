@@ -4,31 +4,12 @@ local mockWindow = {}
 local mockScreen = {}
 local mockHs = {}
 
-function mockWindow:id()
-	return self._id
-end
-
-function mockWindow:frame()
-	return self._frame
-end
-
-function mockWindow:setFrame(frame)
-	self._frame = frame
-end
-
-function mockWindow:maximize()
-	local screenFrame = mockScreen:fullFrame()
-	self._frame = {
-		x = screenFrame.x,
-		y = screenFrame.y,
-		w = screenFrame.w,
-		h = screenFrame.h
-	}
-end
-
-function mockWindow:screen()
-	return mockScreen
-end
+function mockWindow:id() return self._id end
+function mockWindow:frame() return self._frame end
+function mockWindow:setFrame(frame) self._frame = frame end
+function mockWindow:maximize() self._frame = mockScreen:fullFrame() end
+function mockWindow:screen() return mockScreen end
+function mockWindow:isFullScreen() return self._isFullScreen or false end
 
 function mockWindow:centerOnScreen()
 	local screenFrame = mockScreen:frame()
@@ -41,25 +22,11 @@ function mockWindow:centerOnScreen()
 	}
 end
 
-function mockWindow:setFullScreen(fullscreen)
-	self._isFullScreen = fullscreen
-end
 
-function mockWindow:isFullScreen()
-	return self._isFullScreen or false
-end
+function mockScreen:frame() return {x = 0, y = 23, w = 1440, h = 877} end
+function mockScreen:fullFrame() return {x = 0, y = 0, w = 1440, h = 900} end
 
-function mockScreen:frame()
-	return {x = 0, y = 23, w = 1440, h = 877}
-end
-
-function mockScreen:fullFrame()
-	return {x = 0, y = 0, w = 1440, h = 900}
-end
-
-function mockHs.focusedWindow()
-	return mockWindow
-end
+function mockHs.focusedWindow() return mockWindow end
 
 TestWMUtilsMonocleMaximized = {}
 

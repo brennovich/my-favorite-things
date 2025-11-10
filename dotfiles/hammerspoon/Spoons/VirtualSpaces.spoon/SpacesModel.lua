@@ -38,6 +38,10 @@ function SpacesModel:removeWindow(windowId)
 
 	if virtualSpace then
 		self:_removeWindowFromList(virtualSpace, windowId)
+
+		if self._focusedWindows[virtualSpace] == windowId then
+			self._focusedWindows[virtualSpace] = nil
+		end
 	end
 
 	self._windowVirtualSpaceMap[windowId] = nil

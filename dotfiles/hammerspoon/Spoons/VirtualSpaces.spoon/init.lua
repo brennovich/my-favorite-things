@@ -36,6 +36,7 @@ function obj:init()
 	end)
 	self.windowFilter:subscribe(hs.window.filter.windowDestroyed, function(window)
 		self.model:removeWindow(window:id())
+		self:_restoreWindowsFocusForVirtualSpace(self.model:getCurrentVirtualSpace())
 	end)
 
 	for _, win in ipairs(hs.window.allWindows()) do
@@ -134,7 +135,7 @@ end
 
 function obj:_focusWindowById(windowId)
 	local win = hs.window.get(windowId)
-	if win then
+	if win and win:isStandard() and not win:isMinimized() then
 		win:focus()
 		return true
 	end
