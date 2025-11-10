@@ -128,6 +128,7 @@ function obj:centerWindow()
 	local win = hs.window.focusedWindow()
 	if not win then return end
 	win:centerOnScreen()
+	updateResizeBorder(self, win)
 end
 
 function obj:monocle()
@@ -146,11 +147,13 @@ function obj:monocle()
 	if isMaximized and self.windowFrameCache[winId] then
 		win:setFrame(self.windowFrameCache[winId])
 		self.windowFrameCache[winId] = nil
+		updateResizeBorder(self, win)
 		return
 	end
 
 	self.windowFrameCache[winId] = win:frame()
 	hs.grid.maximizeWindow(win)
+	updateResizeBorder(self, win)
 end
 
 function obj:monocleMaximized()
@@ -176,11 +179,13 @@ function obj:monocleMaximized()
 	if isMaximized and self.monocleMaximizedFrameCache[winId] then
 		win:setFrame(self.monocleMaximizedFrameCache[winId])
 		self.monocleMaximizedFrameCache[winId] = nil
+		updateResizeBorder(self, win)
 		return
 	end
 
 	self.monocleMaximizedFrameCache[winId] = currentFrame
 	win:maximize()
+	updateResizeBorder(self, win)
 end
 
 function obj:resizeWider()
