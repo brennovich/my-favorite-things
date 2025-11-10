@@ -7,6 +7,7 @@ obj.author = "brnnc"
 obj.license = "MIT"
 
 obj.windowFrameCache = {}
+obj.fullscreenFrameCache = {}
 obj.gap = 15
 
 obj.resizeStrokeColor = { red = 0.384, green = 0.388, blue = 0.631, alpha = 1 }
@@ -154,6 +155,29 @@ function obj:monocle()
 
 	self.windowFrameCache[winId] = win:frame()
 	hs.grid.maximizeWindow(win)
+end
+
+function obj:fullscreen()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+
+	local winId = win:id()
+	local currentFrame = win:frame()
+	local screenFullFrame = win:screen():fullFrame()
+
+	local isFullscreen = (currentFrame.x == screenFullFrame.x and
+	                      currentFrame.y == screenFullFrame.y and
+	                      currentFrame.w == screenFullFrame.w and
+	                      currentFrame.h == screenFullFrame.h)
+
+	if isFullscreen and self.fullscreenFrameCache[winId] then
+		win:setFrame(self.fullscreenFrameCache[winId])
+		self.fullscreenFrameCache[winId] = nil
+		return
+	end
+
+	self.fullscreenFrameCache[winId] = currentFrame
+	win:setFrame(screenFullFrame)
 end
 
 function obj:resizeWider()

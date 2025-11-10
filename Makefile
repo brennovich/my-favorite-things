@@ -87,10 +87,12 @@ feeds: ~/.newsboat/config ~/.newsboat/urls
 
 hammerspoon: ~/.hammerspoon/init.lua
 	which hs &> /dev/null || brew install --cask hammerspoon
+	rm -rf ~/.hammerspoon/Spoons
 	mkdir -p ~/.hammerspoon/Spoons
 	cp -R dotfiles/hammerspoon/Spoons/* ~/.hammerspoon/Spoons/
 	cd ~/.hammerspoon/Spoons \
 		&& curl -LO https://github.com/Hammerspoon/Spoons/raw/master/Spoons/RoundedCorners.spoon.zip \
+		&& curl -LO https://github.com/brennovich/ToggleMenubar.spoon/releases/download/v0.4.2/ToggleMenubar.spoon.zip \
 		&& unzip -o \*.zip \
 		&& rm *.zip
 

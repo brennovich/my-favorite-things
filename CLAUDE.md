@@ -29,7 +29,7 @@ make -f Makefile.macos clean
 - `golang`, `rust`, `ruby`, `node` - Language environment setup
 - `media` - Installs VLC and yt-dlp for media handling
 - `feeds` - Installs and configures newsboat RSS reader
-- `hammerspoon` - Installs Hammerspoon automation tool
+- `hammerspoon` - Installs Hammerspoon, copies custom Spoons, downloads external Spoons (RoundedCorners, ToggleMenubar)
 - `defaults` - Configures macOS system preferences via defaults command
 - `github` - Installs GitHub CLI
 
@@ -41,6 +41,8 @@ make -f Makefile.macos clean
   - `bin/` - Custom shell scripts and utilities
   - `newsboat/` - RSS feed reader configuration
   - `hammerspoon/` - Lua-based macOS automation scripts
+    - `Spoons/VirtualSpaces.spoon/` - Custom virtual workspace implementation with test suite
+    - `Spoons/WMUtils.spoon/` - Custom window management utilities with test suite
   - Root level dotfiles (zshrc, vimrc, gitconfig, etc.)
 - `wallpapers/` - Desktop backgrounds
 - `etc/` - System-wide configuration files (copied with sudo)
@@ -97,18 +99,30 @@ Lua-based macOS automation with i3-like window management capabilities. Uses a S
 
 #### Spoons (Custom Modules)
 
-- **WMUtils.spoon** - Window management utilities
-  - Move windows with pixel precision
-  - Center windows on screen
-  - Monocle mode (toggle maximize with frame restoration)
-  - Configurable gap between windows
+- **VirtualSpaces.spoon** (custom) - i3-like virtual workspace system
+  - Provides 4 virtual workspaces using native macOS spaces
+  - Tracks window assignments and focus per virtual space
+  - Automatically handles window creation/destruction
+  - Supports native macOS window switching (Cmd+Tab, Mission Control)
+  - Uses two native spaces: one active, one for storage
+  - Built with test coverage (SpacesModel, WindowsSort, NativeSpaceManager)
 
-- **ToggleMenubar.spoon** - System UI control
+- **WMUtils.spoon** (custom) - Window management utilities
+  - Move windows with pixel precision (gap*2 increments = 30px)
+  - Center windows on screen
+  - Monocle mode (toggle maximize with frame restoration, respects gaps)
+  - Fullscreen mode (toggle true fullscreen ignoring gaps and menubar)
+  - Resize mode with visual border feedback
+  - Configurable gap between windows (15px default)
+  - Test coverage for fullscreen feature
+
+- **ToggleMenubar.spoon** (external, v0.4.2) - System UI control
   - Toggle macOS menubar visibility
   - Automatically adjusts grid margins when toggled
+  - Downloaded from GitHub releases
 
-- **ReloadConfiguration** - Auto-reload Hammerspoon config on changes
-- **RoundedCorners** - Visual enhancement for window corners
+- **RoundedCorners** (external) - Visual enhancement for window corners
+  - Downloaded from Hammerspoon/Spoons repository
 
 #### Window Management Features
 
@@ -129,17 +143,26 @@ Lua-based macOS automation with i3-like window management capabilities. Uses a S
 - Alt+Ctrl+K - Top half
 - Alt+Ctrl+J - Bottom half
 - Alt+Ctrl+Space - Center window
-- Alt+Ctrl+M - Monocle mode (maximize/restore)
+- Alt+Ctrl+M - Monocle mode (maximize/restore, respects 15px gaps)
+- Alt+Ctrl+F - Fullscreen mode (true fullscreen, ignores gaps and covers menubar)
 
-**Desktop Management:**
-- Ensures 3 desktops exist on startup
-- Alt+Shift+1/2/3 - Move window to desktop 1/2/3
+**Resize Mode:**
+- Alt+Ctrl+R - Enter resize mode (shows visual border around focused window)
+- In resize mode:
+  - H/L - Make window slimmer/wider (30px increments)
+  - K/J - Make window shorter/taller (30px increments)
+  - Escape - Exit resize mode
 
-**Application Launcher:**
-- Alt+4 - Open Safari
+**Virtual Spaces (i3-like workspaces):**
+- Alt+1/2/3/4 - Switch to virtual space 1/2/3/4
+- Alt+Shift+1/2/3/4 - Move focused window to virtual space 1/2/3/4
+- New windows automatically assigned to current virtual space
+- Focus per virtual space is preserved when switching
+- Works seamlessly with native macOS window switching (Cmd+Tab, Mission Control)
 
 **System UI:**
 - Ctrl+Alt+Cmd+D - Toggle menubar visibility
+- Ctrl+Alt+Cmd+R - Reload Hammerspoon configuration
 
 ## Development Workflow
 
