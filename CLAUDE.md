@@ -97,6 +97,12 @@ Environment files (`dotfiles/env-*`) are sourced by zshrc to configure PATH and 
 
 Lua-based macOS automation with i3-like window management capabilities. Uses a Spoon-based architecture for modular functionality.
 
+**Spoon Loading:**
+Spoons are loaded using `hs.loadSpoon("SpoonName")` and accessed via the global `spoon` table. For example:
+- Load: `hs.loadSpoon("WMUtils")`
+- Access: `spoon.WMUtils:methodName()`
+- Keybindings use the full path: `spoon.WMUtils:leftHalf()`, not `wmUtils:leftHalf()`
+
 #### Spoons (Custom Modules)
 
 - **VirtualSpaces.spoon** (custom) - i3-like virtual workspace system
@@ -110,14 +116,18 @@ Lua-based macOS automation with i3-like window management capabilities. Uses a S
 - **WMUtils.spoon** (custom) - Window management utilities
   - Move windows with pixel precision (gap*2 increments = 30px)
   - Center windows on screen using hs.window:centerOnScreen()
+  - Grid positioning with toggle-restore (leftHalf, rightHalf, topHalf, bottomHalf)
+    - First call: saves frame and positions to grid half
+    - Second call: restores original frame
+    - Shared cache across all grid positions
   - Monocle mode (toggle maximize with frame restoration, respects gaps)
-  - Monocle Maximized mode (toggle full maximize using hs.window:maximize())
+  - Telescope mode (toggle full maximize using hs.window:maximize())
     - Works with all windows including constrained ones (Terminal.app)
     - Respects macOS fullscreen when already in fullscreen mode
     - Automatically restores original frame on toggle
   - Resize mode with visual border feedback
   - Configurable gap between windows (15px default)
-  - Test coverage for centerWindow, monocle, and monocleMaximized
+  - Test coverage for centerWindow, monocle, telescope, and grid toggle
 
 - **ToggleMenubar.spoon** (external, v0.4.2) - System UI control
   - Toggle macOS menubar visibility
@@ -140,14 +150,14 @@ Lua-based macOS automation with i3-like window management capabilities. Uses a S
 **Window Movement:**
 - Alt+Shift+H/J/K/L - Move window by gap increments (30px)
 
-**Window Positioning (grid-based):**
-- Alt+Ctrl+H - Left half
-- Alt+Ctrl+L - Right half
-- Alt+Ctrl+K - Top half
-- Alt+Ctrl+J - Bottom half
+**Window Positioning (grid-based with toggle-restore):**
+- Alt+Ctrl+H - Left half (toggle: first call positions, second call restores)
+- Alt+Ctrl+L - Right half (toggle: first call positions, second call restores)
+- Alt+Ctrl+K - Top half (toggle: first call positions, second call restores)
+- Alt+Ctrl+J - Bottom half (toggle: first call positions, second call restores)
 - Alt+Ctrl+Space - Center window
 - Alt+Ctrl+M - Monocle mode (maximize/restore, respects 15px gaps)
-- Alt+Ctrl+F - Monocle Maximized mode (full maximize using hs.window:maximize())
+- Alt+Ctrl+F - Telescope mode (full maximize using hs.window:maximize())
   - Works with all windows including constrained ones (Terminal.app)
   - Toggle to restore original frame
 

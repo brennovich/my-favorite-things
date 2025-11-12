@@ -56,7 +56,7 @@ hs.hotkey.bind({"leftalt", "shift"}, "J", function() spoon.WMUtils:moveDown() en
 
 hs.hotkey.bind({"leftalt", "ctrl"}, "Space", function() spoon.WMUtils:centerWindow() end)
 hs.hotkey.bind({"leftalt", "ctrl"}, "M", function() spoon.WMUtils:monocle() end)
-hs.hotkey.bind({"leftalt", "ctrl"}, "F", function() spoon.WMUtils:monocleMaximized() end)
+hs.hotkey.bind({"leftalt", "ctrl"}, "F", function() spoon.WMUtils:telescope() end)
 
 resizeModal = spoon.WMUtils:setupResizeModal()
 
@@ -85,14 +85,14 @@ end)
 hs.hotkey.bind({"leftalt", "ctrl"}, "G", function() hs.grid.toggleShow() end)
 
 hs.hotkey.bind({"leftalt", "ctrl"}, "H", function()
-    hs.grid.set(hs.window.focusedWindow(), {0, 0, 1, 2})
+    spoon.WMUtils:leftHalf()
 end)
 hs.hotkey.bind({"leftalt", "ctrl"}, "L", function()
-    hs.grid.set(hs.window.focusedWindow(), {1, 0, 1, 2})
+    spoon.WMUtils:rightHalf()
 end)
 hs.hotkey.bind({"leftalt", "ctrl"}, "J", function()
-    hs.grid.set(hs.window.focusedWindow(), {0, 1, 2, 1})
+    spoon.WMUtils:bottomHalf()
 end)
 hs.hotkey.bind({"leftalt", "ctrl"}, "K", function()
-    hs.grid.set(hs.window.focusedWindow(), {0, 0, 2, 1})
+    spoon.WMUtils:topHalf()
 end)

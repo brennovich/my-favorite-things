@@ -6,8 +6,9 @@ obj.version = "1.0"
 obj.author = "brnnc"
 obj.license = "MIT"
 
-obj.windowFrameCache = {}
-obj.monocleMaximizedFrameCache = {}
+obj.monocleFrameCache = {}
+obj.telescopeFrameCache = {}
+obj.gridFrameCache = {}
 obj.gap = 15
 
 obj.resizeStrokeColor = { red = 0.384, green = 0.388, blue = 0.631, alpha = 1 }
@@ -108,6 +109,97 @@ function obj:init()
 	return self
 end
 
+function obj:updateResizeBorder(win)
+	updateResizeBorder(self, win)
+end
+
+local function gridCellEquals(cell1, cell2)
+	return cell1.x == cell2.x and
+	       cell1.y == cell2.y and
+	       cell1.w == cell2.w and
+	       cell1.h == cell2.h
+end
+
+function obj:leftHalf()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+
+	local winId = win:id()
+	local currentCell = hs.grid.get(win)
+	local targetCell = {x = 0, y = 0, w = 1, h = 2}
+
+	if gridCellEquals(currentCell, targetCell) and self.gridFrameCache[winId] then
+		win:setFrame(self.gridFrameCache[winId])
+		self.gridFrameCache[winId] = nil
+		self:updateResizeBorder(win)
+		return
+	end
+
+	self.gridFrameCache[winId] = win:frame()
+	hs.grid.set(win, targetCell, win:screen())
+	self:updateResizeBorder(win)
+end
+
+function obj:rightHalf()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+
+	local winId = win:id()
+	local currentCell = hs.grid.get(win)
+	local targetCell = {x = 1, y = 0, w = 1, h = 2}
+
+	if gridCellEquals(currentCell, targetCell) and self.gridFrameCache[winId] then
+		win:setFrame(self.gridFrameCache[winId])
+		self.gridFrameCache[winId] = nil
+		self:updateResizeBorder(win)
+		return
+	end
+
+	self.gridFrameCache[winId] = win:frame()
+	hs.grid.set(win, targetCell, win:screen())
+	self:updateResizeBorder(win)
+end
+
+function obj:topHalf()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+
+	local winId = win:id()
+	local currentCell = hs.grid.get(win)
+	local targetCell = {x = 0, y = 0, w = 2, h = 1}
+
+	if gridCellEquals(currentCell, targetCell) and self.gridFrameCache[winId] then
+		win:setFrame(self.gridFrameCache[winId])
+		self.gridFrameCache[winId] = nil
+		self:updateResizeBorder(win)
+		return
+	end
+
+	self.gridFrameCache[winId] = win:frame()
+	hs.grid.set(win, targetCell, win:screen())
+	self:updateResizeBorder(win)
+end
+
+function obj:bottomHalf()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+
+	local winId = win:id()
+	local currentCell = hs.grid.get(win)
+	local targetCell = {x = 0, y = 1, w = 2, h = 1}
+
+	if gridCellEquals(currentCell, targetCell) and self.gridFrameCache[winId] then
+		win:setFrame(self.gridFrameCache[winId])
+		self.gridFrameCache[winId] = nil
+		self:updateResizeBorder(win)
+		return
+	end
+
+	self.gridFrameCache[winId] = win:frame()
+	hs.grid.set(win, targetCell, win:screen())
+	self:updateResizeBorder(win)
+end
+
 function obj:moveLeft()
 	moveWindow(self, -self.gap * 2, 0)
 end
@@ -144,26 +236,26 @@ function obj:monocle()
 	                     currentCell.w == gridSize.w and
 	                     currentCell.h == gridSize.h)
 
-	if isMaximized and self.windowFrameCache[winId] then
-		win:setFrame(self.windowFrameCache[winId])
-		self.windowFrameCache[winId] = nil
+	if isMaximized and self.monocleFrameCache[winId] then
+		win:setFrame(self.monocleFrameCache[winId])
+		self.monocleFrameCache[winId] = nil
 		updateResizeBorder(self, win)
 		return
 	end
 
-	self.windowFrameCache[winId] = win:frame()
+	self.monocleFrameCache[winId] = win:frame()
 	hs.grid.maximizeWindow(win)
 	updateResizeBorder(self, win)
 end
 
-function obj:monocleMaximized()
+function obj:telescope()
 	local win = hs.window.focusedWindow()
 	if not win then return end
 
 	local winId = win:id()
 
 	if win:isFullScreen() then
-		self.monocleMaximizedFrameCache[winId] = nil
+		self.telescopeFrameCache[winId] = nil
 		return
 	end
 
@@ -176,14 +268,14 @@ function obj:monocleMaximized()
 	                     currentFrame.w >= screenFullFrame.w and
 	                     currentFrame.h >= screenFullFrame.h - heightTolerance)
 
-	if isMaximized and self.monocleMaximizedFrameCache[winId] then
-		win:setFrame(self.monocleMaximizedFrameCache[winId])
-		self.monocleMaximizedFrameCache[winId] = nil
+	if isMaximized and self.telescopeFrameCache[winId] then
+		win:setFrame(self.telescopeFrameCache[winId])
+		self.telescopeFrameCache[winId] = nil
 		updateResizeBorder(self, win)
 		return
 	end
 
-	self.monocleMaximizedFrameCache[winId] = currentFrame
+	self.telescopeFrameCache[winId] = currentFrame
 	win:maximize()
 	updateResizeBorder(self, win)
 end
