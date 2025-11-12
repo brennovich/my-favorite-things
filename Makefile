@@ -4,7 +4,8 @@ dotfiles = \
 	~/.gitignore \
 	~/.env-brew \
 	~/.env-ports \
-	~/.ctags
+	~/.ctags \
+	~/.hushlogin
 
 dotfiles: $(dotfiles) colors
 

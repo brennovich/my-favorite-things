@@ -14,12 +14,11 @@ window-padding-x = 15
 window-padding-y = 15
 window-title-font-family = "SF Mono"
 window-width = 87
-window-height = 47
+window-height = 43
 
 resize-overlay = "never"
 
 macos-titlebar-style = "tabs"
-macos-titlebar-style = "hidden"
 macos-icon = "glass"
 
 theme = "marques-de-itu"

@@ -16,6 +16,8 @@ export HISTFILESIZE=99999999 \
 	PATH=$HOME/.bin:$PATH \
 	EDITOR=vi
 
+PS1='%n@%m %% '
+
 
 autoload -U +X bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
@@ -26,3 +28,7 @@ setopt HIST_IGNORE_ALL_DUPS
 alias l='ls -lha --color'
 if type nvim > /dev/null 2>&1; then alias vim='nvim'; fi
 if type newsboat > /dev/null 2>&1; then alias newsboat='newsboat; source ~/.bin/colorscheme'; fi
+
+if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+  source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
+fi
