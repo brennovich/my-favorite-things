@@ -7,8 +7,8 @@
 [color "diff"]
   meta = yellow bold
   frag = magenta bold
-  old = red bold
-  new = green bold
+  old = 167
+  new = 108
 [alias]
   b = branch -v                     # branch (verbose)
   amend = commit --amend            # ammend your last commit ammend = commit --amend           # ammend your last commit

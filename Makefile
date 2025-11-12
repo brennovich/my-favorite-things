@@ -51,6 +51,10 @@ vim: ~/.vimrc
 		&& git clone https://github.com/yasuhiroki/github-actions-yaml.vim \
 		&& git clone https://github.com/aareman/shellspec.vim
 
+terminal: ~/.config/ghostty/config
+	mkdir -p ~/.config/ghostty/themes
+	cp ~/.vim/pack/plugins/start/marques-de-itu/ghostty ~/.config/ghostty/themes/marques-de-itu
+
 colors: ~/.bin/colorscheme ~/.env-theme
 	if ! [ -d ~/.config/base16-shell ]; then git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell; fi
 

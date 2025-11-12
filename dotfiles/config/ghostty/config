@@ -1,0 +1,25 @@
+font-family = "SF Mono"
+font-size = 13
+font-thicken = true
+font-thicken-strength = 200
+
+background-blur = true
+background-opacity = 1
+
+cursor-color = "#6768aa"
+cursor-text = "#f6f4f0"
+cursor-style = "block"
+
+window-padding-x = 15
+window-padding-y = 15
+window-title-font-family = "SF Mono"
+window-width = 87
+window-height = 47
+
+resize-overlay = "never"
+
+macos-titlebar-style = "tabs"
+macos-titlebar-style = "hidden"
+macos-icon = "glass"
+
+theme = "marques-de-itu"

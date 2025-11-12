@@ -36,6 +36,10 @@ hs.hotkey.bind({"leftalt", "ctrl", "cmd"}, "R", function()
     hs.reload()
 end)
 
+hs.hotkey.bind({"leftalt", "cmd"}, "Return", function()
+    hs.execute("open -n -a Ghostty")
+end)
+
 for i = 1, 4 do
     hs.hotkey.bind({"leftalt"}, tostring(i), function()
 	spoon.VirtualSpaces:switchToVirtualSpace(i)
