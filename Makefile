@@ -53,8 +53,10 @@ vim: ~/.vimrc
 		&& git clone https://github.com/aareman/shellspec.vim
 
 terminal: ~/.config/ghostty/config
+	brew install --cask ghostty font-go
 	mkdir -p ~/.config/ghostty/themes
-	cp ~/.vim/pack/plugins/start/marques-de-itu/ghostty ~/.config/ghostty/themes/marques-de-itu
+	cp ~/.vim/pack/plugins/start/marques-de-itu/ghostty/marques-de-itu-dark ~/.config/ghostty/themes/marques-de-itu-dark
+	cp ~/.vim/pack/plugins/start/marques-de-itu/ghostty/marques-de-itu-light ~/.config/ghostty/themes/marques-de-itu-light
 
 colors: ~/.bin/colorscheme ~/.env-theme
 	if ! [ -d ~/.config/base16-shell ]; then git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell; fi
@@ -69,6 +71,7 @@ defaults:
 	defaults write com.apple.dock "show-recents" -bool "false"
 	defaults write com.apple.dock launchanim -bool false
 	defaults write com.apple.dock mru-spaces -bool false
+	defaults write com.apple.screencapture disable-shadow -bool true; killall SystemUIServer
 	defaults write com.apple.Safari UniversalSearchEnabled -bool false
 	defaults write com.apple.Safari SuppressSearchSuggestions -bool true
 	defaults write com.apple.Safari IncludeDevelopMenu -bool true

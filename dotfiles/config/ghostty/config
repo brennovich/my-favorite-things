@@ -1,7 +1,7 @@
-font-family = "SF Mono"
+font-family = "Go Mono"
 font-size = 13
 font-thicken = true
-font-thicken-strength = 200
+font-thicken-strength = 100
 
 background-blur = true
 background-opacity = 1
@@ -10,9 +10,11 @@ cursor-color = "#6768aa"
 cursor-text = "#f6f4f0"
 cursor-style = "block"
 
+bell-features = "no-title,attention"
+
 window-padding-x = 15
 window-padding-y = 15
-window-title-font-family = "SF Mono"
+window-title-font-family = "go Mono"
 window-width = 87
 window-height = 43
 
@@ -21,4 +23,4 @@ resize-overlay = "never"
 macos-titlebar-style = "tabs"
 macos-icon = "glass"
 
-theme = "marques-de-itu"
+theme = "dark:marques-de-itu-dark,light:marques-de-itu-light"
