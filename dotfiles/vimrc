@@ -56,4 +56,12 @@ syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell
 syn match AcronymNoSpell '\<\(\u\|\d\)\{3,}s\?\>' contains=@NoSpell
 
 set t_Co=256
+
+let s:appearance = substitute(system('defaults read -g AppleInterfaceStyle 2>/dev/null'), '\n', '', 'g')
+if s:appearance == 'Dark'
+  set background=dark
+else
+  set background=light
+endif
+
 colorscheme marques-de-itu

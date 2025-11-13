@@ -1,25 +1,15 @@
 [color]
   ui = true
-[color "branch"]
-  current = yellow reverse
-  local = yellow
-  remote = green
-[color "diff"]
-  meta = yellow bold
-  frag = magenta bold
-  old = 167
-  new = 108
 [alias]
-  b = branch -v                     # branch (verbose)
-  amend = commit --amend            # ammend your last commit ammend = commit --amend           # ammend your last commit
-  co = checkout                     # checkout
-  cp = cherry-pick -x               # grab a change from a branch
-  d = diff                          # diff unstaged changes
-  dc = diff --cached                # diff staged changes
+  amend = commit --amend
+  co = checkout
+  cp = cherry-pick
+  d = diff
+  dc = diff --cached
   l = log --graph --date=short
   s = status --short
 [format]
-  pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
+  pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(yellow)%s %C(magenta) [%an]%Creset
 [merge]
   summary = true
   verbosity = 1
