@@ -100,7 +100,8 @@ hammerspoon: ~/.hammerspoon/init.lua
 	cp -R dotfiles/hammerspoon/Spoons/* ~/.hammerspoon/Spoons/
 	cd ~/.hammerspoon/Spoons \
 		&& curl -LO https://github.com/Hammerspoon/Spoons/raw/master/Spoons/RoundedCorners.spoon.zip \
-		&& curl -LO https://github.com/brennovich/ToggleMenubar.spoon/releases/download/v0.4.2/ToggleMenubar.spoon.zip \
+		&& curl -LO https://github.com/brennovich/ToggleMenubar.spoon/releases/latest/download/ToggleMenubar.spoon.zip \
+		&& curl -LO https://github.com/brennovich/VirtualSpaces.spoon/releases/latest/download/VirtualSpaces.spoon.zip \
 		&& unzip -o \*.zip \
 		&& rm *.zip
 
