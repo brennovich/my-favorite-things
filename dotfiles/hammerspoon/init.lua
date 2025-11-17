@@ -37,7 +37,7 @@ hs.hotkey.bind({"leftalt", "ctrl", "cmd"}, "R", function()
 end)
 
 hs.hotkey.bind({"leftalt", "cmd"}, "Return", function()
-    hs.execute("open -n -a Ghostty")
+    hs.execute("open -a Ghostty")
 end)
 
 for i = 1, 4 do
