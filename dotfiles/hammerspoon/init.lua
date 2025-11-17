@@ -46,10 +46,7 @@ for i = 1, 4 do
     end)
 
     hs.hotkey.bind({"leftalt", "shift"}, tostring(i), function()
-	local win = hs.window.focusedWindow()
-	if win then
-	    spoon.VirtualSpaces:moveWindowToVirtualSpace(win, i)
-	end
+	spoon.VirtualSpaces:moveWindowToVirtualSpace(i)
     end)
 end
 
