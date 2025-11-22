@@ -1,5 +1,12 @@
 [color]
   ui = true
+[color "diff"]
+  old = 167
+  new = 70
+[color "status"]
+  added = 70
+  changed = 202
+  untracked = 245
 [alias]
   amend = commit --amend
   co = checkout

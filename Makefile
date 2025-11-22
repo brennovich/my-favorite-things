@@ -36,27 +36,27 @@ vim: ~/.vimrc
 	rm -rf $(config_path)/pack
 	mkdir -p $(config_path)/backups $(config_path)/pack/plugins/start
 	cd $(config_path)/pack/plugins/start \
-		&& git clone https://github.com/brennovich/marques-de-itu.git \
-		&& git clone https://github.com/clojure-vim/clojure.vim.git \
-		&& git clone https://github.com/derekwyatt/vim-scala.git \
-		&& git clone https://github.com/fatih/vim-go.git \
-		&& git clone https://github.com/github/copilot.vim.git \
-		&& git clone https://github.com/rust-lang/rust.vim.git \
-		&& git clone https://github.com/tpope/vim-fugitive.git \
-		&& git clone https://github.com/tpope/vim-markdown.git \
-		&& git clone https://github.com/tpope/vim-repeat.git \
-		&& git clone https://github.com/tpope/vim-sensible.git \
-		&& git clone https://github.com/tpope/vim-sleuth.git \
-		&& git clone https://github.com/tpope/vim-surround \
-		&& git clone https://github.com/tpope/vim-vinegar.git \
-		&& git clone https://github.com/yasuhiroki/github-actions-yaml.vim \
-		&& git clone https://github.com/aareman/shellspec.vim
+		&& git clone --depth 1 https://github.com/brennovich/marques-de-itu.git \
+		&& git clone --depth 1 https://github.com/clojure-vim/clojure.vim.git \
+		&& git clone --depth 1 https://github.com/derekwyatt/vim-scala.git \
+		&& git clone --depth 1 https://github.com/fatih/vim-go.git \
+		&& git clone --depth 1 https://github.com/github/copilot.vim.git \
+		&& git clone --depth 1 https://github.com/rust-lang/rust.vim.git \
+		&& git clone --depth 1 https://github.com/tpope/vim-fugitive.git \
+		&& git clone --depth 1 https://github.com/tpope/vim-markdown.git \
+		&& git clone --depth 1 https://github.com/tpope/vim-repeat.git \
+		&& git clone --depth 1 https://github.com/tpope/vim-sensible.git \
+		&& git clone --depth 1 https://github.com/tpope/vim-sleuth.git \
+		&& git clone --depth 1 https://github.com/tpope/vim-surround \
+		&& git clone --depth 1 https://github.com/tpope/vim-vinegar.git \
+		&& git clone --depth 1 https://github.com/yasuhiroki/github-actions-yaml.vim \
+		&& git clone --depth 1 https://github.com/aareman/shellspec.vim
 
-terminal: ~/.config/ghostty/config
-	brew install --cask ghostty font-go
-	mkdir -p ~/.config/ghostty/themes
-	cp ~/.vim/pack/plugins/start/marques-de-itu/ghostty/marques-de-itu-dark ~/.config/ghostty/themes/marques-de-itu-dark
-	cp ~/.vim/pack/plugins/start/marques-de-itu/ghostty/marques-de-itu-light ~/.config/ghostty/themes/marques-de-itu-light
+terminal: ~/.config/kitty/kitty.conf
+	brew install --cask kitty font-go
+	mkdir -p ~/.config/kitty/themes
+	cp ~/.vim/pack/plugins/start/marques-de-itu/kitty/marques-de-itu-dark.conf ~/.config/kitty/themes/marques-de-itu-dark.conf
+	cp ~/.vim/pack/plugins/start/marques-de-itu/kitty/marques-de-itu-light.conf ~/.config/kitty/themes/marques-de-itu-light.conf
 
 colors: ~/.bin/colorscheme ~/.env-theme
 	if ! [ -d ~/.config/base16-shell ]; then git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell; fi

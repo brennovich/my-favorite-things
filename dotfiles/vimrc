@@ -50,18 +50,17 @@ let g:scala_scaladoc_indent = 1
 let g:markdown_minlines = 100
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'ruby', 'scala', 'go']
 
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown wrap
+autocmd BufNewFile,BufReadPost *.lua setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 
 syn match UrlNoSpell "\w\+:\/\/[^[:space:]]\+" contains=@NoSpell
 syn match AcronymNoSpell '\<\(\u\|\d\)\{3,}s\?\>' contains=@NoSpell
 
 set t_Co=256
-
-let s:appearance = substitute(system('defaults read -g AppleInterfaceStyle 2>/dev/null'), '\n', '', 'g')
-if s:appearance == 'Dark'
-  set background=dark
-else
+set background=dark
+if substitute(system('defaults read -g AppleInterfaceStyle 2>/dev/null'), '\n', '', 'g') != 'Dark'
   set background=light
 endif
-
 colorscheme marques-de-itu
+
+autocmd SigUSR1 * source ~/.vimrc | redraw!

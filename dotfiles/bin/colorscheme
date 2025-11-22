@@ -3,9 +3,9 @@
 echo "$(pgrep 'vi$')" > /dev/null || exit 0
 
 if defaults read -g AppleInterfaceStyle &> /dev/null; then
-	NEXT_COLORSCHEME=base16-grayscale-dark
+	NEXT_COLORSCHEME=dark
 else
-	NEXT_COLORSCHEME=base16-grayscale-light
+	NEXT_COLORSCHEME=light
 fi
 
 if [ ! -z "$COLORSCHEME" ]; then
@@ -18,6 +18,6 @@ fi
 unset COLORSCHEME BASE16_SHELL
 export COLORSCHEME=$NEXT_COLORSCHEME
 
-source ~/.config/base16-shell/scripts/${COLORSCHEME}.sh
+kitty @ set-colors -a ~/.config/kitty/themes/marques-de-itu-${COLORSCHEME}.conf
 
 pkill -SIGUSR1 "vi$" > /dev/null
