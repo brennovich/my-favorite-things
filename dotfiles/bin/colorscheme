@@ -1,11 +1,9 @@
 #!/bin/sh
 
-echo "$(pgrep 'vi$')" > /dev/null || exit 0
-
 if defaults read -g AppleInterfaceStyle &> /dev/null; then
-	NEXT_COLORSCHEME=dark
+	NEXT_COLORSCHEME=marques-de-itu-dark
 else
-	NEXT_COLORSCHEME=light
+	NEXT_COLORSCHEME=marques-de-itu-light
 fi
 
 if [ ! -z "$COLORSCHEME" ]; then
@@ -15,9 +13,10 @@ if [ ! -z "$COLORSCHEME" ]; then
 	fi
 fi
 
-unset COLORSCHEME BASE16_SHELL
+unset COLORSCHEME SHELL_THEME
 export COLORSCHEME=$NEXT_COLORSCHEME
 
-kitty @ set-colors -a ~/.config/kitty/themes/marques-de-itu-${COLORSCHEME}.conf
+kitty @ set-colors -a ~/.config/kitty/themes/${COLORSCHEME}.conf
+source ~/.vim/pack/plugins/start/marques-de-itu/shell/${COLORSCHEME}.sh
 
 pkill -SIGUSR1 "vi$" > /dev/null

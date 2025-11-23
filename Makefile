@@ -59,7 +59,6 @@ terminal: ~/.config/kitty/kitty.conf
 	cp ~/.vim/pack/plugins/start/marques-de-itu/kitty/marques-de-itu-light.conf ~/.config/kitty/themes/marques-de-itu-light.conf
 
 colors: ~/.bin/colorscheme ~/.env-theme
-	if ! [ -d ~/.config/base16-shell ]; then git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell; fi
 
 defaults:
 	defaults write com.apple.dock autohide-time-modifier -float 0
