@@ -22,8 +22,7 @@ rust: ~/.env-rust
 	rustup run stable cargo install rustfmt
 
 ruby: ~/.env-ruby ~/.gemrc
-	sudo port install ruby34
-	sudo port select --set ruby ruby34
+	sudo port install rbenv ruby-build
 
 node: ~/.env-node
 	sudo port install nvm
