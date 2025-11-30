@@ -126,7 +126,8 @@ function obj:leftHalf()
 
 	local winId = win:id()
 	local currentCell = hs.grid.get(win)
-	local targetCell = {x = 0, y = 0, w = 1, h = 2}
+	local gridSize = hs.grid.getGrid(win:screen())
+	local targetCell = {x = 0, y = 0, w = gridSize.w / 2, h = gridSize.h}
 
 	if gridCellEquals(currentCell, targetCell) and self.gridFrameCache[winId] then
 		win:setFrame(self.gridFrameCache[winId])
@@ -146,7 +147,8 @@ function obj:rightHalf()
 
 	local winId = win:id()
 	local currentCell = hs.grid.get(win)
-	local targetCell = {x = 1, y = 0, w = 1, h = 2}
+	local gridSize = hs.grid.getGrid(win:screen())
+	local targetCell = {x = gridSize.w / 2, y = 0, w = gridSize.w / 2, h = gridSize.h}
 
 	if gridCellEquals(currentCell, targetCell) and self.gridFrameCache[winId] then
 		win:setFrame(self.gridFrameCache[winId])
@@ -166,7 +168,8 @@ function obj:topHalf()
 
 	local winId = win:id()
 	local currentCell = hs.grid.get(win)
-	local targetCell = {x = 0, y = 0, w = 2, h = 1}
+	local gridSize = hs.grid.getGrid(win:screen())
+	local targetCell = {x = 0, y = 0, w = gridSize.w, h = gridSize.h / 2}
 
 	if gridCellEquals(currentCell, targetCell) and self.gridFrameCache[winId] then
 		win:setFrame(self.gridFrameCache[winId])
@@ -186,7 +189,8 @@ function obj:bottomHalf()
 
 	local winId = win:id()
 	local currentCell = hs.grid.get(win)
-	local targetCell = {x = 0, y = 1, w = 2, h = 1}
+	local gridSize = hs.grid.getGrid(win:screen())
+	local targetCell = {x = 0, y = gridSize.h / 2, w = gridSize.w, h = gridSize.h / 2}
 
 	if gridCellEquals(currentCell, targetCell) and self.gridFrameCache[winId] then
 		win:setFrame(self.gridFrameCache[winId])

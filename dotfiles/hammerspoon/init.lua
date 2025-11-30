@@ -13,7 +13,7 @@ alertStyle = {
 	fadeOutDuration = 0,
 }
 
-gap = 15
+gap = 20
 
 spoon.ToggleMenubar.gap = gap
 spoon.WMUtils.gap = gap
@@ -21,7 +21,7 @@ spoon.RoundedCorners.radius = 9
 
 hs.grid.ui.showExtraKeys = false
 
-hs.grid.setGrid('2x2')
+hs.grid.setGrid('6x6')
 hs.grid.setMargins({gap, gap})
 
 hs.window.animationDuration = 0

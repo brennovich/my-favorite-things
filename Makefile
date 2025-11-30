@@ -91,7 +91,7 @@ media: ~/.bin/ytvlc
 feeds: ~/.newsboat/config ~/.newsboat/urls
 	which newsboat &> /dev/null || sudo port install newsboat
 
-hammerspoon: ~/.hammerspoon/init.lua
+hammerspoon: ~/.hammerspoon/init.lua dotfiles/hammerspoon/init.lua
 	which hs &> /dev/null || brew install --cask hammerspoon
 	rm -rf ~/.hammerspoon/Spoons
 	mkdir -p ~/.hammerspoon/Spoons
