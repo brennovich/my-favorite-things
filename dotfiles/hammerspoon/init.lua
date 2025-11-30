@@ -37,7 +37,7 @@ hs.hotkey.bind({"leftalt", "ctrl", "cmd"}, "R", function()
 end)
 
 hs.hotkey.bind({"leftalt", "cmd"}, "Return", function()
-    hs.execute("open -a Ghostty")
+    hs.execute("kitty @ launch")
 end)
 
 for i = 1, 4 do
@@ -46,7 +46,7 @@ for i = 1, 4 do
     end)
 
     hs.hotkey.bind({"leftalt", "shift"}, tostring(i), function()
-	spoon.VirtualSpaces:moveWindowToVirtualSpace(i)
+	spoon.VirtualSpaces:moveWindowToVirtualSpace(nil, i)
     end)
 end
 
