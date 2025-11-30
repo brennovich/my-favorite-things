@@ -51,7 +51,7 @@ vim: ~/.vimrc
 		&& git clone --depth 1 https://github.com/yasuhiroki/github-actions-yaml.vim \
 		&& git clone --depth 1 https://github.com/aareman/shellspec.vim
 
-terminal: ~/.config/kitty/kitty.conf
+terminal: ~/.config/kitty/kitty.conf ~/.config/kitty/kitty.app.icns
 	brew install --cask kitty font-go
 	mkdir -p ~/.config/kitty/themes
 	cp ~/.vim/pack/plugins/start/marques-de-itu/kitty/marques-de-itu-dark.conf ~/.config/kitty/themes/marques-de-itu-dark.conf
@@ -64,27 +64,27 @@ defaults:
 	defaults write -g NSWindowShouldDragOnGesture -bool true
 	defaults write -g ApplePressAndHoldEnabled -bool false
 	defaults write com.apple.dock "mru-spaces" -bool "false"
-	defaults write com.apple.Music "userWantsPlaybackNotifications" -bool "false" && killall Music
+	defaults write com.apple.Music "userWantsPlaybackNotifications" -bool "false"
 	defaults write com.apple.dock "autohide" -bool "true"
 	defaults write com.apple.dock "show-recents" -bool "false"
 	defaults write com.apple.dock launchanim -bool false
 	defaults write com.apple.dock mru-spaces -bool false
-	defaults write com.apple.screencapture disable-shadow -bool true; killall SystemUIServer
-	defaults write com.apple.Safari UniversalSearchEnabled -bool false
-	defaults write com.apple.Safari SuppressSearchSuggestions -bool true
-	defaults write com.apple.Safari IncludeDevelopMenu -bool true
-	defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-	defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
-	defaults write com.apple.Safari WebKitMediaPlaybackAllowsInline -bool false
-	defaults write com.apple.SafariTechnologyPreview WebKitMediaPlaybackAllowsInline -bool false
-	defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
-	defaults write com.apple.SafariTechnologyPreview com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
+	- defaults write com.apple.screencapture disable-shadow -bool true; killall SystemUIServer
+	- defaults write com.apple.Safari UniversalSearchEnabled -bool false
+	- defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+	- defaults write com.apple.Safari IncludeDevelopMenu -bool true
+	- defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+	- defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+	- defaults write com.apple.Safari WebKitMediaPlaybackAllowsInline -bool false
+	- defaults write com.apple.SafariTechnologyPreview WebKitMediaPlaybackAllowsInline -bool false
+	- defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
+	- defaults write com.apple.SafariTechnologyPreview com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
 	killall Dock
 
 github:
 	brew install gh
 
-media: vlc ~/.bin/ytvlc
+media: ~/.bin/ytvlc
 	which yt-dls &> /dev/null || curl -SsL -o ~/.bin/yt-dlp 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_macos'; chmod a+rx ~/.bin/yt-dlp
 	brew install --cask qlvideo vlc
 
