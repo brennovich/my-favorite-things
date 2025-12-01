@@ -3,6 +3,17 @@ hs.loadSpoon("ToggleMenubar")
 hs.loadSpoon("RoundedCorners")
 hs.loadSpoon("VirtualSpaces")
 
+if hs.console.darkMode(true) then
+    hs.console.windowBackgroundColor({ red = 0.1, green = 0.1, blue = 0.12, alpha = 1 })
+    hs.console.outputBackgroundColor({ red = 0.1, green = 0.1, blue = 0.12, alpha = 1 })
+    hs.console.inputBackgroundColor({ red = 0.15, green = 0.15, blue = 0.17, alpha = 1 })
+
+    hs.console.consoleCommandColor({ red = 0.4, green = 0.8, blue = 0.9, alpha = 1 })
+    hs.console.consolePrintColor({ red = 0.85, green = 0.85, blue = 0.85, alpha = 1 })
+    hs.console.consoleResultColor({ red = 0.95, green = 0.7, blue = 0.4, alpha = 1 })
+    hs.console.alpha(.96)
+end
+
 alertStyle = {
 	radius = 10,
 	strokeWidth = 4,
