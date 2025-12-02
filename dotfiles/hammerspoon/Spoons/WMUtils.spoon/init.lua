@@ -300,6 +300,34 @@ function obj:resizeShorter()
 	resize(self, 0, -self.gap * 2)
 end
 
+function obj:resizeWiderByGrid()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+	hs.grid.resizeWindowWider(win)
+	updateResizeBorder(self, win)
+end
+
+function obj:resizeThinnerByGrid()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+	hs.grid.resizeWindowThinner(win)
+	updateResizeBorder(self, win)
+end
+
+function obj:resizeTallerByGrid()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+	hs.grid.resizeWindowTaller(win)
+	updateResizeBorder(self, win)
+end
+
+function obj:resizeShorterByGrid()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+	hs.grid.resizeWindowShorter(win)
+	updateResizeBorder(self, win)
+end
+
 function obj:setupResizeModal()
 	self.resizeModal = hs.hotkey.modal.new()
 	local spoon = self

@@ -79,6 +79,11 @@ resizeModal:bind({}, "l", function() spoon.WMUtils:resizeWider() end)
 resizeModal:bind({}, "k", function() spoon.WMUtils:resizeShorter() end)
 resizeModal:bind({}, "j", function() spoon.WMUtils:resizeTaller() end)
 
+resizeModal:bind({"shift"}, "h", function() spoon.WMUtils:resizeThinnerByGrid() end)
+resizeModal:bind({"shift"}, "l", function() spoon.WMUtils:resizeWiderByGrid() end)
+resizeModal:bind({"shift"}, "k", function() spoon.WMUtils:resizeShorterByGrid() end)
+resizeModal:bind({"shift"}, "j", function() spoon.WMUtils:resizeTallerByGrid() end)
+
 resizeModal:bind({}, "escape", function() resizeModal:exit() end)
 
 hs.hotkey.bind({"leftalt"}, "H", function()
