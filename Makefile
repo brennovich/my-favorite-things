@@ -22,16 +22,16 @@ rust: ~/.env-rust
 	rustup run stable cargo install rustfmt
 
 ruby: ~/.env-ruby ~/.gemrc
-	sudo port install rbenv ruby-build
+	brew install rbenv ruby-build
 
 node: ~/.env-node
-	sudo port install nvm
+	brew install nvm
 
 k8s: ~/.env-k8s
 
 config_path = ~/.vim
 vim: ~/.vimrc
-	sudo port install vim +huge
+	brew install vim
 	rm -rf $(config_path)/pack
 	mkdir -p $(config_path)/backups $(config_path)/pack/plugins/start
 	cd $(config_path)/pack/plugins/start \
@@ -89,7 +89,7 @@ media: ~/.bin/ytvlc
 	brew install --cask qlvideo vlc
 
 feeds: ~/.newsboat/config ~/.newsboat/urls
-	which newsboat &> /dev/null || sudo port install newsboat
+	which newsboat &> /dev/null || brew install newsboat
 
 hammerspoon: ~/.hammerspoon/init.lua dotfiles/hammerspoon/init.lua
 	which hs &> /dev/null || brew install --cask hammerspoon
