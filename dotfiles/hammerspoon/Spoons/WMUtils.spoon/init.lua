@@ -22,6 +22,31 @@ obj.resizeModal = nil
 obj.resizeBorder = nil
 obj.resizeWatcher = nil
 
+obj.defaultHotkeys = {
+	moveLeft = {{"leftalt", "shift"}, "h"},
+	moveRight = {{"leftalt", "shift"}, "l"},
+	moveUp = {{"leftalt", "shift"}, "k"},
+	moveDown = {{"leftalt", "shift"}, "j"},
+	leftHalf = {{"leftalt", "ctrl"}, "h"},
+	rightHalf = {{"leftalt", "ctrl"}, "l"},
+	topHalf = {{"leftalt", "ctrl"}, "k"},
+	bottomHalf = {{"leftalt", "ctrl"}, "j"},
+	centerWindow = {{"leftalt", "ctrl"}, "space"},
+	monocle = {{"leftalt", "ctrl"}, "m"},
+	telescope = {{"leftalt", "ctrl"}, "f"}
+}
+
+obj.defaultResizeHotkeys = {
+	resizeSlimmer = {{}, "h"},
+	resizeWider = {{}, "l"},
+	resizeShorter = {{}, "k"},
+	resizeTaller = {{}, "j"},
+	resizeThinnerByGrid = {{"shift"}, "h"},
+	resizeWiderByGrid = {{"shift"}, "l"},
+	resizeShorterByGrid = {{"shift"}, "k"},
+	resizeTallerByGrid = {{"shift"}, "j"}
+}
+
 local function createResizeBorder(self, win)
 	if self.resizeBorder then
 		self.resizeBorder:hide()
@@ -362,6 +387,64 @@ function obj:setupResizeModal()
 	end
 
 	return self.resizeModal
+end
+
+function obj:bindHotkeys(mapping)
+	local repeatableActions = {
+		moveLeft = true,
+		moveRight = true,
+		moveUp = true,
+		moveDown = true,
+		resizeWider = true,
+		resizeSlimmer = true,
+		resizeTaller = true,
+		resizeShorter = true
+	}
+
+	for action, hotkey in pairs(mapping) do
+		local mods = hotkey[1]
+		local key = hotkey[2]
+		local fn = function() self[action](self) end
+
+		if repeatableActions[action] then
+			hs.hotkey.bind(mods, key, fn, nil, fn)
+		else
+			hs.hotkey.bind(mods, key, fn)
+		end
+	end
+
+	return self
+end
+
+function obj:bindResizeHotkeys(mapping)
+	if not self.resizeModal then
+		error("resizeModal not initialized. Call setupResizeModal() first.")
+	end
+
+	local repeatableActions = {
+		resizeWider = true,
+		resizeSlimmer = true,
+		resizeTaller = true,
+		resizeShorter = true,
+		resizeWiderByGrid = true,
+		resizeThinnerByGrid = true,
+		resizeTallerByGrid = true,
+		resizeShorterByGrid = true
+	}
+
+	for action, hotkey in pairs(mapping) do
+		local mods = hotkey[1]
+		local key = hotkey[2]
+		local fn = function() self[action](self) end
+
+		if repeatableActions[action] then
+			self.resizeModal:bind(mods, key, fn, nil, fn)
+		else
+			self.resizeModal:bind(mods, key, fn)
+		end
+	end
+
+	return self
 end
 
 return obj

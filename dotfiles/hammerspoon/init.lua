@@ -61,28 +61,13 @@ for i = 1, 4 do
     end)
 end
 
-hs.hotkey.bind({"leftalt", "shift"}, "H", function() spoon.WMUtils:moveLeft() end)
-hs.hotkey.bind({"leftalt", "shift"}, "L", function() spoon.WMUtils:moveRight() end)
-hs.hotkey.bind({"leftalt", "shift"}, "K", function() spoon.WMUtils:moveUp() end)
-hs.hotkey.bind({"leftalt", "shift"}, "J", function() spoon.WMUtils:moveDown() end)
-
-hs.hotkey.bind({"leftalt", "ctrl"}, "Space", function() spoon.WMUtils:centerWindow() end)
-hs.hotkey.bind({"leftalt", "ctrl"}, "M", function() spoon.WMUtils:monocle() end)
-hs.hotkey.bind({"leftalt", "ctrl"}, "F", function() spoon.WMUtils:telescope() end)
+spoon.WMUtils:bindHotkeys(spoon.WMUtils.defaultHotkeys)
 
 resizeModal = spoon.WMUtils:setupResizeModal()
 
 hs.hotkey.bind({"leftalt", "ctrl"}, "R", function() resizeModal:enter() end)
 
-resizeModal:bind({}, "h", function() spoon.WMUtils:resizeSlimmer() end)
-resizeModal:bind({}, "l", function() spoon.WMUtils:resizeWider() end)
-resizeModal:bind({}, "k", function() spoon.WMUtils:resizeShorter() end)
-resizeModal:bind({}, "j", function() spoon.WMUtils:resizeTaller() end)
-
-resizeModal:bind({"shift"}, "h", function() spoon.WMUtils:resizeThinnerByGrid() end)
-resizeModal:bind({"shift"}, "l", function() spoon.WMUtils:resizeWiderByGrid() end)
-resizeModal:bind({"shift"}, "k", function() spoon.WMUtils:resizeShorterByGrid() end)
-resizeModal:bind({"shift"}, "j", function() spoon.WMUtils:resizeTallerByGrid() end)
+spoon.WMUtils:bindResizeHotkeys(spoon.WMUtils.defaultResizeHotkeys)
 
 resizeModal:bind({}, "escape", function() resizeModal:exit() end)
 
@@ -100,16 +85,3 @@ hs.hotkey.bind({"leftalt"}, "J", function()
 end)
 
 hs.hotkey.bind({"leftalt", "ctrl"}, "G", function() hs.grid.toggleShow() end)
-
-hs.hotkey.bind({"leftalt", "ctrl"}, "H", function()
-    spoon.WMUtils:leftHalf()
-end)
-hs.hotkey.bind({"leftalt", "ctrl"}, "L", function()
-    spoon.WMUtils:rightHalf()
-end)
-hs.hotkey.bind({"leftalt", "ctrl"}, "J", function()
-    spoon.WMUtils:bottomHalf()
-end)
-hs.hotkey.bind({"leftalt", "ctrl"}, "K", function()
-    spoon.WMUtils:topHalf()
-end)
