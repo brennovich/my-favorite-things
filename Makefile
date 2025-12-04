@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 dotfiles = \
 	~/.zshrc \
 	~/.gitconfig \
@@ -26,8 +28,16 @@ ruby: ~/.env-ruby ~/.gemrc
 
 node: ~/.env-node
 	brew install nvm
+	. "$$(brew --prefix nvm)/nvm.sh" \
+		&& nvm install --lts
+
+lua:
+	brew install lua luarocks
 
 k8s: ~/.env-k8s
+
+claude: node ~/.claude/CLAUDE.md ~/.claude/commands/commit.md
+	npm install -g @anthropic-ai/claude-code
 
 config_path = ~/.vim
 vim: ~/.vimrc
