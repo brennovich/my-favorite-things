@@ -10,4 +10,7 @@ local bindHotkeysModules = require('tests/test_bind_hotkeys')
 TestWMUtilsBindHotkeys = bindHotkeysModules[1]
 TestWMUtilsBindResizeHotkeys = bindHotkeysModules[2]
 
+local tileModules = require('tests/test_tile')
+TestWMUtilsTile = tileModules[1]
+
 os.exit(lu.LuaUnit.run())

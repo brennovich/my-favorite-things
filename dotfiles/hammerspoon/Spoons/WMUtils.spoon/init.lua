@@ -9,7 +9,9 @@ obj.license = "MIT"
 obj.monocleFrameCache = {}
 obj.telescopeFrameCache = {}
 obj.gridFrameCache = {}
+obj.tileFrameCache = {}
 obj.gap = 15
+obj.mainRatio = 0.6
 
 obj.resizeStrokeColor = { red = 0.384, green = 0.388, blue = 0.631, alpha = 1 }
 obj.resizeStrokeColorInner = { red = 0.53, green = 0.53, blue = 0.78, alpha = 0.6 }
@@ -33,7 +35,8 @@ obj.defaultHotkeys = {
 	bottomHalf = {{"leftalt", "ctrl"}, "j"},
 	centerWindow = {{"leftalt", "ctrl"}, "space"},
 	monocle = {{"leftalt", "ctrl"}, "m"},
-	telescope = {{"leftalt", "ctrl"}, "f"}
+	telescope = {{"leftalt", "ctrl"}, "f"},
+	tile = {{"leftalt", "ctrl"}, "t"}
 }
 
 obj.defaultResizeHotkeys = {
@@ -128,6 +131,101 @@ local function resize(self, dw, dh)
 	frame.h = frame.h + dh
 	win:setFrame(frame)
 	updateResizeBorder(self, win)
+end
+
+local function getTileableWindows(self)
+	local focusedWin = hs.window.focusedWindow()
+	if not focusedWin then return {}, nil end
+
+	local screen = focusedWin:screen()
+	local windows = {}
+
+	if spoon and spoon.VirtualSpaces and spoon.VirtualSpaces.getWindowsForCurrentVirtualSpace then
+		local allWindows = spoon.VirtualSpaces:getWindowsForCurrentVirtualSpace()
+		for _, win in ipairs(allWindows) do
+			if win:screen() == screen then
+				table.insert(windows, win)
+			end
+		end
+	else
+		for _, win in ipairs(hs.window.orderedWindows()) do
+			if win:screen() == screen and win:isStandard() and not win:isFullScreen() then
+				table.insert(windows, win)
+			end
+		end
+	end
+
+	return windows, focusedWin
+end
+
+local function calculateTileFrames(self, screen, windowCount)
+	local screenFrame = screen:frame()
+	local gap = self.gap
+
+	local usableArea = {
+		x = screenFrame.x + gap,
+		y = screenFrame.y + gap,
+		w = screenFrame.w - (gap * 2),
+		h = screenFrame.h - (gap * 2)
+	}
+
+	if windowCount == 1 then
+		return {{
+			x = usableArea.x,
+			y = usableArea.y,
+			w = usableArea.w,
+			h = usableArea.h
+		}}
+	end
+
+	local mainW = usableArea.w * self.mainRatio
+	local stackW = usableArea.w * (1 - self.mainRatio) - gap
+	local stackCount = windowCount - 1
+	local stackH = usableArea.h / stackCount
+
+	local frames = {}
+
+	table.insert(frames, {
+		x = usableArea.x,
+		y = usableArea.y,
+		w = mainW,
+		h = usableArea.h
+	})
+
+	for i = 0, stackCount - 1 do
+		table.insert(frames, {
+			x = usableArea.x + mainW + gap,
+			y = usableArea.y + (i * stackH) + (i > 0 and gap or 0),
+			w = stackW,
+			h = stackH - (i > 0 and gap or 0)
+		})
+	end
+
+	return frames
+end
+
+local function sortWindowsForTiling(windows, focusedWin)
+	local sorted = {}
+
+	if focusedWin then
+		table.insert(sorted, focusedWin)
+	end
+
+	for _, win in ipairs(windows) do
+		if not focusedWin or win:id() ~= focusedWin:id() then
+			table.insert(sorted, win)
+		end
+	end
+
+	return sorted
+end
+
+local function frameEquals(f1, f2, tolerance)
+	tolerance = tolerance or 1
+	return math.abs(f1.x - f2.x) < tolerance and
+	       math.abs(f1.y - f2.y) < tolerance and
+	       math.abs(f1.w - f2.w) < tolerance and
+	       math.abs(f1.h - f2.h) < tolerance
 end
 
 function obj:init()
@@ -307,6 +405,52 @@ function obj:telescope()
 	self.telescopeFrameCache[winId] = currentFrame
 	win:maximize()
 	updateResizeBorder(self, win)
+end
+
+function obj:tile()
+	local windows, focusedWin = getTileableWindows(self)
+	if #windows == 0 then return end
+
+	local screen = focusedWin and focusedWin:screen() or windows[1]:screen()
+
+	if self:_isCurrentlyTiled(windows, screen) then
+		for _, win in ipairs(windows) do
+			local cached = self.tileFrameCache[win:id()]
+			if cached then
+				win:setFrame(cached)
+			end
+		end
+		self:updateResizeBorder(focusedWin)
+		return
+	end
+
+	for _, win in ipairs(windows) do
+		if not self.tileFrameCache[win:id()] then
+			self.tileFrameCache[win:id()] = win:frame()
+		end
+	end
+
+	local sortedWindows = sortWindowsForTiling(windows, focusedWin)
+	local frames = calculateTileFrames(self, screen, #sortedWindows)
+	for i, win in ipairs(sortedWindows) do
+		win:setFrame(frames[i])
+	end
+
+	self:updateResizeBorder(focusedWin)
+end
+
+function obj:_isCurrentlyTiled(windows, screen)
+	local focusedWin = hs.window.focusedWindow()
+	local sortedWindows = sortWindowsForTiling(windows, focusedWin)
+	local frames = calculateTileFrames(self, screen, #sortedWindows)
+
+	for i, win in ipairs(sortedWindows) do
+		if not frameEquals(win:frame(), frames[i], 2) then
+			return false
+		end
+	end
+
+	return true
 end
 
 function obj:resizeWider()
