@@ -5,6 +5,7 @@ local mockScreen = {}
 
 function mockScreen:frame() return {x = 0, y = 23, w = 1440, h = 877} end
 function mockScreen:fullFrame() return {x = 0, y = 0, w = 1440, h = 900} end
+function mockScreen:id() return 1 end
 
 for i = 1, 4 do
 	mockWindows[i] = {

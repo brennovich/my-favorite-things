@@ -13,4 +13,10 @@ TestWMUtilsBindResizeHotkeys = bindHotkeysModules[2]
 local tileModules = require('tests/test_tile')
 TestWMUtilsTile = tileModules[1]
 
+local tiledResizeModules = require('tests/test_tiled_resize')
+TestWMUtilsTiledResize = tiledResizeModules[1]
+
+local virtualSpacesModules = require('tests/test_virtualspaces_integration')
+TestWMUtilsVirtualSpacesIntegration = virtualSpacesModules[1]
+
 os.exit(lu.LuaUnit.run())

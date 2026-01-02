@@ -13,6 +13,12 @@ obj.tileFrameCache = {}
 obj.gap = 15
 obj.mainRatio = 0.6
 
+obj.activeTileMainRatio = nil
+obj.activeTileStackHeights = {}
+obj.activeTileWindows = {}
+obj.tiledVirtualSpaces = {}
+obj.virtualSpaceWatcher = nil
+
 obj.resizeStrokeColor = { red = 0.384, green = 0.388, blue = 0.631, alpha = 1 }
 obj.resizeStrokeColorInner = { red = 0.53, green = 0.53, blue = 0.78, alpha = 0.6 }
 obj.resizeStrokeWidth = 4.0
@@ -22,6 +28,7 @@ obj.resizeBorderRadiusInner = { xRadius = 8, yRadius = 8 }
 
 obj.resizeModal = nil
 obj.resizeBorder = nil
+obj.resizeBorders = {}
 obj.resizeWatcher = nil
 
 obj.defaultHotkeys = {
@@ -113,6 +120,80 @@ local function updateResizeBorder(self, win)
 	end
 end
 
+local function createTiledResizeBorders(self, windows)
+	for _, border in ipairs(self.resizeBorders) do
+		border:hide()
+		border:delete()
+	end
+	self.resizeBorders = {}
+
+	if not windows or not hs.canvas then return end
+
+	for _, win in ipairs(windows) do
+		local screen = win:screen()
+		local sf = screen:fullFrame()
+		local wf = win:frame()
+
+		local border = hs.canvas.new(sf)
+		border:appendElements({
+			type = "rectangle",
+			action = "stroke",
+			strokeWidth = self.resizeStrokeWidth,
+			strokeColor = self.resizeStrokeColor,
+			roundedRectRadii = self.resizeBorderRadius,
+			frame = {
+				x = wf.x - sf.x - 1,
+				y = wf.y - sf.y - 1,
+				h = wf.h + 2,
+				w = wf.w + 2
+			}
+		}, {
+			type = "rectangle",
+			action = "stroke",
+			strokeWidth = self.resizeStrokeWidthInner,
+			strokeColor = self.resizeStrokeColorInner,
+			roundedRectRadii = self.resizeBorderRadiusInner,
+			frame = {
+				x = wf.x - sf.x + 1,
+				y = wf.y - sf.y + 1,
+				h = wf.h - 2,
+				w = wf.w - 2
+			}
+		})
+		border:level("tornOffMenu")
+		border:show()
+		table.insert(self.resizeBorders, border)
+	end
+end
+
+local function updateTiledResizeBorders(self, windows)
+	if #self.resizeBorders ~= #windows then
+		createTiledResizeBorders(self, windows)
+		return
+	end
+
+	for i, win in ipairs(windows) do
+		local border = self.resizeBorders[i]
+		if border then
+			local screen = win:screen()
+			local sf = screen:fullFrame()
+			local wf = win:frame()
+			border[1].frame = {
+				x = wf.x - sf.x - 1,
+				y = wf.y - sf.y - 1,
+				h = wf.h + 2,
+				w = wf.w + 2
+			}
+			border[2].frame = {
+				x = wf.x - sf.x + 1,
+				y = wf.y - sf.y + 1,
+				h = wf.h - 2,
+				w = wf.w - 2
+			}
+		end
+	end
+end
+
 local function moveWindow(self, dx, dy)
 	local win = hs.window.focusedWindow()
 	if not win then return end
@@ -158,7 +239,7 @@ local function getTileableWindows(self)
 	return windows, focusedWin
 end
 
-local function calculateTileFrames(self, screen, windowCount)
+local function calculateTileFrames(self, screen, windowCount, customMainRatio, stackHeights, sortedWindows)
 	local screenFrame = screen:frame()
 	local gap = self.gap
 
@@ -178,10 +259,10 @@ local function calculateTileFrames(self, screen, windowCount)
 		}}
 	end
 
-	local mainW = usableArea.w * self.mainRatio
-	local stackW = usableArea.w * (1 - self.mainRatio) - gap
+	local mainRatio = customMainRatio or self.mainRatio
+	local mainW = usableArea.w * mainRatio
+	local stackW = usableArea.w * (1 - mainRatio) - gap
 	local stackCount = windowCount - 1
-	local stackH = usableArea.h / stackCount
 
 	local frames = {}
 
@@ -192,13 +273,45 @@ local function calculateTileFrames(self, screen, windowCount)
 		h = usableArea.h
 	})
 
-	for i = 0, stackCount - 1 do
-		table.insert(frames, {
-			x = usableArea.x + mainW + gap,
-			y = usableArea.y + (i * stackH) + (i > 0 and gap or 0),
-			w = stackW,
-			h = stackH - (i > 0 and gap or 0)
-		})
+	if stackHeights and sortedWindows and next(stackHeights) then
+		local totalCustomHeight = 0
+		local customCount = 0
+		for i = 2, #sortedWindows do
+			local win = sortedWindows[i]
+			if stackHeights[win:id()] then
+				totalCustomHeight = totalCustomHeight + stackHeights[win:id()]
+				customCount = customCount + 1
+			end
+		end
+
+		local remainingHeight = usableArea.h - totalCustomHeight - (customCount * gap)
+		local equalHeight = remainingHeight / (stackCount - customCount)
+
+		local currentY = usableArea.y
+		for i = 2, #sortedWindows do
+			local win = sortedWindows[i]
+			local h = stackHeights[win:id()] or equalHeight
+			if i > 2 then
+				currentY = currentY + gap
+			end
+			table.insert(frames, {
+				x = usableArea.x + mainW + gap,
+				y = currentY,
+				w = stackW,
+				h = h
+			})
+			currentY = currentY + h
+		end
+	else
+		local stackH = usableArea.h / stackCount
+		for i = 0, stackCount - 1 do
+			table.insert(frames, {
+				x = usableArea.x + mainW + gap,
+				y = usableArea.y + (i * stackH) + (i > 0 and gap or 0),
+				w = stackW,
+				h = stackH - (i > 0 and gap or 0)
+			})
+		end
 	end
 
 	return frames
@@ -229,7 +342,29 @@ local function frameEquals(f1, f2, tolerance)
 end
 
 function obj:init()
+	if spoon and spoon.VirtualSpaces and spoon.VirtualSpaces.subscribe then
+		spoon.VirtualSpaces:subscribe("virtualSpaceChanged", function(eventData)
+			if self.resizeModal then
+				self.resizeModal:exit()
+			end
+		end)
+	end
 	return self
+end
+
+local function getCurrentVirtualSpaceId(self)
+	if spoon and spoon.VirtualSpaces and spoon.VirtualSpaces.getCurrentVirtualSpace then
+		return spoon.VirtualSpaces:getCurrentVirtualSpace() or 1
+	end
+	return 1
+end
+
+function obj:isInTiledResizeMode()
+	local windows, focusedWin = getTileableWindows(self)
+	if #windows < 2 then return false end
+
+	local spaceId = getCurrentVirtualSpaceId(self)
+	return self.tiledVirtualSpaces[spaceId] == true
 end
 
 function obj:updateResizeBorder(win)
@@ -412,6 +547,7 @@ function obj:tile()
 	if #windows == 0 then return end
 
 	local screen = focusedWin and focusedWin:screen() or windows[1]:screen()
+	local spaceId = getCurrentVirtualSpaceId(self)
 
 	if self:_isCurrentlyTiled(windows, screen) then
 		for _, win in ipairs(windows) do
@@ -420,6 +556,7 @@ function obj:tile()
 				win:setFrame(cached)
 			end
 		end
+		self.tiledVirtualSpaces[spaceId] = false
 		self:updateResizeBorder(focusedWin)
 		return
 	end
@@ -436,6 +573,7 @@ function obj:tile()
 		win:setFrame(frames[i])
 	end
 
+	self.tiledVirtualSpaces[spaceId] = true
 	self:updateResizeBorder(focusedWin)
 end
 
@@ -453,20 +591,109 @@ function obj:_isCurrentlyTiled(windows, screen)
 	return true
 end
 
+function obj:resizeTiledMainStack(delta)
+	local windows, focusedWin = getTileableWindows(self)
+	if #windows < 2 then return end
+
+	local screen = focusedWin and focusedWin:screen() or windows[1]:screen()
+
+	if not self.activeTileMainRatio then
+		self.activeTileMainRatio = self.mainRatio
+	end
+
+	local screenFrame = screen:frame()
+	local usableWidth = screenFrame.w - (self.gap * 2)
+	local ratioDelta = delta / usableWidth
+
+	self.activeTileMainRatio = self.activeTileMainRatio + ratioDelta
+
+	if self.activeTileMainRatio < 0.2 then
+		self.activeTileMainRatio = 0.2
+	elseif self.activeTileMainRatio > 0.8 then
+		self.activeTileMainRatio = 0.8
+	end
+
+	table.sort(windows, function(a, b)
+		return a:frame().x < b:frame().x
+	end)
+
+	local frames = calculateTileFrames(self, screen, #windows, self.activeTileMainRatio, self.activeTileStackHeights, windows)
+	for i, win in ipairs(windows) do
+		win:setFrame(frames[i])
+	end
+
+	updateTiledResizeBorders(self, windows)
+end
+
+function obj:resizeTiledStackWindow(delta)
+	local windows, focusedWin = getTileableWindows(self)
+	if #windows < 2 or not focusedWin then return end
+
+	local screen = focusedWin:screen()
+
+	table.sort(windows, function(a, b)
+		return a:frame().x < b:frame().x
+	end)
+
+	local focusedIndex = nil
+	for i, win in ipairs(windows) do
+		if win:id() == focusedWin:id() then
+			focusedIndex = i
+			break
+		end
+	end
+
+	if focusedIndex == 1 then
+		return
+	end
+
+	local currentHeight = focusedWin:frame().h
+	local newHeight = currentHeight + delta
+
+	self.activeTileStackHeights[focusedWin:id()] = newHeight
+
+	if not self.activeTileMainRatio then
+		self.activeTileMainRatio = self.mainRatio
+	end
+
+	local frames = calculateTileFrames(self, screen, #windows, self.activeTileMainRatio, self.activeTileStackHeights, windows)
+	for i, win in ipairs(windows) do
+		win:setFrame(frames[i])
+	end
+
+	updateTiledResizeBorders(self, windows)
+end
+
 function obj:resizeWider()
-	resize(self, self.gap * 2, 0)
+	if self.activeTileMainRatio then
+		self:resizeTiledMainStack(self.gap * 2)
+	else
+		resize(self, self.gap * 2, 0)
+	end
 end
 
 function obj:resizeSlimmer()
-	resize(self, -self.gap * 2, 0)
+	if self.activeTileMainRatio then
+		self:resizeTiledMainStack(-self.gap * 2)
+	else
+		resize(self, -self.gap * 2, 0)
+	end
 end
 
 function obj:resizeTaller()
-	resize(self, 0, self.gap * 2)
+	if self.activeTileMainRatio then
+		self:resizeTiledStackWindow(self.gap * 2)
+	else
+		resize(self, 0, self.gap * 2)
+	end
 end
 
 function obj:resizeShorter()
-	resize(self, 0, -self.gap * 2)
+	if self.activeTileMainRatio then
+		self:resizeTiledStackWindow(-self.gap * 2)
+	else
+		resize(self, 0, -self.gap * 2)
+	end
 end
 
 function obj:resizeWiderByGrid()
@@ -504,7 +731,20 @@ function obj:setupResizeModal()
 	function self.resizeModal.entered()
 		local win = hs.window.focusedWindow()
 		if win then
-			createResizeBorder(spoon, win)
+			if spoon:isInTiledResizeMode() then
+				spoon.activeTileMainRatio = spoon.mainRatio
+				local windows, focusedWin = getTileableWindows(spoon)
+				local sortedWindows = sortWindowsForTiling(windows, focusedWin)
+
+				spoon.activeTileWindows = {}
+				for _, w in ipairs(sortedWindows) do
+					spoon.activeTileWindows[w:id()] = true
+				end
+
+				createTiledResizeBorders(spoon, sortedWindows)
+			else
+				createResizeBorder(spoon, win)
+			end
 
 			spoon.resizeWatcher = hs.window.filter.new(nil)
 			spoon.resizeWatcher:subscribe(hs.window.filter.windowMoved, function(window, appName, event)
@@ -513,12 +753,22 @@ function obj:setupResizeModal()
 				end
 			end)
 			spoon.resizeWatcher:subscribe(hs.window.filter.windowFocused, function(window, appName, event)
-				createResizeBorder(spoon, window)
+				if spoon.activeTileMainRatio then
+					if not spoon.activeTileWindows[window:id()] then
+						spoon.resizeModal:exit()
+					end
+				else
+					createResizeBorder(spoon, window)
+				end
 			end)
 		end
 	end
 
 	function self.resizeModal.exited()
+		spoon.activeTileMainRatio = nil
+		spoon.activeTileStackHeights = {}
+		spoon.activeTileWindows = {}
+
 		if spoon.resizeWatcher then
 			spoon.resizeWatcher:unsubscribeAll()
 			spoon.resizeWatcher = nil
@@ -528,6 +778,11 @@ function obj:setupResizeModal()
 			spoon.resizeBorder:delete()
 			spoon.resizeBorder = nil
 		end
+		for _, border in ipairs(spoon.resizeBorders) do
+			border:hide()
+			border:delete()
+		end
+		spoon.resizeBorders = {}
 	end
 
 	return self.resizeModal
