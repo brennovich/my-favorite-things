@@ -26,6 +26,7 @@ rust: ~/.env-rust
 
 ruby: ~/.env-ruby ~/.gemrc
 	brew install rbenv ruby-build
+	gem install ripper-tags
 
 node: ~/.env-node
 	brew install nvm
@@ -52,13 +53,16 @@ vim: ~/.vimrc
 		&& git clone --depth 1 https://github.com/fatih/vim-go.git \
 		&& git clone --depth 1 https://github.com/github/copilot.vim.git \
 		&& git clone --depth 1 https://github.com/rust-lang/rust.vim.git \
+		&& git clone --depth 1 https://github.com/tpope/vim-bundler.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-fugitive.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-markdown.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-repeat.git \
+		&& git clone --depth 1 https://github.com/vim-ruby/vim-ruby.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-sensible.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-sleuth.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-surround \
 		&& git clone --depth 1 https://github.com/tpope/vim-projectionist.git \
+		&& git clone --depth 1 https://github.com/tpope/vim-rails.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-vinegar.git \
 		&& git clone --depth 1 https://github.com/yasuhiroki/github-actions-yaml.vim \
 		&& git clone --depth 1 https://github.com/aareman/shellspec.vim

@@ -7,7 +7,14 @@ git_dir=$(git rev-parse --git-dir 2>/dev/null) || {
 	exit 1
 }
 
-trap 'rm -f "$git_dir/tags.$$"' EXIT
+trap 'rm -f "$git_dir/tags.$$" "$git_dir/tags-deps.$$"' EXIT
 
-ctags --tag-relative=always -f "$git_dir/tags.$$" -R .
+if [ -f Gemfile ]; then
+	ripper-tags --tag-relative -f "$git_dir/tags.$$" -R .
+	ripper-tags --tag-relative -f "$git_dir/tags-deps.$$" -R $(bundle list --paths | tr '\n' ' ')
+else
+	ctags --tag-relative=always -f "$git_dir/tags.$$" -R .
+fi
+
 mv "$git_dir/tags.$$" "$git_dir/tags"
+[ -f "$git_dir/tags-deps.$$" ] && mv "$git_dir/tags-deps.$$" "$git_dir/tags-deps"
