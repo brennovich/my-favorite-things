@@ -36,8 +36,8 @@ lua:
 
 k8s: ~/.env-k8s
 
-claude: node ~/.claude/CLAUDE.md ~/.claude/commands/commit.md
-	npm install -g @anthropic-ai/claude-code
+claude: ~/.env-claude ~/.claude/CLAUDE.md ~/.claude/commands/commit.md
+	curl -fsSL https://claude.ai/install.sh | bash
 
 config_path = ~/.vim
 vim: ~/.vimrc
