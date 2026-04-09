@@ -20,6 +20,12 @@ if ! [ -z ${KITTY_INSTALLATION_DIR} ]; then
 	kitty @ set-colors -a ~/.config/kitty/themes/${COLORSCHEME}.conf
 fi
 
+if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
+	variant=$(echo "${COLORSCHEME##*-}" | awk '{print toupper(substr($0,1,1)) substr($0,2)}')
+	defaults write com.apple.Terminal "Default Window Settings" -string "Marques de Itu $variant"
+	defaults write com.apple.Terminal "Startup Window Settings" -string "Marques de Itu $variant"
+fi
+
 source ~/.vim/pack/plugins/start/marques-de-itu/shell/${COLORSCHEME}.sh
 
 pkill -SIGUSR1 "vi$" > /dev/null

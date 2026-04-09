@@ -6,6 +6,7 @@ dotfiles = \
 	~/.gitignore \
 	~/.env-brew \
 	~/.env-ports \
+	~/.env-claude \
 	~/.ctags \
 	~/.hushlogin
 
@@ -57,20 +58,45 @@ vim: ~/.vimrc
 		&& git clone --depth 1 https://github.com/tpope/vim-sensible.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-sleuth.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-surround \
+		&& git clone --depth 1 https://github.com/tpope/vim-projectionist.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-vinegar.git \
 		&& git clone --depth 1 https://github.com/yasuhiroki/github-actions-yaml.vim \
 		&& git clone --depth 1 https://github.com/aareman/shellspec.vim
 
-terminal: ~/.config/kitty/kitty.conf ~/.config/kitty/kitty.app.icns
-	brew install --cask kitty font-go
+kitty: ~/.config/kitty/kitty.conf ~/.config/kitty/kitty.app.icns
+	brew install --cask kitty font-go font-fira-code font-jetbrains-mono
 	mkdir -p ~/.config/kitty/themes
 	cp ~/.vim/pack/plugins/start/marques-de-itu/kitty/marques-de-itu-dark.conf ~/.config/kitty/themes/marques-de-itu-dark.conf
 	cp ~/.vim/pack/plugins/start/marques-de-itu/kitty/marques-de-itu-light.conf ~/.config/kitty/themes/marques-de-itu-light.conf
 
+terminal_plist = $(HOME)/Library/Preferences/com.apple.Terminal.plist
+theme_path = $(HOME)/.vim/pack/plugins/start/marques-de-itu/terminalapp
+terminal:
+	defaults write com.apple.Terminal ShowDocumentProxyIcon -bool false
+	defaults write -g NSToolbarTitleViewRolloverDelay -float 0.5
+	defaults write com.apple.Terminal ShowLineMarks -bool false
+	-/usr/libexec/PlistBuddy -c "Delete ':Window Settings:Marques de Itu Dark'" $(terminal_plist)
+	/usr/libexec/PlistBuddy \
+		-c "Add ':Window Settings:Marques de Itu Dark' dict" \
+		-c "Merge '$(theme_path)/Marques de Itu Dark.terminal' ':Window Settings:Marques de Itu Dark'" \
+		$(terminal_plist)
+	-/usr/libexec/PlistBuddy -c "Delete ':Window Settings:Marques de Itu Light'" $(terminal_plist)
+	/usr/libexec/PlistBuddy \
+		-c "Add ':Window Settings:Marques de Itu Light' dict" \
+		-c "Merge '$(theme_path)/Marques de Itu Light.terminal' ':Window Settings:Marques de Itu Light'" \
+		$(terminal_plist)
+	if defaults read -g AppleInterfaceStyle &> /dev/null; then \
+		defaults write com.apple.Terminal "Default Window Settings" -string "Marques de Itu Dark"; \
+		defaults write com.apple.Terminal "Startup Window Settings" -string "Marques de Itu Dark"; \
+	else \
+		defaults write com.apple.Terminal "Default Window Settings" -string "Marques de Itu Light"; \
+		defaults write com.apple.Terminal "Startup Window Settings" -string "Marques de Itu Light"; \
+	fi
+
 colors: ~/.bin/colorscheme ~/.env-theme
 
 defaults:
-	defaults write com.apple.dock autohide-time-modifier -float 0
+	defaults write -g NSMenuEnableActionImages -bool NO
 	defaults write -g NSWindowShouldDragOnGesture -bool true
 	defaults write -g ApplePressAndHoldEnabled -bool false
 	defaults write com.apple.dock "mru-spaces" -bool "false"
@@ -90,6 +116,9 @@ defaults:
 	- defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
 	- defaults write com.apple.SafariTechnologyPreview com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
 	killall Dock
+
+ctags: ~/.ctags ~/.bin/reload-ctags
+	brew install universal-ctags
 
 github:
 	brew install gh

@@ -16,11 +16,11 @@ export HISTFILESIZE=99999999 \
 	PATH=$HOME/.bin:$PATH \
 	EDITOR=vi
 
-PS1='%n@%m %% '
-
+PS1='%% '
 
 autoload -U +X bashcompinit && bashcompinit
 autoload -Uz compinit && compinit
+autoload -Uz add-zsh-hook
 
 setopt HIST_FIND_NO_DUPS
 setopt HIST_IGNORE_ALL_DUPS

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+git_dir=$(git rev-parse --git-dir 2>/dev/null) || {
+	echo "not a git repository" >&2
+	exit 1
+}
+
+trap 'rm -f "$git_dir/tags.$$"' EXIT
+
+ctags --tag-relative=always -f "$git_dir/tags.$$" -R .
+mv "$git_dir/tags.$$" "$git_dir/tags"
