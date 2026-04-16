@@ -104,6 +104,27 @@ function TestWMUtilsBindHotkeys:testRepeatfnCallsCorrectMethod()
 	lu.assertEquals(mockWindow._frame.x, initialX - self.wmutils.gap * 2)
 end
 
+function TestWMUtilsBindHotkeys:testBindHotkeysWithModalUsesModalBind()
+	local modalBindCalls = {}
+	local mockModal = {
+		bind = function(modal, mods, key, pressedfn, releasedfn, repeatfn)
+			table.insert(modalBindCalls, {mods = mods, key = key, repeatfn = repeatfn})
+		end
+	}
+
+	local mapping = {
+		moveLeft = {{"shift"}, "h"}
+	}
+
+	self.wmutils:bindHotkeys(mapping, mockModal)
+
+	lu.assertEquals(#self.hotkeyBindCalls, 0)
+	lu.assertEquals(#modalBindCalls, 1)
+	lu.assertEquals(modalBindCalls[1].mods, {"shift"})
+	lu.assertEquals(modalBindCalls[1].key, "h")
+	lu.assertNotNil(modalBindCalls[1].repeatfn)
+end
+
 function TestWMUtilsBindHotkeys:testDefaultHotkeysPropertyExists()
 	lu.assertNotNil(self.wmutils.defaultHotkeys)
 	lu.assertEquals(type(self.wmutils.defaultHotkeys), "table")

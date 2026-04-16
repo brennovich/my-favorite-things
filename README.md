@@ -1,26 +1,21 @@
 ## My Favorite Things
 
-This project that is named just like [John Coltrane's album](https://en.wikipedia.org/wiki/My_Favorite_Things_(album)) it's an attempt to automate my computer setup. It assume a custom workflow used by me, and builds an environment with this workflow in mind.
-
-Everything is automated using `make`. There are many utilities and system specific scripts in order to provide seamless integration.
-
-### Features
-
-Make tasks per platform to install and configure:
-
-- **vim**: plain old vim, with classic plugins
-- **colors**: a set of colors for minimal/distraction-free colors, for terminal and vim
-- **dotfiles**: a set of dotfiles for my workflow
-- **languages**: a set of languages and tools I use, like `go`, `ruby`, etc.
+Named after [John Coltrane's album](https://en.wikipedia.org/wiki/My_Favorite_Things_(album)), this project automates my macOS setup using `make`.
 
 ### Usage
 
-You can take advantage of `make` tasks:
-
 ```sh
-make -f Makefile.macos dotfiles colors vim
+make dotfiles colors vim
 ```
 
-### Related Projects
+### Targets
 
-- https://github.com/brennovich/marques-de-itu
+- `dotfiles` - shell configs (zshrc, gitconfig, etc.)
+- `colors` - base16-shell color scheme
+- `vim` - vim with manual plugin management
+- `kitty` / `terminal` - terminal emulator setup with [marques-de-itu](https://github.com/brennovich/marques-de-itu) theme
+- `hammerspoon` - i3-like window management
+- `golang`, `rust`, `ruby`, `node`, `lua` - language environments
+- `feeds` - newsboat RSS reader
+- `media` - VLC and yt-dlp
+- `defaults` - macOS system preferences

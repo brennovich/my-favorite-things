@@ -106,6 +106,7 @@ terminal:
 	fi
 
 colors: ~/.bin/colorscheme ~/.env-theme
+	git -C ~/.vim/pack/plugins/start/marques-de-itu pull --rebase
 
 defaults:
 	defaults write -g NSMenuEnableActionImages -bool NO
@@ -117,6 +118,10 @@ defaults:
 	defaults write com.apple.dock "show-recents" -bool "false"
 	defaults write com.apple.dock launchanim -bool false
 	defaults write com.apple.dock mru-spaces -bool false
+	defaults write -g EnableTilingByEdgeDrag -bool false
+	defaults write -g EnableTopTilingByEdgeDrag -bool false
+	defaults write -g EnableTilingOptionInWindowMenu -bool false
+	defaults write com.apple.dock expose-group-apps -bool true
 	- defaults write com.apple.screencapture disable-shadow -bool true; killall SystemUIServer
 	- defaults write com.apple.Safari UniversalSearchEnabled -bool false
 	- defaults write com.apple.Safari SuppressSearchSuggestions -bool true
@@ -154,6 +159,9 @@ hammerspoon: ~/.hammerspoon/init.lua dotfiles/hammerspoon/init.lua
 		&& unzip -o \*.zip \
 		&& rm *.zip
 
+karabiner: ~/.config/karabiner/karabiner.json
+	brew list --cask karabiner-elements &> /dev/null || brew install --cask karabiner-elements
+	mkdir -p $(@D)
 
 ~/.bin/%: dotfiles/bin/*
 	mkdir -p $(@D)

@@ -32,18 +32,18 @@ obj.resizeBorders = {}
 obj.resizeWatcher = nil
 
 obj.defaultHotkeys = {
-	moveLeft = {{"leftalt", "shift"}, "h"},
-	moveRight = {{"leftalt", "shift"}, "l"},
-	moveUp = {{"leftalt", "shift"}, "k"},
-	moveDown = {{"leftalt", "shift"}, "j"},
-	leftHalf = {{"leftalt", "ctrl"}, "h"},
-	rightHalf = {{"leftalt", "ctrl"}, "l"},
-	topHalf = {{"leftalt", "ctrl"}, "k"},
-	bottomHalf = {{"leftalt", "ctrl"}, "j"},
-	centerWindow = {{"leftalt", "ctrl"}, "space"},
-	monocle = {{"leftalt", "ctrl"}, "m"},
-	telescope = {{"leftalt", "ctrl"}, "f"},
-	tile = {{"leftalt", "ctrl"}, "t"}
+	moveLeft = {{"shift"}, "h"},
+	moveRight = {{"shift"}, "l"},
+	moveUp = {{"shift"}, "k"},
+	moveDown = {{"shift"}, "j"},
+	leftHalf = {{"ctrl"}, "h"},
+	rightHalf = {{"ctrl"}, "l"},
+	topHalf = {{"ctrl"}, "k"},
+	bottomHalf = {{"ctrl"}, "j"},
+	centerWindow = {{"ctrl"}, "space"},
+	monocle = {{"ctrl"}, "m"},
+	telescope = {{"ctrl"}, "f"},
+	tile = {{"ctrl"}, "t"}
 }
 
 obj.defaultResizeHotkeys = {
@@ -788,7 +788,7 @@ function obj:setupResizeModal()
 	return self.resizeModal
 end
 
-function obj:bindHotkeys(mapping)
+function obj:bindHotkeys(mapping, modal)
 	local repeatableActions = {
 		moveLeft = true,
 		moveRight = true,
@@ -804,11 +804,12 @@ function obj:bindHotkeys(mapping)
 		local mods = hotkey[1]
 		local key = hotkey[2]
 		local fn = function() self[action](self) end
+		local repeatfn = repeatableActions[action] and fn or nil
 
-		if repeatableActions[action] then
-			hs.hotkey.bind(mods, key, fn, nil, fn)
+		if modal then
+			modal:bind(mods, key, fn, nil, repeatfn)
 		else
-			hs.hotkey.bind(mods, key, fn)
+			hs.hotkey.bind(mods, key, fn, nil, repeatfn)
 		end
 	end
 

@@ -39,49 +39,52 @@ hs.window.animationDuration = 0
 
 spoon.RoundedCorners:start()
 
-hs.hotkey.bind({"ctrl", "leftalt", "cmd"}, "D", function()
+hyper = hs.hotkey.modal.new()
+hs.hotkey.bind({}, "f18", function() hyper:enter() end, function() hyper:exit() end)
+
+hyper:bind({"ctrl", "cmd"}, "D", function()
     spoon.ToggleMenubar:toggle()
 end)
 
-hs.hotkey.bind({"leftalt", "ctrl", "cmd"}, "R", function()
+hyper:bind({"ctrl", "cmd"}, "R", function()
     hs.reload()
 end)
 
-hs.hotkey.bind({"leftalt", "cmd"}, "Return", function()
+hyper:bind({"cmd"}, "Return", function()
     hs.execute("kitty @ launch")
 end)
 
 for i = 1, 4 do
-    hs.hotkey.bind({"leftalt"}, tostring(i), function()
+    hyper:bind({}, tostring(i), function()
 	spoon.VirtualSpaces:switchToVirtualSpace(i)
     end)
 
-    hs.hotkey.bind({"leftalt", "shift"}, tostring(i), function()
+    hyper:bind({"shift"}, tostring(i), function()
 	spoon.VirtualSpaces:moveWindowToVirtualSpace(nil, i)
     end)
 end
 
-spoon.WMUtils:bindHotkeys(spoon.WMUtils.defaultHotkeys)
+spoon.WMUtils:bindHotkeys(spoon.WMUtils.defaultHotkeys, hyper)
 
 resizeModal = spoon.WMUtils:setupResizeModal()
 
-hs.hotkey.bind({"leftalt", "ctrl"}, "R", function() resizeModal:enter() end)
+hyper:bind({"ctrl"}, "R", function() resizeModal:enter() end)
 
 spoon.WMUtils:bindResizeHotkeys(spoon.WMUtils.defaultResizeHotkeys)
 
 resizeModal:bind({}, "escape", function() resizeModal:exit() end)
 
-hs.hotkey.bind({"leftalt"}, "H", function()
+hyper:bind({}, "H", function()
     hs.window.focusedWindow():focusWindowWest()
 end)
-hs.hotkey.bind({"leftalt"}, "L", function()
+hyper:bind({}, "L", function()
     hs.window.focusedWindow():focusWindowEast()
 end)
-hs.hotkey.bind({"leftalt"}, "K", function()
+hyper:bind({}, "K", function()
     hs.window.focusedWindow():focusWindowNorth()
 end)
-hs.hotkey.bind({"leftalt"}, "J", function()
+hyper:bind({}, "J", function()
     hs.window.focusedWindow():focusWindowSouth()
 end)
 
-hs.hotkey.bind({"leftalt", "ctrl"}, "G", function() hs.grid.toggleShow() end)
+hyper:bind({"ctrl"}, "G", function() hs.grid.toggleShow() end)
