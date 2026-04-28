@@ -5,11 +5,10 @@ Make sure to only change if it required for the functionality or to fix mistakes
 Create a Git commit for the current changes making sure to follow:
 
 **Title (first line):**
-- Use Conventional Commits format: `type(scope): brief description`
 - Keep it concise and descriptive
 - It must contain around 50 characters
 - Use imperative mood (e.g., "Fix bug" not "Fixed bug" or "Fixes bug")
-- Examples: `feat: add new feature`, `fix: correct a bug`, `refactor(schemas): build system performance`
+- Examples: `Add new feature`, `Correct a bug`, `Improve build system performance`
 
 **Body (subsequent paragraphs):**
 - Write in paragraph form, not bullet points
