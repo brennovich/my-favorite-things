@@ -38,7 +38,7 @@ lua:
 
 k8s: ~/.env-k8s
 
-claude: ~/.env-claude ~/.claude/CLAUDE.md ~/.claude/commands/commit.md
+claude: ~/.env-claude ~/.claude/CLAUDE.md ~/.claude/commands/commit.md ~/.claude/skills/writing-commit-messages/SKILL.md
 	curl -fsSL https://claude.ai/install.sh | bash
 
 config_path = ~/.vim
