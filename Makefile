@@ -68,14 +68,21 @@ vim: ~/.vimrc
 		&& git clone --depth 1 https://github.com/aareman/shellspec.vim
 
 kitty: ~/.config/kitty/kitty.conf ~/.config/kitty/kitty.app.icns
-	brew install --cask kitty font-go font-fira-code font-jetbrains-mono
+	brew install --cask kitty
 	mkdir -p ~/.config/kitty/themes
 	cp ~/.vim/pack/plugins/start/marques-de-itu/kitty/marques-de-itu-dark.conf ~/.config/kitty/themes/marques-de-itu-dark.conf
 	cp ~/.vim/pack/plugins/start/marques-de-itu/kitty/marques-de-itu-light.conf ~/.config/kitty/themes/marques-de-itu-light.conf
 
+ghostty: ~/.config/ghostty/config
+	brew install --cask ghostty
+	mkdir -p ~/.config/ghostty/themes
+	cp ~/.vim/pack/plugins/start/marques-de-itu/ghostty/marques-de-itu-dark ~/.config/ghostty/themes/marques-de-itu-dark
+	cp ~/.vim/pack/plugins/start/marques-de-itu/ghostty/marques-de-itu-light ~/.config/ghostty/themes/marques-de-itu-light
+
 terminal_plist = $(HOME)/Library/Preferences/com.apple.Terminal.plist
 theme_path = $(HOME)/.vim/pack/plugins/start/marques-de-itu/terminalapp
 terminal:
+	brew install --cask font-go font-fira-code font-jetbrains-mono
 	defaults write com.apple.Terminal ShowDocumentProxyIcon -bool false
 	defaults write -g NSToolbarTitleViewRolloverDelay -float 0.5
 	defaults write com.apple.Terminal ShowLineMarks -bool false
