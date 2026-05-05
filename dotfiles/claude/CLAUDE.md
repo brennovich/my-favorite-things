@@ -24,6 +24,12 @@
 - Don't explicitly fail the test, write an assertion that will fail naturally instead.
 - Everytime that fetching a library from github.com/motain make sure to use the GOPRIVATE environment variable `GOPRIVATE=github.com/motain/*` to avoid issues with private repositories.
 
+### Ruby
+
+### Rails
+
+- Always make sure to have `db/schema.rb` changes when adding new migrations.
+
 ### Makefile
 
 - Use tabs for indentation.
