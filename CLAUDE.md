@@ -4,200 +4,85 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal macOS system configuration and dotfiles repository. The project automates computer setup with a custom workflow using Makefile-based automation. Named after John Coltrane's album "My Favorite Things".
+Personal macOS system configuration and dotfiles repository. Named after John Coltrane's album "My Favorite Things". Highly opinionated — changes should match the existing workflow rather than introduce new conventions.
 
 ## Build System
 
-This project uses GNU Make for all automation. The Makefile is platform-specific:
+GNU Make drives everything. The root `Makefile` is the only Makefile; older docs (including `README.md`) still reference `Makefile.macos` — that's stale, use `Makefile`.
 
 ```sh
-# Run make commands by specifying the platform-specific Makefile
-make -f Makefile.macos <target>
-
-# Install multiple components
-make -f Makefile.macos dotfiles colors vim
-
-# Clean temporary files
-make -f Makefile.macos clean
+make <target>                    # e.g. make dotfiles
+make dotfiles colors vim         # multiple targets
+make clean                       # rm -rf tmp/*
 ```
 
-### Key Targets
+### Targets
 
-- `dotfiles` - Installs shell configurations (zshrc, gitconfig, etc.) to home directory
-- `colors` - Sets up base16-shell color scheme system
-- `vim` - Installs vim from MacPorts and configures plugins
-- `golang`, `rust`, `ruby`, `node` - Language environment setup
-- `media` - Installs VLC and yt-dlp for media handling
-- `feeds` - Installs and configures newsboat RSS reader
-- `hammerspoon` - Installs Hammerspoon, copies custom Spoons, downloads external Spoons (RoundedCorners, ToggleMenubar)
-- `defaults` - Configures macOS system preferences via defaults command
-- `github` - Installs GitHub CLI
+- `dotfiles` — copies shell/git configs (zshrc, gitconfig, env-*, ctags, hushlogin) to `~/`; depends on `colors`
+- `colors` — installs `~/.bin/colorscheme` and `~/.env-theme` (base16 switcher)
+- `vim` — installs vim via brew, wipes `~/.vim/pack`, clones plugins fresh
+- `kitty`, `ghostty`, `terminal` — install terminal emulators and copy `marques-de-itu` themes from the cloned vim plugin
+- `hammerspoon` — installs Hammerspoon, copies local Spoons, downloads `RoundedCorners`, `ToggleMenubar`, and `VirtualSpaces` Spoons from GitHub releases
+- `golang`, `rust`, `ruby`, `node`, `lua`, `k8s` — language toolchains
+- `claude` — installs Claude Code CLI and copies `dotfiles/claude/` into `~/.claude/`
+- `ctags` — installs universal-ctags and reload helper
+- `media` — installs VLC; downloads `yt-dlp` binary via curl into `~/.bin/`
+- `feeds` — installs newsboat and copies its config
+- `github` — installs `gh`
+- `defaults` — writes macOS preferences (Dock, Safari, etc.); has destructive side effects (`killall Dock`)
 
-## Architecture
-
-### File Organization
-
-- `dotfiles/` - Source configuration files that get copied to home directory
-  - `bin/` - Custom shell scripts and utilities
-  - `newsboat/` - RSS feed reader configuration
-  - `hammerspoon/` - Lua-based macOS automation scripts
-    - `Spoons/VirtualSpaces.spoon/` - Custom virtual workspace implementation with test suite
-    - `Spoons/WMUtils.spoon/` - Custom window management utilities with test suite
-  - Root level dotfiles (zshrc, vimrc, gitconfig, etc.)
-- `wallpapers/` - Desktop backgrounds
-- `etc/` - System-wide configuration files (copied with sudo)
-
-### Installation Pattern
-
-The Makefile uses pattern rules for copying dotfiles:
+### Pattern Rules
 
 ```makefile
-~/.%: dotfiles/*
-    mkdir -p $(@D)
-    cp -R dotfiles/$* $@
+~/.bin/%: dotfiles/bin/*    # files in dotfiles/bin/ → ~/.bin/<name> (chmod +x)
+~/.%:     dotfiles/*        # files in dotfiles/<x> → ~/.<x>
+/etc/%:   etc/*             # files in etc/<x> → /etc/<x> (sudo)
 ```
 
-This means files in `dotfiles/` are copied to `~/` with a dot prefix. For example:
-- `dotfiles/zshrc` → `~/.zshrc`
-- `dotfiles/vimrc` → `~/.vimrc`
-- `dotfiles/bin/colorscheme` → `~/.bin/colorscheme`
+Adding a new dotfile: drop it in `dotfiles/`, add the target path to the appropriate variable in the Makefile (e.g. add `~/.newrc` to the `dotfiles` variable). The pattern rule handles the copy.
 
-### Package Management
+`~/.config/...` paths work with the same `~/.%` rule because the source lives at `dotfiles/config/...` (e.g. `~/.config/ghostty/config` ← `dotfiles/config/ghostty/config`).
 
-The project uses both MacPorts and Homebrew:
-- MacPorts (`port`): Primary package manager for system tools (vim, newsboat, ruby, etc.)
-- Homebrew (`brew`): Used for GitHub CLI and casks (Hammerspoon, VLC)
+## Package Management
 
-Environment files (`dotfiles/env-*`) are sourced by zshrc to configure PATH and tool-specific settings.
+Homebrew is the sole package manager. MacPorts references in older commits are gone. Some tools are installed outside brew:
+- `yt-dlp` — curled directly from GitHub releases
+- `rust` — `rustup` installer script
+- `ToggleMenubar`, `VirtualSpaces`, `RoundedCorners` Spoons — downloaded as release zips
 
-## Key Components
+Environment files (`dotfiles/env-*`) are sourced by `zshrc` to set up PATH and per-tool config.
 
-### Shell Configuration (zshrc)
+## Hammerspoon
 
-- Vi mode with custom keybindings
-- Sources all `~/.env-*` files on startup
-- Newsboat integration that resets ANSI colors after exit
+`dotfiles/hammerspoon/init.lua` is the entry point. Spoons are loaded via `hs.loadSpoon("Name")` and accessed as `spoon.Name:method()`.
 
-### Vim Configuration (vimrc)
+### Local Spoons
 
-- Classic vim (not neovim) with manual plugin management
-- Plugins installed to `~/.vim/pack/plugins/start/`
-- vim-go with goimports formatting
-- Custom color scheme: marques-de-itu
-- No status line, no column ruler (minimal UI)
+- `dotfiles/hammerspoon/Spoons/WMUtils.spoon/` — window management (movement, grid halves with toggle-restore, monocle/telescope modes, resize modal). Has a luaunit test suite — see below.
 
-### Custom Utilities (dotfiles/bin/)
+### External Spoons (downloaded by `make hammerspoon`)
 
-- `colorscheme` - Base16 color scheme switcher
-- `ytvlc` - YouTube video player wrapper for VLC
-- `ytchrss` - YouTube channel RSS feed helper
-- `logbook` - Personal logging tool
+- `RoundedCorners` — Hammerspoon/Spoons official repo
+- `ToggleMenubar` — `brennovich/ToggleMenubar.spoon` releases
+- `VirtualSpaces` — `brennovich/VirtualSpaces.spoon` releases (i3-like virtual workspaces; previously vendored here, now external)
 
-### Hammerspoon (init.lua)
+Keybindings live in `init.lua` — read it directly rather than relying on docs. The grid is 6×6 with `gap = 20`.
 
-Lua-based macOS automation with i3-like window management capabilities. Uses a Spoon-based architecture for modular functionality.
+### Running WMUtils Tests
 
-**Spoon Loading:**
-Spoons are loaded using `hs.loadSpoon("SpoonName")` and accessed via the global `spoon` table. For example:
-- Load: `hs.loadSpoon("WMUtils")`
-- Access: `spoon.WMUtils:methodName()`
-- Keybindings use the full path: `spoon.WMUtils:leftHalf()`, not `wmUtils:leftHalf()`
+```sh
+cd dotfiles/hammerspoon/Spoons/WMUtils.spoon
+luarocks test                                            # runs all tests via rockspec
+eval $(luarocks --local path) && lua tests/test.lua      # direct invocation
+```
 
-#### Spoons (Custom Modules)
-
-- **VirtualSpaces.spoon** (custom) - i3-like virtual workspace system
-  - Provides 4 virtual workspaces using native macOS spaces
-  - Tracks window assignments and focus per virtual space
-  - Automatically handles window creation/destruction
-  - Supports native macOS window switching (Cmd+Tab, Mission Control)
-  - Uses two native spaces: one active, one for storage
-  - Built with test coverage (SpacesModel, WindowsSort, NativeSpaceManager)
-
-- **WMUtils.spoon** (custom) - Window management utilities
-  - Move windows with pixel precision (gap*2 increments = 30px)
-  - Center windows on screen using hs.window:centerOnScreen()
-  - Grid positioning with toggle-restore (leftHalf, rightHalf, topHalf, bottomHalf)
-    - First call: saves frame and positions to grid half
-    - Second call: restores original frame
-    - Shared cache across all grid positions
-  - Monocle mode (toggle maximize with frame restoration, respects gaps)
-  - Telescope mode (toggle full maximize using hs.window:maximize())
-    - Works with all windows including constrained ones (Terminal.app)
-    - Respects macOS fullscreen when already in fullscreen mode
-    - Automatically restores original frame on toggle
-  - Resize mode with visual border feedback
-  - Configurable gap between windows (15px default)
-  - Test coverage for centerWindow, monocle, telescope, and grid toggle
-
-- **ToggleMenubar.spoon** (external, v0.4.2) - System UI control
-  - Toggle macOS menubar visibility
-  - Automatically adjusts grid margins when toggled
-  - Downloaded from GitHub releases
-
-- **RoundedCorners** (external) - Visual enhancement for window corners
-  - Downloaded from Hammerspoon/Spoons repository
-
-#### Window Management Features
-
-**Grid System:**
-- 2x2 grid layout with configurable gaps (15px default)
-- No animation for instant window placement
-- Grid overlay toggle (Alt+Ctrl+G)
-
-**Window Focus (i3-like):**
-- Alt+H/J/K/L - Focus window west/south/north/east
-
-**Window Movement:**
-- Alt+Shift+H/J/K/L - Move window by gap increments (30px)
-
-**Window Positioning (grid-based with toggle-restore):**
-- Alt+Ctrl+H - Left half (toggle: first call positions, second call restores)
-- Alt+Ctrl+L - Right half (toggle: first call positions, second call restores)
-- Alt+Ctrl+K - Top half (toggle: first call positions, second call restores)
-- Alt+Ctrl+J - Bottom half (toggle: first call positions, second call restores)
-- Alt+Ctrl+Space - Center window
-- Alt+Ctrl+M - Monocle mode (maximize/restore, respects 15px gaps)
-- Alt+Ctrl+F - Telescope mode (full maximize using hs.window:maximize())
-  - Works with all windows including constrained ones (Terminal.app)
-  - Toggle to restore original frame
-
-**Resize Mode:**
-- Alt+Ctrl+R - Enter resize mode (shows visual border around focused window)
-- In resize mode:
-  - H/L - Make window slimmer/wider (30px increments)
-  - K/J - Make window shorter/taller (30px increments)
-  - Escape - Exit resize mode
-
-**Virtual Spaces (i3-like workspaces):**
-- Alt+1/2/3/4 - Switch to virtual space 1/2/3/4
-- Alt+Shift+1/2/3/4 - Move focused window to virtual space 1/2/3/4
-- New windows automatically assigned to current virtual space
-- Focus per virtual space is preserved when switching
-- Works seamlessly with native macOS window switching (Cmd+Tab, Mission Control)
-
-**System UI:**
-- Ctrl+Alt+Cmd+D - Toggle menubar visibility
-- Ctrl+Alt+Cmd+R - Reload Hammerspoon configuration
+`tests/test.lua` aggregates the suite; individual files (`test_wmutils.lua`, `test_bind_hotkeys.lua`, `test_tile.lua`, `test_tiled_resize.lua`, `test_virtualspaces_integration.lua`) use mocks for `hs.*` APIs so they run without Hammerspoon.
 
 ## Development Workflow
 
-When modifying dotfiles:
+1. Edit files under `dotfiles/`
+2. Run `make <target>` to install into `~/`
+3. Reload as appropriate (Hammerspoon: Ctrl+Alt+Cmd+R; shell: new session; vim: restart)
+4. Commit
 
-1. Edit files in `dotfiles/` directory
-2. Run `make -f Makefile.macos <target>` to install to home directory
-3. Test the configuration
-4. Commit changes to git
-
-When adding new dotfiles:
-
-1. Add the source file to `dotfiles/`
-2. Add the target path to the appropriate Makefile variable (e.g., `dotfiles = ... ~/.newfile`)
-3. The pattern rule will handle installation automatically
-
-## Important Notes
-
-- This is a personal configuration repo - changes are highly opinionated
-- MacPorts must be installed before running most targets
-- The `defaults` target modifies macOS system settings (Dock, Safari, etc.)
-- Vim plugins are managed manually via git clone, not a plugin manager
-- Color scheme integration across terminal and vim using base16-shell
+The `defaults` target is destructive (modifies system preferences and kills Dock/SystemUIServer) — don't run it speculatively.
