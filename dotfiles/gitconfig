@@ -13,10 +13,10 @@
   cp = cherry-pick
   d = diff
   dc = diff --cached
-  l = log --graph --date=short
+  l = log --graph --date=short --pretty=format:'%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(yellow)%s %C(magenta) [%an]%Creset'
   s = status --short
 [format]
-  pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(yellow)%s %C(magenta) [%an]%Creset
+  pretty = full
 [merge]
   summary = true
   verbosity = 1
