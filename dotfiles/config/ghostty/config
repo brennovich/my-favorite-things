@@ -1,5 +1,5 @@
 font-family = "Go Mono"
-font-size = 15
+font-size = 18
 font-thicken = true
 font-thicken-strength = 64
 
@@ -16,13 +16,14 @@ bell-features = "no-title,attention"
 
 window-padding-x = 15
 window-padding-y = 15
-window-title-font-family = "go Mono"
+window-title-font-family = "Go Mono"
 window-width = 78
 window-height = 40
 
 resize-overlay = "never"
 
 macos-titlebar-style = "tabs"
-macos-icon = "glass"
+# macos-titlebar-style = "hidden"
+# macos-icon = "glass"
 
 theme = "dark:marques-de-itu-dark,light:marques-de-itu-light"
