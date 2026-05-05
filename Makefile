@@ -52,6 +52,7 @@ vim: ~/.vimrc
 		&& git clone --depth 1 https://github.com/derekwyatt/vim-scala.git \
 		&& git clone --depth 1 https://github.com/fatih/vim-go.git \
 		&& git clone --depth 1 https://github.com/github/copilot.vim.git \
+		&& git clone --depth 1 https://github.com/jxnblk/vim-mdx-js.git \
 		&& git clone --depth 1 https://github.com/rust-lang/rust.vim.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-bundler.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-fugitive.git \
