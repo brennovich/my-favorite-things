@@ -134,6 +134,13 @@ defaults:
 	- defaults write com.apple.SafariTechnologyPreview com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
 	killall Dock
 
+defaults/powersaving:
+	sudo pmset -a womp 0
+	sudo pmset -b tcpkeepalive 0
+	sudo pmset -b lowpowermode 1
+	brew list blueutil &> /dev/null || brew install blueutil
+	blueutil --power 0
+
 ctags: ~/.ctags ~/.bin/reload-ctags
 	brew install universal-ctags
 
