@@ -1,19 +1,26 @@
 {
-  "profiles": [
-    {
-      "name": "Default profile",
-      "selected": true,
-      "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" },
-      "simple_modifications": [
+    "global": {
+        "enable_notification_window": false,
+        "show_in_menu_bar": false
+    },
+    "profiles": [
         {
-          "from": { "key_code": "caps_lock" },
-          "to": [ { "key_code": "left_control" } ]
-        },
-        {
-          "from": { "key_code": "left_option" },
-          "to": [ { "key_code": "f18" } ]
+            "name": "Default profile",
+            "selected": true,
+            "simple_modifications": [
+                {
+                    "from": { "key_code": "caps_lock" },
+                    "to": [{ "key_code": "left_control" }]
+                },
+                {
+                    "from": { "key_code": "left_option" },
+                    "to": [{ "key_code": "f18" }]
+                }
+            ],
+            "virtual_hid_keyboard": {
+                "indicate_sticky_modifier_keys_state": false,
+                "keyboard_type_v2": "ansi"
+            }
         }
-      ]
-    }
-  ]
+    ]
 }
