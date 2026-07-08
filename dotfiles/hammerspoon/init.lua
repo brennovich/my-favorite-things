@@ -25,17 +25,25 @@ alertStyle = {
 	fadeOutDuration = 0,
 }
 
-local pagerBadge = spoon.Pager.Badge.new({ text = "1" })
-spoon.Pager:addComponent(pagerBadge):start()
+local activeVirtualSpace = spoon.Pager.Badge.new({ text = "1", size = 11 })
+local watts = spoon.Pager.Text.new({text = "6.7w", size = 9})
+local clock = spoon.Pager.Text.new({
+    text = function() return os.date("%H:%M") end,
+    refresh = 30,
+})
 
-spoon.VirtualSpaces:subscribe("virtualSpaceChanged", function(eventData)
-      pagerBadge:setText(eventData.currentSpace.id)
-end)
+spoon.Pager
+    :addComponent(spoon.Pager.Stack.new({watts, clock}))
+    :addComponent(activeVirtualSpace)
+    :start()
+
+spoon.VirtualSpaces:subscribe("virtualSpaceChanged",
+    function(evt) activeVirtualSpace:setText(evt.currentSpace.id) end)
 
 gap = 20
-
 spoon.ToggleMenubar.gap = gap
 spoon.WMUtils.gap = gap
+
 spoon.RoundedCorners.radius = 9
 
 hs.grid.ui.showExtraKeys = false
