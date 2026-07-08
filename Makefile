@@ -163,6 +163,7 @@ hammerspoon: ~/.hammerspoon/init.lua dotfiles/hammerspoon/init.lua
 		&& curl -LO https://github.com/Hammerspoon/Spoons/raw/master/Spoons/RoundedCorners.spoon.zip \
 		&& curl -LO https://github.com/brennovich/ToggleMenubar.spoon/releases/latest/download/ToggleMenubar.spoon.zip \
 		&& curl -LO https://github.com/brennovich/VirtualSpaces.spoon/releases/latest/download/VirtualSpaces.spoon.zip \
+		&& curl -LO https://github.com/brennovich/Pager.spoon/releases/latest/download/Pager.spoon.zip \
 		&& unzip -o \*.zip \
 		&& rm *.zip
 

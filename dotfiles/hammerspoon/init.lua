@@ -2,6 +2,7 @@ hs.loadSpoon("WMUtils")
 hs.loadSpoon("ToggleMenubar")
 hs.loadSpoon("RoundedCorners")
 hs.loadSpoon("VirtualSpaces")
+hs.loadSpoon("Pager")
 
 if hs.console.darkMode(true) then
     hs.console.windowBackgroundColor({ red = 0.1, green = 0.1, blue = 0.12, alpha = 1 })
@@ -23,6 +24,13 @@ alertStyle = {
 	fadeInDuration = 0,
 	fadeOutDuration = 0,
 }
+
+local pagerBadge = spoon.Pager.Badge.new({ text = "1" })
+spoon.Pager:addComponent(pagerBadge):start()
+
+spoon.VirtualSpaces:subscribe("virtualSpaceChanged", function(eventData)
+      pagerBadge:setText(eventData.currentSpace.id)
+end)
 
 gap = 20
 
