@@ -136,7 +136,10 @@ defaults:
 
 defaults/powersaving:
 	sudo pmset -a womp 0
-	sudo pmset -b tcpkeepalive 0
+	sudo pmset -a powernap 0
+	sudo pmset -a tcpkeepalive 0
+	sudo pmset -a standbydelayhigh 3600
+	sudo pmset -a standbydelaylow 1800
 	sudo pmset -b lowpowermode 1
 	brew list blueutil &> /dev/null || brew install blueutil
 	blueutil --power 0
