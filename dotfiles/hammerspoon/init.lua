@@ -26,7 +26,16 @@ alertStyle = {
 }
 
 local activeVirtualSpace = spoon.Pager.Badge.new({ text = "1", size = 11 })
-local watts = spoon.Pager.Text.new({text = "6.7w", size = 9})
+local wattageBin = os.getenv("HOME") .. "/.bin/wattage"
+local watts = spoon.Pager.Text.new({
+    text = function()
+        local output, ok = hs.execute(wattageBin)
+        if not ok then return "--" end
+        return output:gsub("%s+$", "") .. "w"
+    end,
+    size = 9,
+    refresh = 5,
+})
 local clock = spoon.Pager.Text.new({
     text = function() return os.date("%H:%M") end,
     refresh = 30,

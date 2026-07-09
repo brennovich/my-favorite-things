@@ -36,6 +36,7 @@ make clean
 - `terminal` - Configures Terminal.app with custom theme (auto-detects dark/light mode)
 - `claude` - Installs Claude Code CLI and copies config
 - `ctags` - Installs universal-ctags with config
+- `wattage` - Compiles the Swift SMC helper in `src/wattage/` to `~/.bin/wattage`; prints total system power draw in watts (SMC key `PSTR`, `PDTR` fallback), consumed by the Pager wattage display in Hammerspoon. The only compiled tool in the repo — everything else in `~/.bin` is copied from `dotfiles/bin/`. Also built as a dependency of `hammerspoon`
 
 ## Testing
 
@@ -52,6 +53,14 @@ lua tests/test.lua -p TestWMUtilsTelescope
 ```
 
 `tests/test.lua` is the aggregating entry point: each test module returns a list of suites that must be `require`d and assigned to a global (e.g. `TestWMUtilsTile`) there. A new test file is not run until it is registered in `tests/test.lua`. The `-p` flag is luaunit's pattern filter on those global suite names.
+
+### Wattage Helper Tests (Swift)
+
+```sh
+make test-wattage
+```
+
+Assert-based tests for the SMC value decoding in `src/wattage/tests/main.swift`, compiled together with `SMC.swift` into `build/wattage_test` (a multi-file `swiftc` build only allows top-level statements in a file named `main.swift`).
 
 ## Architecture
 

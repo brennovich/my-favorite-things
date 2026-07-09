@@ -154,7 +154,7 @@ media: ~/.bin/ytvlc
 feeds: ~/.newsboat/config ~/.newsboat/urls
 	which newsboat &> /dev/null || brew install newsboat
 
-hammerspoon: ~/.hammerspoon/init.lua dotfiles/hammerspoon/init.lua
+hammerspoon: ~/.hammerspoon/init.lua dotfiles/hammerspoon/init.lua ~/.bin/wattage
 	which hs &> /dev/null || brew install --cask hammerspoon
 	rm -rf ~/.hammerspoon/Spoons
 	mkdir -p ~/.hammerspoon/Spoons
@@ -166,6 +166,17 @@ hammerspoon: ~/.hammerspoon/init.lua dotfiles/hammerspoon/init.lua
 		&& curl -LO https://github.com/brennovich/Pager.spoon/releases/latest/download/Pager.spoon.zip \
 		&& unzip -o \*.zip \
 		&& rm *.zip
+
+wattage: ~/.bin/wattage
+
+~/.bin/wattage: src/wattage/SMC.swift src/wattage/main.swift
+	mkdir -p $(@D)
+	swiftc -O -o $@ $^
+
+test-wattage: src/wattage/SMC.swift src/wattage/tests/main.swift
+	mkdir -p build
+	swiftc -o build/wattage_test $^
+	./build/wattage_test
 
 karabiner: ~/.config/karabiner/karabiner.json
 	brew list --cask karabiner-elements &> /dev/null || brew install --cask karabiner-elements
@@ -185,4 +196,4 @@ karabiner: ~/.config/karabiner/karabiner.json
 	sudo cp etc/$* $@
 
 clean:
-	rm -rf tmp/*
+	rm -rf tmp/* build

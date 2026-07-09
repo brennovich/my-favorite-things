@@ -5,3 +5,4 @@ tmp*
 2bwm-pkgbuild/2bwm-git/*
 *~
 .solargraph.yml
+build/
