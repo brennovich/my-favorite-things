@@ -2,7 +2,6 @@ hs.loadSpoon("WMUtils")
 hs.loadSpoon("ToggleMenubar")
 hs.loadSpoon("RoundedCorners")
 hs.loadSpoon("VirtualSpaces")
-hs.loadSpoon("Pager")
 
 if hs.console.darkMode(true) then
     hs.console.windowBackgroundColor({ red = 0.1, green = 0.1, blue = 0.12, alpha = 1 })
@@ -25,34 +24,10 @@ alertStyle = {
 	fadeOutDuration = 0,
 }
 
-local activeVirtualSpace = spoon.Pager.Badge.new({ text = "1", size = 11 })
-local wattageBin = os.getenv("HOME") .. "/.bin/wattage"
-local watts = spoon.Pager.Text.new({
-    text = function()
-        local output, ok = hs.execute(wattageBin)
-        if not ok then return "--" end
-        return output:gsub("%s+$", "") .. "w"
-    end,
-    size = 9,
-    refresh = 5,
-})
-local clock = spoon.Pager.Text.new({
-    text = function() return os.date("%H:%M") end,
-    refresh = 30,
-})
-
-spoon.Pager
-    :addComponent(spoon.Pager.Stack.new({watts, clock}))
-    :addComponent(activeVirtualSpace)
-    :start()
-
-spoon.VirtualSpaces:subscribe("virtualSpaceChanged",
-    function(evt) activeVirtualSpace:setText(evt.currentSpace.id) end)
-
 gap = 20
+
 spoon.ToggleMenubar.gap = gap
 spoon.WMUtils.gap = gap
-
 spoon.RoundedCorners.radius = 9
 
 hs.grid.ui.showExtraKeys = false
@@ -64,52 +39,49 @@ hs.window.animationDuration = 0
 
 spoon.RoundedCorners:start()
 
-hyper = hs.hotkey.modal.new()
-hs.hotkey.bind({}, "f18", function() hyper:enter() end, function() hyper:exit() end)
-
-hyper:bind({"ctrl", "cmd"}, "D", function()
+hs.hotkey.bind({"ctrl", "leftalt", "cmd"}, "D", function()
     spoon.ToggleMenubar:toggle()
 end)
 
-hyper:bind({"ctrl", "cmd"}, "R", function()
+hs.hotkey.bind({"leftalt", "ctrl", "cmd"}, "R", function()
     hs.reload()
 end)
 
-hyper:bind({"cmd"}, "Return", function()
+hs.hotkey.bind({"leftalt", "cmd"}, "Return", function()
     hs.execute("kitty @ launch")
 end)
 
 for i = 1, 4 do
-    hyper:bind({}, tostring(i), function()
+    hs.hotkey.bind({"leftalt"}, tostring(i), function()
 	spoon.VirtualSpaces:switchToVirtualSpace(i)
     end)
 
-    hyper:bind({"shift"}, tostring(i), function()
+    hs.hotkey.bind({"leftalt", "shift"}, tostring(i), function()
 	spoon.VirtualSpaces:moveWindowToVirtualSpace(nil, i)
     end)
 end
 
-spoon.WMUtils:bindHotkeys(spoon.WMUtils.defaultHotkeys, hyper)
+spoon.WMUtils:bindHotkeys(spoon.WMUtils.defaultHotkeys)
 
 resizeModal = spoon.WMUtils:setupResizeModal()
 
-hyper:bind({"ctrl"}, "R", function() resizeModal:enter() end)
+hs.hotkey.bind({"leftalt", "ctrl"}, "R", function() resizeModal:enter() end)
 
 spoon.WMUtils:bindResizeHotkeys(spoon.WMUtils.defaultResizeHotkeys)
 
 resizeModal:bind({}, "escape", function() resizeModal:exit() end)
 
-hyper:bind({}, "H", function()
+hs.hotkey.bind({"leftalt"}, "H", function()
     hs.window.focusedWindow():focusWindowWest()
 end)
-hyper:bind({}, "L", function()
+hs.hotkey.bind({"leftalt"}, "L", function()
     hs.window.focusedWindow():focusWindowEast()
 end)
-hyper:bind({}, "K", function()
+hs.hotkey.bind({"leftalt"}, "K", function()
     hs.window.focusedWindow():focusWindowNorth()
 end)
-hyper:bind({}, "J", function()
+hs.hotkey.bind({"leftalt"}, "J", function()
     hs.window.focusedWindow():focusWindowSouth()
 end)
 
-hyper:bind({"ctrl"}, "G", function() hs.grid.toggleShow() end)
+hs.hotkey.bind({"leftalt", "ctrl"}, "G", function() hs.grid.toggleShow() end)

@@ -182,10 +182,6 @@ test-wattage: src/wattage/SMC.swift src/wattage/tests/main.swift
 	swiftc -o build/wattage_test $^
 	./build/wattage_test
 
-karabiner: ~/.config/karabiner/karabiner.json
-	brew list --cask karabiner-elements &> /dev/null || brew install --cask karabiner-elements
-	mkdir -p $(@D)
-
 ~/.bin/%: dotfiles/bin/*
 	mkdir -p $(@D)
 	cp dotfiles/bin/$* $@

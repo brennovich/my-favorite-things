@@ -29,7 +29,6 @@ make clean
 - `media` - Installs VLC and yt-dlp for media handling
 - `feeds` - Installs and configures newsboat RSS reader
 - `hammerspoon` - Installs Hammerspoon, copies custom Spoons, downloads external Spoons (RoundedCorners, ToggleMenubar, VirtualSpaces)
-- `karabiner` - Installs Karabiner-Elements and copies config; remaps left-option to F18 so it drives Hammerspoon's hyper modal while right-option stays a native Option key for special characters
 - `defaults` - Configures macOS system preferences via defaults command
 - `github` - Installs GitHub CLI
 - `kitty` - Installs kitty terminal with custom theme
@@ -97,11 +96,11 @@ Spoons are loaded using `hs.loadSpoon("SpoonName")` and accessed via the global 
 - Load: `hs.loadSpoon("WMUtils")`
 - Access: `spoon.WMUtils:methodName()`
 
-**Keybinding chain (spans two files):**
-Karabiner remaps `left_option` → `F18` (`dotfiles/config/karabiner/karabiner.json`). In `hammerspoon/init.lua`, `F18` enters/exits a `hs.hotkey.modal` named `hyper`. Every window-management, VirtualSpaces, and resize binding is registered on `hyper`, so it is the single entry point for the whole keymap. `caps_lock` is separately remapped to `left_control`. The resize sub-mode is a nested modal entered from `hyper` via `ctrl+R`.
+**Keybindings:**
+All window-management, VirtualSpaces, and resize bindings live in `hammerspoon/init.lua` and are registered on `leftalt` (plus `ctrl`/`cmd`/`shift` variants). The resize sub-mode is an `hs.hotkey.modal` entered via `leftalt+ctrl+R`.
 
 **Custom Spoons (in repo):**
-- **WMUtils.spoon** - Window management utilities (move, resize, center, grid positioning with toggle-restore, monocle, telescope mode). Bindings are attached via `bindHotkeys`/`bindResizeHotkeys`, which take the `hyper` modal so all shortcuts live behind it. Has test coverage.
+- **WMUtils.spoon** - Window management utilities (move, resize, center, grid positioning with toggle-restore, monocle, telescope mode). Bindings are attached via `bindHotkeys`/`bindResizeHotkeys`. Has test coverage.
 
 **External Spoons (downloaded during `make hammerspoon`):**
 - **VirtualSpaces.spoon** - i3-like virtual workspace system
