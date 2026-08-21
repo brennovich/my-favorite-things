@@ -51,14 +51,9 @@
 ### Git
 
 - Never run `git checkout -- .`, `git reset --hard`, or `git stash` to 'verify' state. Use `git diff`, `git status`, or a scratch copy instead.
-- Before committing, run `git status` and confirm only the intended files are staged; if unrelated files are already staged, stop and ask.
 
 ### Github Actions
 
 - Make sure to use the latest stable versions of actions.
 - Use `id`s to name steps. Skip `name`.
 - Add line break between jobs, but keep the steps of a job together.
-
-## Output formatting for review/slack replies
-
-When I ask for a PR comment, Slack reply, or review response, output it as a single fenced markdown block, compact, with no internal-only context (Slack threads, Sentry links) unless I say the audience has seen it.
