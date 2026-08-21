@@ -47,26 +47,27 @@ vim: ~/.vimrc
 	rm -rf $(config_path)/pack
 	mkdir -p $(config_path)/backups $(config_path)/pack/plugins/start
 	cd $(config_path)/pack/plugins/start \
+		&& git clone --depth 1 https://github.com/aareman/shellspec.vim \
 		&& git clone --depth 1 https://github.com/brennovich/marques-de-itu.git \
 		&& git clone --depth 1 https://github.com/clojure-vim/clojure.vim.git \
 		&& git clone --depth 1 https://github.com/derekwyatt/vim-scala.git \
 		&& git clone --depth 1 https://github.com/fatih/vim-go.git \
 		&& git clone --depth 1 https://github.com/github/copilot.vim.git \
 		&& git clone --depth 1 https://github.com/jxnblk/vim-mdx-js.git \
+		&& git clone --depth 1 https://github.com/pgr0ss/vim-github-url \
 		&& git clone --depth 1 https://github.com/rust-lang/rust.vim.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-bundler.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-fugitive.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-markdown.git \
+		&& git clone --depth 1 https://github.com/tpope/vim-projectionist.git \
+		&& git clone --depth 1 https://github.com/tpope/vim-rails.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-repeat.git \
-		&& git clone --depth 1 https://github.com/vim-ruby/vim-ruby.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-sensible.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-sleuth.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-surround \
-		&& git clone --depth 1 https://github.com/tpope/vim-projectionist.git \
-		&& git clone --depth 1 https://github.com/tpope/vim-rails.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-vinegar.git \
-		&& git clone --depth 1 https://github.com/yasuhiroki/github-actions-yaml.vim \
-		&& git clone --depth 1 https://github.com/aareman/shellspec.vim
+		&& git clone --depth 1 https://github.com/vim-ruby/vim-ruby.git \
+		&& git clone --depth 1 https://github.com/yasuhiroki/github-actions-yaml.vim
 
 kitty: ~/.config/kitty/kitty.conf ~/.config/kitty/kitty.app.icns
 	brew install --cask kitty
