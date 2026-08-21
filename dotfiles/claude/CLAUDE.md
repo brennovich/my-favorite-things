@@ -46,6 +46,11 @@
 - Use idiomatic Makefile conventions, like file targets and variables.
 - Don't comment tasks.
 
+### Markdown
+
+- Don't break lines in the middle of sentences, let the text wrap naturally.
+- Always make tables fully spaced and aligned, even if it means adding extra spaces to the cells.
+
 ## Tool Specific Instructions
 
 ### Git
