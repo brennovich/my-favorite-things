@@ -13,6 +13,20 @@
 - Make only the changes I explicitly asked for. If you spot an adjacent improvement (renaming, tightening locks, restructuring helpers), list it as a suggestion instead of applying it.
 - Never state that behavior is unchanged, that a bug is real, or that an event is emitted without citing file:line evidence from the current code. Run the relevant specs.
 
+## Code comments
+
+- Comment only what the code cannot say by itself: why a workaround exists, how an external system actually behaves, what breaks if the code is removed. If the comment restates the code, delete it.
+- Write literally. Describe what happens, not what it evokes. Avoid anthropomorphism, metaphor and drama:
+  - "the window answers with an error" -> "the call returns an error"
+  - "nothing would ever say so" -> "no notification is delivered"
+  - "the moments to cast the net are the ones where a corpse is about to cost something" -> "done when a stale entry is about to matter"
+- Use short common words and plain verbs (returns, reports, drops, removes, exists). Keep the same term for the same thing throughout a file.
+- One fact per sentence. Cut build-up, restatement and hedges ("at all", "for the moment", "possibly", "whatever it was").
+- Prefer the shortest phrasing that keeps the fact:
+  - "a read taken mid animation answers where it was rather than where it now is" -> "a read mid animation returns the old position"
+  - "`as? T` would answer yes to anything" -> "`as? T` succeeds for any type"
+- Be specific instead of gesturing at something. If a value is inferred or a rule is approximate, state how: "the API does not report membership, so it is inferred from two items sharing an owner and a position".
+
 ## Global memory
 
 - Durable analysis docs that shouldn't live in the repo (refactor backlogs, review findings, exploration notes) go to `~/code/memory/<repo-basename>/` as markdown files. Check that folder for existing docs before re-exploring a topic. Only write docs into the repo's own docs/ when explicitly asked.
