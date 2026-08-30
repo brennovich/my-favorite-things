@@ -7,7 +7,9 @@ dotfiles = \
 	~/.env-brew \
 	~/.env-ports \
 	~/.env-claude \
-	~/.ctags \
+	~/.ctags.d/swift.ctags \
+	~/.ctags.d/scala.ctags \
+	~/.ctags.d/exclude.ctags \
 	~/.hushlogin
 
 dotfiles: $(dotfiles) colors
@@ -54,6 +56,7 @@ vim: ~/.vimrc
 		&& git clone --depth 1 https://github.com/fatih/vim-go.git \
 		&& git clone --depth 1 https://github.com/github/copilot.vim.git \
 		&& git clone --depth 1 https://github.com/jxnblk/vim-mdx-js.git \
+		&& git clone --depth 1 https://github.com/keith/swift.vim \
 		&& git clone --depth 1 https://github.com/pgr0ss/vim-github-url \
 		&& git clone --depth 1 https://github.com/rust-lang/rust.vim.git \
 		&& git clone --depth 1 https://github.com/tpope/vim-bundler.git \
@@ -145,7 +148,7 @@ defaults/powersaving:
 	brew list blueutil &> /dev/null || brew install blueutil
 	blueutil --power 0
 
-ctags: ~/.ctags ~/.bin/reload-ctags
+ctags: ~/.ctags.d/swift.ctags ~/.ctags.d/scala.ctags ~/.ctags.d/exclude.ctags ~/.bin/reload-ctags
 	brew install universal-ctags
 
 github:

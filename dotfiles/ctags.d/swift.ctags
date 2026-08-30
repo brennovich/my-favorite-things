@@ -1,0 +1,11 @@
+--langdef=Swift
+--langmap=Swift:.swift
+--regex-Swift=/^[ \t]*(public|private|internal|open|fileprivate)?[ \t]*(final[ \t]+)?class[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\3/c,class/
+--regex-Swift=/^[ \t]*(public|private|internal|open|fileprivate)?[ \t]*struct[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\2/s,struct/
+--regex-Swift=/^[ \t]*(public|private|internal|open|fileprivate)?[ \t]*enum[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\2/e,enum/
+--regex-Swift=/^[ \t]*(public|private|internal|open|fileprivate)?[ \t]*protocol[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\2/p,protocol/
+--regex-Swift=/^[ \t]*extension[ \t]+([A-Za-z_][A-Za-z0-9_.]*)/\1/x,extension/
+--regex-Swift=/^[ \t]*(public|private|internal|open|fileprivate|static|final|override|mutating|[ \t])*func[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\2/f,function/
+--regex-Swift=/^[ \t]*(public|private|internal|fileprivate|static|let|var|weak|lazy|[ \t])*(let|var)[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\3/v,variable/
+--regex-Swift=/^[ \t]*typealias[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\1/t,typealias/
+--regex-Swift=/^[ \t]*case[ \t]+([A-Za-z_][A-Za-z0-9_]*)/\1/n,case/

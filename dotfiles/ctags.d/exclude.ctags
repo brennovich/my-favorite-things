@@ -1,0 +1,15 @@
+--recurse=yes
+--tag-relative=yes
+--exclude=.git
+--exclude=public
+--exclude=doc
+--exclude=vendor/bundle
+--exclude=vendor/assets
+--exclude=.ensime_cache
+--exclude=.ensime
+--exclude=target
+--exclude=*.js.map
+--exclude=*.min.*
+--exclude=*.swp
+--exclude=*.bak
+--exclude=*.tar.*

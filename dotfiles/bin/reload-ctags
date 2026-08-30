@@ -17,4 +17,6 @@ else
 fi
 
 mv "$git_dir/tags.$$" "$git_dir/tags"
-[ -f "$git_dir/tags-deps.$$" ] && mv "$git_dir/tags-deps.$$" "$git_dir/tags-deps"
+if [ -f "$git_dir/tags-deps.$$" ]; then
+	mv "$git_dir/tags-deps.$$" "$git_dir/tags-deps"
+fi
