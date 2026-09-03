@@ -27,6 +27,19 @@
   - "`as? T` would answer yes to anything" -> "`as? T` succeeds for any type"
 - Be specific instead of gesturing at something. If a value is inferred or a rule is approximate, state how: "the API does not report membership, so it is inferred from two items sharing an owner and a position".
 
+## Testing
+
+- Pin a rule where it is implemented. A layer above gets one test per entry point showing it delegates, plus tests for its own guards only.
+- Before writing a test, read the tests of the types the code calls. If one already pins the rule, do not pin it again through the caller.
+- Two entry points sharing one helper get one copy of its tests, plus one test showing the second path applies it.
+- When extracting a layer, move its tests down and delete the pass-through tests above it in the same commit.
+- Name tests by the rule, not by the entry point.
+- Every assertion must be able to fail. Name the production line that would fail it; if the fixture or a fallback makes it pass anyway, fix the fixture. When pinning existing behaviour, break that line once and watch the test fail.
+- Do not test states production cannot reach. Find the production path to the state before building it by hand.
+- Stubs answer the way the real dependency does, failure modes included.
+- In a table test, every row takes a distinct path. Drop rows whose assertions are a subset of another's.
+- Do not assert defaults the fixture sets, preconditions another test pins, or call counts and order no behaviour depends on.
+
 ## Global memory
 
 - Durable analysis docs that shouldn't live in the repo (refactor backlogs, review findings, exploration notes) go to `~/code/memory/<repo-basename>/` as markdown files. Check that folder for existing docs before re-exploring a topic. Only write docs into the repo's own docs/ when explicitly asked.
