@@ -40,8 +40,13 @@ lua:
 
 k8s: ~/.env-k8s
 
-claude: ~/.env-claude ~/.claude/CLAUDE.md ~/.claude/commands/commit.md ~/.claude/skills/writing-commit-messages/SKILL.md
+claude_settings = $(HOME)/.claude/settings.json
+claude: ~/.env-claude ~/.claude/CLAUDE.md ~/.claude/commands/commit.md ~/.claude/skills/writing-commit-messages/SKILL.md ~/.bin/claude-statusline
 	curl -fsSL https://claude.ai/install.sh | bash
+	[ -s $(claude_settings) ] || echo '{}' > $(claude_settings)
+	jq '.statusLine = { type: "command", command: "~/.bin/claude-statusline" }' \
+		$(claude_settings) > $(claude_settings).new \
+		&& mv $(claude_settings).new $(claude_settings)
 
 config_path = ~/.vim
 vim: ~/.vimrc

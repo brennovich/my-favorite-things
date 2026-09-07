@@ -1,0 +1,47 @@
+#!/bin/sh
+
+margin=4
+
+input=$(cat)
+
+{
+	read -r model
+	read -r cwd
+	read -r branch
+	read -r context_percentage
+	read -r cost
+	read -r width
+} <<-EOF
+	$(printf '%s' "$input" | jq -r '
+		[
+			(.model.display_name // "" | ascii_downcase | gsub(" "; "-")),
+			(.cwd // .workspace.current_dir // ""),
+			(.worktree.branch // ""),
+			(.context_window.used_percentage // 0 | round),
+			(.cost.total_cost_usd // 0 | round),
+			(.terminal_width // .term_width // .width // "")
+		] | .[] | tostring
+	')
+EOF
+
+[ -z "$branch" ] && branch=$(git -C "$cwd" rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+left="$model $(basename "$cwd")"
+[ -n "$branch" ] && left="$left ($branch)"
+right="ctx(${context_percentage}%) \$${cost}"
+
+[ -z "$width" ] && width=$(tput cols 2>/dev/null)
+[ -z "$width" ] && width=$COLUMNS
+case "$width" in
+	'' | *[!0-9]*) width='' ;;
+esac
+
+if [ -z "$width" ]; then
+	printf '%s  %s' "$left" "$right"
+	exit 0
+fi
+
+pad=$((width - margin - ${#left}))
+[ "$pad" -lt 1 ] && pad=1
+printf '%s' "$left"
+printf "%${pad}s" "$right"

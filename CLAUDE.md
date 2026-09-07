@@ -33,7 +33,7 @@ make clean
 - `github` - Installs GitHub CLI
 - `kitty` - Installs kitty terminal with custom theme
 - `terminal` - Configures Terminal.app with custom theme (auto-detects dark/light mode)
-- `claude` - Installs Claude Code CLI and copies config
+- `claude` - Installs Claude Code CLI, copies config, and points the `statusLine` setting in `~/.claude/settings.json` at `~/.bin/claude-statusline` (merged with jq so the rest of the settings are kept)
 - `ctags` - Installs universal-ctags with config
 - `wattage` - Compiles the Swift SMC helper in `src/wattage/` to `~/.bin/wattage`; prints total system power draw in watts (SMC key `PSTR`, `PDTR` fallback), consumed by the Pager wattage display in Hammerspoon. The only compiled tool in the repo — everything else in `~/.bin` is copied from `dotfiles/bin/`. Also built as a dependency of `hammerspoon`
 
@@ -119,6 +119,7 @@ All window-management, VirtualSpaces, and resize bindings live in `hammerspoon/i
 - `ytvlc` - YouTube video player wrapper for VLC
 - `ytchrss` - YouTube channel RSS feed helper
 - `logbook` - Personal logging tool
+- `claude-statusline` - Claude Code status line: reads the session JSON on stdin and prints `model dir (branch)` left-aligned with `ctx(%) $cost` right-aligned to the terminal width
 
 ## Development Workflow
 
