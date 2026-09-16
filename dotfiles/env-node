@@ -1,6 +1,13 @@
-mkdir -p ~/.nvm
-
 export NVM_DIR="$HOME/.nvm"
+mkdir -p "$NVM_DIR"
 
-[ -s "$(brew --prefix nvm)/nvm.sh" ] && \. "$(brew --prefix nvm)/nvm.sh"
-[ -s /opt/local/share/nvm/init-nvm.sh ] && \. /opt/local/share/nvm/init-nvm.sh
+node_default=$(ls -d "$NVM_DIR"/versions/node/v* 2>/dev/null | sort -V | tail -1)
+[ -n "$node_default" ] && export PATH="$node_default/bin:$PATH"
+unset node_default
+
+nvm() {
+	unset -f nvm
+	[ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && . "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
+	[ -s /opt/local/share/nvm/init-nvm.sh ] && . /opt/local/share/nvm/init-nvm.sh
+	nvm "$@"
+}
