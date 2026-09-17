@@ -5,9 +5,12 @@ bindkey ^S history-incremental-search-forward
 bindkey ^P up-line-or-search
 bindkey ^N down-line-or-search
 
-for env in ~/.env-*; do
+pkg_envs=(~/.env-brew(N) ~/.env-ports(N))
+envs=(~/.env-*)
+for env in $pkg_envs ${envs:|pkg_envs}; do
 	. ${env}
 done
+unset pkg_envs envs
 
 export HISTFILESIZE=99999999 \
 	HISTSIZE=99999999 \

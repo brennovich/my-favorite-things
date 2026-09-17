@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal macOS system configuration and dotfiles repository. The project automates computer setup with a custom workflow using Makefile-based automation. Named after John Coltrane's album "My Favorite Things".
+Personal macOS system configuration and dotfiles repository for an Intel Mac and an Apple Silicon Mac. The project automates computer setup with a custom workflow using Makefile-based automation. Named after John Coltrane's album "My Favorite Things".
 
 ## Build System
 
@@ -22,20 +22,22 @@ make clean
 
 ### Key Targets
 
-- `dotfiles` - Installs shell configurations (zshrc, gitconfig, etc.) to home directory
+- `pkg` - Sets up the package manager selected by `PKG`: Homebrew (`pkg/brew`) or MacPorts built from source without root at `/opt/local` (`pkg/port`, needs sudo once to create `/opt/local`)
+- `dotfiles` - Installs shell configurations (zshrc, gitconfig, etc.) to home directory, plus `~/.env-brew` or `~/.env-ports` depending on `PKG`
 - `colors` - Sets up base16-shell color scheme system
-- `vim` - Installs vim via Homebrew and configures plugins
+- `vim` - Installs vim and configures plugins
 - `golang`, `rust`, `ruby`, `node`, `lua` - Language environment setup
-- `media` - Installs VLC and yt-dlp for media handling
+- `media` - Installs yt-dlp, plus the latest VLC (matching the CPU, from get.videolan.org) and QLVideo (from its GitHub release) into `/Applications`
 - `feeds` - Installs and configures newsboat RSS reader
-- `hammerspoon` - Installs Hammerspoon, copies custom Spoons, downloads external Spoons (RoundedCorners, ToggleMenubar, VirtualSpaces)
 - `defaults` - Configures macOS system preferences via defaults command
 - `github` - Installs GitHub CLI
 - `kitty` - Installs kitty terminal with custom theme
+- `ghostty` - Installs the latest Ghostty release into `/Applications` with custom theme
 - `terminal` - Configures Terminal.app with custom theme (auto-detects dark/light mode)
+- `fonts` - Downloads the Go fonts to `~/Library/Fonts`. Dependency of `kitty`, `ghostty` and `terminal`
 - `claude` - Installs Claude Code CLI, copies config, and points the `statusLine` setting in `~/.claude/settings.json` at `~/.bin/claude-statusline` (merged with jq so the rest of the settings are kept)
 - `ctags` - Installs universal-ctags with config
-- `wattage` - Compiles the Swift SMC helper in `src/wattage/` to `~/.bin/wattage`; prints total system power draw in watts (SMC key `PSTR`, `PDTR` fallback), consumed by the Pager wattage display in Hammerspoon. The only compiled tool in the repo — everything else in `~/.bin` is copied from `dotfiles/bin/`. Also built as a dependency of `hammerspoon`
+- `wattage` - Compiles the Swift SMC helper in `src/wattage/` to `~/.bin/wattage`; prints total system power draw in watts (SMC key `PSTR`, `PDTR` fallback), consumed by the Pager wattage display in Hammerspoon. The only compiled tool in the repo — everything else in `~/.bin` is copied from `dotfiles/bin/`
 
 ## Testing
 
@@ -82,14 +84,17 @@ Binary files in `dotfiles/bin/` get `chmod +x` via a separate pattern rule.
 
 ### Package Management
 
-The project uses Homebrew as its package manager:
-- Homebrew (`brew`): For system tools, languages, casks (Hammerspoon, VLC, kitty)
+`PKG` selects the package manager from the CPU and can be overridden (`make PKG=brew vim`):
+- `brew` on arm64 (Apple Silicon): Homebrew formulae and casks
+- `port` on x86_64 (Intel): MacPorts, since Homebrew 7 moved Intel to Tier 3. It is owned by the user, so `port` runs without sudo. It keeps the default `/opt/local` prefix and `/Applications/MacPorts` applications dir, because MacPorts only uses binary archives when both match the build servers
 
-Environment files (`dotfiles/env-*`) are sourced by zshrc to configure PATH and tool-specific settings.
+Targets install packages through `$(call pkg_install,<brew name>,<port name>)`. Apps with no MacPorts port (VLC, QLVideo, Ghostty) are downloaded from their own release sites, checksum-verified and copied into `/Applications`, the same way on both machines.
+
+Environment files (`dotfiles/env-*`) are sourced by zshrc to configure PATH and tool-specific settings. zshrc sources `~/.env-brew` / `~/.env-ports` first, so PATH entries from the other env files take precedence over the package manager's.
 
 ### Hammerspoon (init.lua)
 
-Lua-based macOS automation with i3-like window management. Uses a Spoon-based architecture.
+Lua-based macOS automation with i3-like window management. Uses a Spoon-based architecture. Hammerspoon itself, `~/.hammerspoon/init.lua` and the Spoons are installed by hand; the Makefile has no `hammerspoon` target.
 
 **Spoon Loading:**
 Spoons are loaded using `hs.loadSpoon("SpoonName")` and accessed via the global `spoon` table:
@@ -102,7 +107,7 @@ All window-management, VirtualSpaces, and resize bindings live in `hammerspoon/i
 **Custom Spoons (in repo):**
 - **WMUtils.spoon** - Window management utilities (move, resize, center, grid positioning with toggle-restore, monocle, telescope mode). Bindings are attached via `bindHotkeys`/`bindResizeHotkeys`. Has test coverage.
 
-**External Spoons (downloaded during `make hammerspoon`):**
+**External Spoons (installed by hand into `~/.hammerspoon/Spoons`):**
 - **VirtualSpaces.spoon** - i3-like virtual workspace system
 - **ToggleMenubar.spoon** - Toggle macOS menubar visibility
 - **RoundedCorners** - Visual enhancement for window corners
@@ -138,6 +143,6 @@ When adding new dotfiles:
 ## Important Notes
 
 - This is a personal configuration repo - changes are highly opinionated
-- Homebrew must be installed before running most targets
+- Run `make pkg` before most targets
 - The `defaults` target modifies macOS system settings (Dock, Safari, etc.)
 - Color scheme integration across terminal and vim using marques-de-itu theme
