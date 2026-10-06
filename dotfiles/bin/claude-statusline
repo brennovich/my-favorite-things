@@ -27,7 +27,6 @@ EOF
 [ -z "$branch" ] && branch=$(git -C "$cwd" rev-parse --abbrev-ref HEAD 2>/dev/null)
 
 left="$model $(basename "$cwd")"
-[ -n "$branch" ] && left="$left ($branch)"
 right="ctx(${context_percentage}%) \$${cost}"
 
 [ -z "$width" ] && width=$(tput cols 2>/dev/null)
@@ -35,6 +34,18 @@ right="ctx(${context_percentage}%) \$${cost}"
 case "$width" in
 	'' | *[!0-9]*) width='' ;;
 esac
+
+if [ -n "$branch" ] && [ -n "$width" ]; then
+	room=$((width - margin - ${#left} - ${#right} - 4))
+	if [ "${#branch}" -gt "$room" ]; then
+		if [ "$room" -ge 2 ]; then
+			branch="$(printf '%.*s' $((room - 1)) "$branch")…"
+		else
+			branch=''
+		fi
+	fi
+fi
+[ -n "$branch" ] && left="$left ($branch)"
 
 if [ -z "$width" ]; then
 	printf '%s  %s' "$left" "$right"
